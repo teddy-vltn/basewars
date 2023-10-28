@@ -1,0 +1,5 @@
+"basewars"
+{
+	"title"	"BaseWars"
+	"base"	"sandbox"
+}

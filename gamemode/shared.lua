@@ -5,6 +5,8 @@ GM.Author 		= ""
 GM.Email 		= ""
 GM.Website 		= ""
 
+DeriveGamemode("sandbox")
+
 function recursiveInclusion( scanDirectory, isGamemode )
 	-- Null-coalescing for optional argument
 	isGamemode = isGamemode or false
