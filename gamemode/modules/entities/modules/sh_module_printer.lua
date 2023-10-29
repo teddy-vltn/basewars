@@ -63,4 +63,4 @@ function BW_PRINTER_MODULE:Use(ent, ply)
 end
 
 local printerModuleInstance = BW_PRINTER_MODULE.New()
-BaseWars.Entity.Modules:Add(printerModuleInstance.Name, printerModuleInstance)
+BaseWars.Entity.Modules:Add(printerModuleInstance)

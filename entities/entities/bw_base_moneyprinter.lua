@@ -27,12 +27,14 @@ ENT.PowerCapacity = 100
 
 local UpgradeModule = nil
 local PrinterModule = nil
+local PowerModule = nil
 
 function ENT:Init()
     if CLIENT then return end
 
     UpgradeModule = BaseWars.Entity.Modules:Get("Upgradeable")
     PrinterModule = BaseWars.Entity.Modules:Get("Printer")
+    PowerModule = BaseWars.Entity.Modules:Get("Power")
 
     self:SetMoney(0)
     self:SetCapacity(1000)
@@ -50,6 +52,7 @@ function ENT:Think()
     if CLIENT then return end
 
     PrinterModule:OnThink(self)
+    PowerModule:OnThink(self)
 
     print("Money: " .. self:GetMoney(), "Power: " .. self:GetPower())
 end

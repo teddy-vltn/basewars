@@ -1,19 +1,33 @@
 local BW_GENERATOR_MODULE = {}
+BW_GENERATOR_MODULE.__index = BW_GENERATOR_MODULE
 
-BW_GENERATOR_MODULE.Name = "Generator"
-BW_GENERATOR_MODULE.Description = "Allows you to generate electricity"
+-- Constants
+local MODULE_NAME = "Generator"
+local MODULE_DESC = "Allows you to generate electricity"
 
-BW_GENERATOR_MODULE.NetworkVars = {
-    {"PowerGeneration", 0, "Int"},
-    {"PowerCapacity", 0, "Int"},
-    {"Power", 0, "Int"}
-}
+-- Initialization
+function BW_GENERATOR_MODULE.New()
+    local self = setmetatable({}, BW_GENERATOR_MODULE)
+    
+    self.Name = MODULE_NAME
+    self.Description = MODULE_DESC
+    self.NetworkVars = {
+        {"PowerGeneration", 0, "Int"},
+        {"PowerCapacity", 0, "Int"},
+        {"Power", 0, "Int"}
+    }
 
-function BW_GENERATOR_MODULE.Initialize(ent)
+    self.InitializedEntities = self.InitializedEntities or {} -- This will hold the entities initialized with this module
+    
+    return self
+end
+
+function BW_GENERATOR_MODULE:Initialize(ent)
+    self.InitializedEntities[ent] = true -- Mark the entity as initialized
     print("Generator module initialized")
 end
 
-function BW_GENERATOR_MODULE.TransmitPowerToNearbyEntities(ent)
+function BW_GENERATOR_MODULE:TransmitPowerToNearbyEntities(ent)
     local nearbyEntities = ents.FindInSphere(ent:GetPos(), 600)
 
     for _, toTransmit in pairs(nearbyEntities) do
@@ -29,7 +43,7 @@ function BW_GENERATOR_MODULE.TransmitPowerToNearbyEntities(ent)
     end
 end
 
-function BW_GENERATOR_MODULE.DrainPower(ent, power)
+function BW_GENERATOR_MODULE:DrainPower(ent, power)
     local actualPower = ent:GetPower()
 
     if actualPower - power < 0 then
@@ -39,7 +53,7 @@ function BW_GENERATOR_MODULE.DrainPower(ent, power)
     end
 end
 
-function BW_GENERATOR_MODULE.OnThink(ent)
+function BW_GENERATOR_MODULE:OnThink(ent)
     if CLIENT then return end
 
     local power = ent:GetPower()
@@ -55,4 +69,5 @@ function BW_GENERATOR_MODULE.OnThink(ent)
 
 end
 
-BaseWars.Entity.Modules:Add(BW_GENERATOR_MODULE.Name, BW_GENERATOR_MODULE)
+local generatorModuleInstance = BW_GENERATOR_MODULE.New()
+BaseWars.Entity.Modules:Add(generatorModuleInstance)
