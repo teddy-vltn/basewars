@@ -3,6 +3,10 @@ BaseWars.Faction = BaseWars.Faction or {}
 
 local Player = FindMetaTable("Player")
 
+function Player:SetFaction(faction)
+    self:SetNWString("Faction", faction)
+end
+
 function BaseWars.Faction.Initialize() -- Initialisation
     BaseWars.Faction.Factions = BaseWars.Faction.Factions or {}
 
@@ -14,6 +18,7 @@ function BaseWars.Faction.CreateFaction(name, leader, password, icon)
     if BaseWars.Faction.Factions[name] then return false, "Faction already exists" end
 
     BaseWars.Faction.Factions[name] = {
+        Name = name,
         Leader = leader,
         Members = {leader = true},
         Password = password or "",
@@ -32,7 +37,7 @@ function BaseWars.Faction.SyncFactions(ply)
 
     -- turn the passwords into a boolean
     for k, v in pairs(factions) do
-        v.Password = v.Password ~= ""
+        v.Password = BaseWars.Faction.HasFactionPassword(k)
     end
 
     net.Start("BaseWars_UpdateFactions")
@@ -47,7 +52,7 @@ function BaseWars.Faction.SyncFaction(name, factionTable) -- Synchronisation
     local copyTable = table.Copy(factionTable)
 
     -- turn the password into a boolean
-    copyTable.Password = factionTable.Password ~= ""
+    copyTable.Password = BaseWars.Faction.HasFactionPassword(name)
 
     net.Start("BaseWars_UpdateFaction")
         net.WriteString(name)
@@ -62,14 +67,14 @@ function BaseWars.Faction.JoinFaction(ply, name, password)
 
     if factionTable.Password ~= "" and factionTable.Password ~= password then return false, "Incorrect password" end
 
-    factionTable.Members[ply] = true
-    ply.Faction = factionTable
+    -- Check if player is already in another faction
+    local currentFaction = ply:GetFaction()
+    if currentFaction then
+        BaseWars.Faction.LeaveFaction(ply) -- Make player leave his current faction
+    end
 
-    -- send to player that they joined the faction
-    net.Start("BaseWars_JoinFaction")
-        net.WriteEntity(ply)
-        net.WriteString(name)
-    net.Send(ply)
+    factionTable.Members[ply] = true
+    ply:SetFaction(name)
 
     BaseWars.Faction.SyncFaction(name, factionTable) -- Synchronisation
 
@@ -89,12 +94,35 @@ net.Receive("BaseWars_JoinFaction", function(len, ply)
     BaseWars.Notify.Send(ply, "Rejoindre une faction", message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)
 
+util.AddNetworkString("BaseWars_LeaveFaction")
+function BaseWars.Faction.LeaveFaction(ply)
+    local factionTable = BaseWars.Faction.GetFactionByMember(ply)
+    if not factionTable then return false, "You are not in a faction" end
+
+    factionTable.Members[ply] = nil
+    ply:SetFaction("")
+
+    BaseWars.Faction.SyncFaction(factionTable.Name, factionTable) -- Synchronisation
+
+    return true, "Successfully left faction"
+end
+
+-- net receive leave faction
+net.Receive("BaseWars_LeaveFaction", function(len, ply)
+    local factionTable = BaseWars.Faction.GetFactionByMember(ply)
+    if not factionTable then return end
+
+    local status, message = BaseWars.Faction.LeaveFaction(ply)
+
+    BaseWars.Notify.Send(ply, "Quitter une faction", message, status and Color(0, 255, 0) or Color(255, 0, 0))
+end)
+
 function BaseWars.Faction.SetFaction(ply, name)
     local factionTable = BaseWars.Faction.GetFaction(name)
     if not factionTable then return false, "Faction does not exist" end
 
     factionTable.Members[ply] = true
-    ply.Faction = factionTable
+    ply:SetFaction(name)
 
     BaseWars.Faction.SyncFaction(name, factionTable) -- Synchronisation
 

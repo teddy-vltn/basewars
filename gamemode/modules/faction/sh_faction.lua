@@ -21,5 +21,12 @@ function BaseWars.Faction.GetFactionByMember(ply)
 end
 
 function Player:GetFaction()
-    return self.Faction
+    return self:GetNWString("Faction")
+end
+
+function BaseWars.Faction.HasFactionPassword(name)
+    local factionTable = BaseWars.Faction.GetFaction(name)
+    if not factionTable then return false end
+
+    if CLIENT then return factionTable.Password else return factionTable.Password != "" end
 end
