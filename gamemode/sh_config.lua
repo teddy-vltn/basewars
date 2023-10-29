@@ -6,15 +6,17 @@ BaseWars.Config = BaseWars.Config or {}
 BaseWars.Config.Shop = {
     ["Entités"] = {
         ["Imprimantes"] = {
-            ["Imprimante Simple"] = {Price = 10, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_base_moneyprinter"},
+            {Name = "Basic Printer", Price = 10, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_base_moneyprinter"},
         },
         ["Générateurs"] = {
-            ["Générateur Basique"] = {Price = 50, Model = "models/props_lab/reciever01b.mdl", ClassName = "bw_base_generator"},
+            {Name = "Basic Generator", Price = 50, Model = "models/props_lab/reciever01b.mdl", ClassName = "bw_base_generator"},
         },
     },
     ["Armes"] = {
     }
 }
+
+BaseWars.Config.MaxShopRecursiveDepth = 3
 
 BaseWars.Config.Navigation = {
     {
