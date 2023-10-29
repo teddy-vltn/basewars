@@ -27,12 +27,14 @@ ENT.PowerCapacity = 100
 
 local UpgradeModule = nil
 local PrinterModule = nil
+local PowerModule = nil
 
 function ENT:Init()
     if CLIENT then return end
 
     UpgradeModule = BaseWars.Entity.Modules:Get("Upgradeable")
     PrinterModule = BaseWars.Entity.Modules:Get("Printer")
+    PowerModule = BaseWars.Entity.Modules:Get("Power")
 
     self:SetMoney(0)
     self:SetCapacity(1000)
@@ -49,7 +51,8 @@ end
 function ENT:Think()
     if CLIENT then return end
 
-    self:RunModules("OnThink")
+    PrinterModule:OnThink(self)
+    PowerModule:OnThink(self)
 
     print("Money: " .. self:GetMoney(), "Power: " .. self:GetPower())
 end
@@ -69,7 +72,7 @@ if SERVER then
     function ENT:Use(ply)
         local oldMoney = self:GetMoney()
 
-        if PrinterModule.Use(self, ply) then
+        if PrinterModule:Use(self, ply) then
             BaseWars.Notify.Send(ply, "You have collected", "$" .. oldMoney .. " from the printer", Color(0, 255, 0))
         end
     end

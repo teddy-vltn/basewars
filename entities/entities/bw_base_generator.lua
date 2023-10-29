@@ -32,7 +32,7 @@ end
 function ENT:Think()
     if CLIENT then return end
 
-    self:RunModules("OnThink")
+    GeneratorModule:OnThink(self)
 
     print("Power: " .. self:GetPower())
 end
