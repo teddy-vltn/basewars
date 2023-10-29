@@ -3,7 +3,7 @@ DEFINE_BASECLASS("base_anim")
 AddCSLuaFile()
 
 ENT.PrintName       = "Base Entity"
-ENT.Author          = "OpenAI"
+ENT.Author          = "Teddy"
 ENT.Information     = "The base entity for all BaseWars entities"
 ENT.Category        = "BaseWars"
 ENT.Editable        = false
@@ -23,7 +23,6 @@ ENT.AllNetworkVars  = {}
 ENT.IsBaseWarsEntity = true
 
 function ENT:Init()
-        -- Run module initializations
 
 end
 

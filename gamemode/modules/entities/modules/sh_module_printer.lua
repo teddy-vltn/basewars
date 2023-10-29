@@ -30,6 +30,22 @@ function BW_PRINTER_MODULE.OnThink(ent)
 
 end
 
+function BW_PRINTER_MODULE.Use(ent, ply)
+    if !ply:IsPlayer() then return end
+
+    local money = ent:GetMoney()
+
+    if money > 0 then
+        ply:AddMoney(money)
+        ent:SetMoney(0)
+    else
+        return false
+    end
+
+    return true
+
+end
+
 BaseWars.Entity.Modules:Add(BW_PRINTER_MODULE.Name, BW_PRINTER_MODULE)
 
 
