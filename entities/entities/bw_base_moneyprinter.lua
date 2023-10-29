@@ -60,7 +60,7 @@ end
 if SERVER then 
 
     function ENT:Upgrade()
-        UpgradeModule.Upgrade(self)
+        UpgradeModule:Upgrade(self)
 
         local upgradeLevel = self:GetUpgradeLevel()
 
