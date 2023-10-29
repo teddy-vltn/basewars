@@ -20,6 +20,8 @@ function CreateBoutiquePanel(parent)
         local items = {}
     
         for _, categoryOrItem in pairs(categoryTable) do
+            if type(categoryOrItem) ~= "table" then continue end
+            
             if categoryOrItem.Price then
                 table.insert(items, categoryOrItem)
             else
@@ -103,11 +105,15 @@ function CreateBoutiquePanel(parent)
 
     local function populateTree(parentNode, categoryTable)
         for categoryName, categoryOrItem in pairs(categoryTable) do
-            if not categoryOrItem.Price then  -- It's a category
-                local categoryNode = parentNode:AddNode(categoryName)
-                populateTree(categoryNode, categoryOrItem)
-                categoryNode.DoClick = function()
-                    displayItems(categoryOrItem)
+            if type(categoryOrItem) == "table" then
+                if not categoryOrItem.Price then  -- It's a category
+                    local categoryNode = parentNode:AddNode(categoryName)
+                    -- Put icon if it's a category
+                    categoryNode:SetIcon(categoryOrItem.Icon or "icon16/folder.png")
+                    populateTree(categoryNode, categoryOrItem)
+                    categoryNode.DoClick = function()
+                        displayItems(categoryOrItem)
+                    end
                 end
             end
         end
