@@ -73,8 +73,21 @@ function BaseWars.Faction.JoinFaction(ply, name, password)
 
     BaseWars.Faction.SyncFaction(name, factionTable) -- Synchronisation
 
-    return true
+    return true, "Successfully joined faction"
 end
+
+-- net receive join faction
+net.Receive("BaseWars_JoinFaction", function(len, ply)
+    local factionName = net.ReadString()
+    local factionTable = BaseWars.Faction.GetFaction(factionName)
+    if not factionTable then return end
+
+    local password = net.ReadString()
+
+    local status, message = BaseWars.Faction.JoinFaction(ply, factionName, password)
+
+    BaseWars.Notify.Send(ply, "Rejoindre une faction", message, status and Color(0, 255, 0) or Color(255, 0, 0))
+end)
 
 function BaseWars.Faction.SetFaction(ply, name)
     local factionTable = BaseWars.Faction.GetFaction(name)

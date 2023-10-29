@@ -20,3 +20,9 @@ net.Receive("BaseWars_JoinFaction", function()
     ply.Faction = factionTable
 end)
 
+function BaseWars.Faction.TryJoinFaction(name, password)
+    net.Start("BaseWars_JoinFaction")
+        net.WriteString(name)
+        net.WriteString(password)
+    net.SendToServer()
+end

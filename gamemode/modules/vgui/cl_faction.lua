@@ -1,3 +1,38 @@
+local function AskForPassword(factionName, callback)
+    local passwordFrame = vgui.Create("DFrame")
+    passwordFrame:SetSize(300, 150)
+    passwordFrame:Center()
+    passwordFrame:SetTitle("Mot de passe requis")
+    passwordFrame:MakePopup()
+
+    local infoLabel = vgui.Create("DLabel", passwordFrame)
+    infoLabel:Dock(TOP)
+    infoLabel:SetText("Veuillez entrer le mot de passe pour rejoindre la faction " .. factionName)
+    infoLabel:SizeToContents()
+    infoLabel:DockMargin(10, 10, 10, 10)
+
+    local passwordEntry = vgui.Create("DTextEntry", passwordFrame)
+    passwordEntry:Dock(TOP)
+    passwordEntry:SetTall(25)
+    passwordEntry:DockMargin(10, 0, 10, 10)
+    passwordEntry:SetPlaceholderText("Mot de passe...")
+
+    local submitButton = vgui.Create("DButton", passwordFrame)
+    submitButton:Dock(BOTTOM)
+    submitButton:SetText("Soumettre")
+    submitButton:DockMargin(10, 5, 10, 10)
+    submitButton.DoClick = function()
+        local password = passwordEntry:GetValue()
+
+        if callback then
+            callback(password) -- Appeler la fonction de callback avec le mot de passe entré
+        end
+
+        passwordFrame:Close()
+    end
+end
+
+
 local function ShowFactionDetails(panel, factionName, factionData)
     
     -- Titre de la faction
@@ -28,7 +63,13 @@ local function ShowFactionDetails(panel, factionName, factionData)
     joinButton:SetText("Rejoindre")
     joinButton:Dock(LEFT)
     joinButton.DoClick = function()
-        -- Logic pour rejoindre la faction
+        if factionData.Password then
+            AskForPassword(factionName, function(password)
+                BaseWars.Faction.TryJoinFaction(factionName, password)
+            end)
+        else
+            BaseWars.Faction.TryJoinFaction(factionName, "")
+        end
     end
 
     -- Seulement montrer le bouton de quitter si le joueur est déjà dans la faction
