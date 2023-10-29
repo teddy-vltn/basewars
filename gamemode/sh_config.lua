@@ -45,4 +45,11 @@ BaseWars.Config.Navigation = {
             CreateBoutiquePanel(parent)
         end
     },
+    {
+        Name = "Faction",
+        Icon = "icon16/box.png",
+        Panel = function(parent)
+            CreateFactionPanel(parent)
+        end
+    },
 }
