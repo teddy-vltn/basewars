@@ -1,7 +1,17 @@
 
 function CreateBoutiquePanel(parent)
+
     local boutiquePanel = vgui.Create("DPanel", parent)
     boutiquePanel:Dock(FILL)
+
+    local searchBar = vgui.Create("DTextEntry", boutiquePanel)
+    searchBar:Dock(TOP)
+    searchBar:SetPlaceholderText("Search...")
+
+    searchBar.OnChange = function(self)
+        local searchQuery = self:GetValue()
+        displayItemsFiltered(BaseWars.Config.Shop, searchQuery)
+    end
 
     local splitter = vgui.Create("DHorizontalDivider", boutiquePanel)
     splitter:Dock(FILL)
@@ -36,7 +46,7 @@ function CreateBoutiquePanel(parent)
     end
     
 
-    local function displayItems(categoryTable)
+    function displayItemsFiltered(categoryTable, filter)
         itemDisplay:Clear()
         local itemList = vgui.Create("DIconLayout", itemDisplay)
         itemList:Dock(FILL)
@@ -45,15 +55,24 @@ function CreateBoutiquePanel(parent)
     
         -- Now, we collect items from the clicked category
         local items = collectItems(categoryTable, BaseWars.Config.MaxShopRecursiveDepth)
+
+        local showedItems = 0
     
-        for itemName, itemProps in pairs(items) do
-            local itemButton = itemList:Add("DButton")
-            itemButton:SetSize(100, 100)
-            itemButton:SetText("")
-    
+        for _, itemProps in pairs(items) do
+
             local Price = itemProps.Price
             local Model = itemProps.Model
             local Name = itemProps.Name
+            
+            if filter != "" and not string.find(string.lower(Name), string.lower(filter)) then continue end
+
+            showedItems = showedItems + 1
+
+            if showedItems > 30 then break end
+
+            local itemButton = itemList:Add("DButton")
+            itemButton:SetSize(100, 100)
+            itemButton:SetText("")
     
             if Model then
                 local itemModel = vgui.Create("DModelPanel", itemButton)
@@ -112,7 +131,7 @@ function CreateBoutiquePanel(parent)
                     categoryNode:SetIcon(categoryOrItem.Icon or "icon16/folder.png")
                     populateTree(categoryNode, categoryOrItem)
                     categoryNode.DoClick = function()
-                        displayItems(categoryOrItem)
+                        displayItemsFiltered(categoryOrItem, "")
                     end
                 end
             end
