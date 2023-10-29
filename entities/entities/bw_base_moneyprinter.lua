@@ -49,7 +49,7 @@ end
 function ENT:Think()
     if CLIENT then return end
 
-    self:RunModules("OnThink")
+    PrinterModule:OnThink(self)
 
     print("Money: " .. self:GetMoney(), "Power: " .. self:GetPower())
 end
@@ -69,7 +69,7 @@ if SERVER then
     function ENT:Use(ply)
         local oldMoney = self:GetMoney()
 
-        if PrinterModule.Use(self, ply) then
+        if PrinterModule:Use(self, ply) then
             BaseWars.Notify.Send(ply, "You have collected", "$" .. oldMoney .. " from the printer", Color(0, 255, 0))
         end
     end

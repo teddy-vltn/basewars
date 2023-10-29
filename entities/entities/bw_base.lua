@@ -119,10 +119,10 @@ function ENT:AddModule(module)
 
 end
 
-function ENT:RunModules(func)
+/*function ENT:RunModules(func)
     for _, module in ipairs(self.Modules) do
         if module[func] then
             module[func](self) 
         end
     end
-end
+end*/
