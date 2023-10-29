@@ -26,27 +26,7 @@ function CreateBoutiquePanel(parent)
     local itemDisplay = vgui.Create("DPanel", splitter)
     splitter:SetRight(itemDisplay)
 
-    local function collectItems(categoryTable, depth)
-        -- If the depth is zero or negative, stop the recursion.
-        if depth <= 0 then return {} end
     
-        local items = {}
-    
-        for _, categoryOrItem in pairs(categoryTable) do
-            if type(categoryOrItem) ~= "table" then continue end
-            
-            if categoryOrItem.Price then
-                table.insert(items, categoryOrItem)
-            else
-                local subItems = collectItems(categoryOrItem, depth - 1)  -- Decrement the depth
-                for _, item in ipairs(subItems) do
-                    table.insert(items, item)
-                end
-            end
-        end
-    
-        return items
-    end
     
 
     function displayItemsFiltered(categoryTable, filter)
@@ -57,7 +37,7 @@ function CreateBoutiquePanel(parent)
         itemList:SetSpaceY(5)
     
         -- Now, we collect items from the clicked category
-        local items = collectItems(categoryTable, BaseWars.Config.MaxShopRecursiveDepth)
+        local items = BaseWars.SpawnMenu.CollectItems(categoryTable, BaseWars.Config.MaxShopRecursiveDepth)
 
         local showedItems = 0
     
@@ -66,6 +46,7 @@ function CreateBoutiquePanel(parent)
             local Price = itemProps.Price
             local Model = itemProps.Model
             local Name = itemProps.Name
+            local ClassName = itemProps.ClassName
             
             if filter != "" and not string.find(string.lower(Name), string.lower(filter)) then continue end
 
@@ -76,6 +57,7 @@ function CreateBoutiquePanel(parent)
             local itemButton = itemList:Add("DButton")
             itemButton:SetSize(100, 100)
             itemButton:SetText("")
+            itemButton.ClassName = ClassName
     
             if Model then
                 local itemModel = vgui.Create("DModelPanel", itemButton)
@@ -119,8 +101,8 @@ function CreateBoutiquePanel(parent)
             end
             
     
-            itemButton.DoClick = function()
-                -- buy feature
+            itemButton.DoClick = function(self)
+                LocalPlayer():BuyEntity(self.ClassName)
             end
         end
     end
