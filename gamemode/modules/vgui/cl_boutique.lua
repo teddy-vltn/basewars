@@ -8,6 +8,9 @@ function CreateBoutiquePanel(parent)
     searchBar:Dock(TOP)
     searchBar:SetPlaceholderText("Search...")
 
+    -- margin with the bottom elements
+    searchBar:DockMargin(0, 0, 0, 5)
+
     searchBar.OnChange = function(self)
         local searchQuery = self:GetValue()
         displayItemsFiltered(BaseWars.Config.Shop, searchQuery)
