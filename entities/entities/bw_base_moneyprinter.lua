@@ -25,25 +25,47 @@ ENT.LastTimePrinted = 0
 ENT.PowerUsage = 10
 ENT.PowerCapacity = 100
 
+ENT.PrinterColor = Color(0, 0, 0)
+
 local UpgradeModule = nil
 local PrinterModule = nil
 local PowerModule = nil
 
+function ENT:LoadConfig()
+    local printerConfig = BaseWars.Config.Printers[self:GetClass()]
+
+    if not printerConfig then
+        print("Error: Printer configuration not found for ", self:GetClass())
+        return
+    end
+
+    self.BaseCapacity = printerConfig.BaseCapacity
+    self.BasePrintRate = printerConfig.BasePrintRate
+    self.BasePrintCoolDown = printerConfig.BasePrintCoolDown
+    self.PowerUsage = printerConfig.PowerUsage
+    self.PowerCapacity = printerConfig.PowerCapacity
+    self.PrinterColor = printerConfig.PrinterColor
+end
+
 function ENT:Init()
     if CLIENT then return end
+
+    self:LoadConfig()
+
+    self:SetColor(self.PrinterColor)
 
     UpgradeModule = BaseWars.Entity.Modules:Get("Upgradeable")
     PrinterModule = BaseWars.Entity.Modules:Get("Printer")
     PowerModule = BaseWars.Entity.Modules:Get("Power")
 
     self:SetMoney(0)
-    self:SetCapacity(1000)
-    self:SetPrintRate(100)
-    self:SetPrintCoolDown(1)
+    self:SetCapacity(self.BaseCapacity)
+    self:SetPrintRate(self.BasePrintRate)
+    self:SetPrintCoolDown(self.BasePrintCoolDown)
     self:SetUpgradeLevel(1)
 
-    self:SetPowerUsage(10)
-    self:SetPowerCapacity(100)
+    self:SetPowerUsage(self.PowerUsage)
+    self:SetPowerCapacity(self.PowerCapacity)
 
     self:Upgrade()
 end
@@ -60,7 +82,7 @@ end
 if SERVER then 
 
     function ENT:Upgrade()
-        UpgradeModule.Upgrade(self)
+        UpgradeModule:Upgrade(self)
 
         local upgradeLevel = self:GetUpgradeLevel()
 

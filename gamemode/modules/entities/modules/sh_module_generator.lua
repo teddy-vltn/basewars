@@ -37,8 +37,8 @@ function BW_GENERATOR_MODULE:TransmitPowerToNearbyEntities(ent)
 
             local powerModule = BaseWars.Entity.Modules:Get("Power")
             
-            powerModule.ReceivePower(toTransmit, powerToTransmit)
-            BW_GENERATOR_MODULE.DrainPower(ent, powerToTransmit)
+            powerModule:ReceivePower(toTransmit, powerToTransmit)
+            self:DrainPower(ent, powerToTransmit)
         end
     end
 end
@@ -65,7 +65,7 @@ function BW_GENERATOR_MODULE:OnThink(ent)
         ent:SetPower(ent:GetPowerCapacity())
     end
 
-    BW_GENERATOR_MODULE.TransmitPowerToNearbyEntities(ent)
+    self:TransmitPowerToNearbyEntities(ent)
 
 end
 

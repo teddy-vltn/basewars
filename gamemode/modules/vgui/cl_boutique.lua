@@ -1,6 +1,9 @@
 
 function CreateBoutiquePanel(parent)
 
+    PrintTable(BaseWars.Config.Shop)
+    PrintTable(BaseWars.SpawnMenu.FlattenedShop)
+
     local boutiquePanel = vgui.Create("DPanel", parent)
     boutiquePanel:Dock(FILL)
 
@@ -26,29 +29,6 @@ function CreateBoutiquePanel(parent)
     local itemDisplay = vgui.Create("DPanel", splitter)
     splitter:SetRight(itemDisplay)
 
-    local function collectItems(categoryTable, depth)
-        -- If the depth is zero or negative, stop the recursion.
-        if depth <= 0 then return {} end
-    
-        local items = {}
-    
-        for _, categoryOrItem in pairs(categoryTable) do
-            if type(categoryOrItem) ~= "table" then continue end
-            
-            if categoryOrItem.Price then
-                table.insert(items, categoryOrItem)
-            else
-                local subItems = collectItems(categoryOrItem, depth - 1)  -- Decrement the depth
-                for _, item in ipairs(subItems) do
-                    table.insert(items, item)
-                end
-            end
-        end
-    
-        return items
-    end
-    
-
     function displayItemsFiltered(categoryTable, filter)
         itemDisplay:Clear()
         local itemList = vgui.Create("DIconLayout", itemDisplay)
@@ -57,15 +37,19 @@ function CreateBoutiquePanel(parent)
         itemList:SetSpaceY(5)
     
         -- Now, we collect items from the clicked category
-        local items = collectItems(categoryTable, BaseWars.Config.MaxShopRecursiveDepth)
+        local items = BaseWars.SpawnMenu.CollectItems(categoryTable, BaseWars.Config.MaxShopRecursiveDepth)
 
         local showedItems = 0
     
-        for _, itemProps in pairs(items) do
+        for key, itemProps in pairs(items) do
 
             local Price = itemProps.Price
             local Model = itemProps.Model
             local Name = itemProps.Name
+            local ClassName = itemProps.ClassName
+            local Level = itemProps.Level or 0
+
+            print(key)
             
             if filter != "" and not string.find(string.lower(Name), string.lower(filter)) then continue end
 
@@ -76,6 +60,7 @@ function CreateBoutiquePanel(parent)
             local itemButton = itemList:Add("DButton")
             itemButton:SetSize(100, 100)
             itemButton:SetText("")
+            itemButton.itemUUID = key 
     
             if Model then
                 local itemModel = vgui.Create("DModelPanel", itemButton)
@@ -117,10 +102,31 @@ function CreateBoutiquePanel(parent)
                     itemLabelPrice:SetTextColor(Color(255, 0, 0))
                 end
             end
+
+            if Level != 0 then
+                local itemLabelLevel = vgui.Create("DLabel", itemButton)
+                itemLabelLevel:Dock(TOP)
+                itemLabelLevel:SetText("Level " .. Level)
+                itemLabelLevel:SetContentAlignment(5)
+                itemLabelLevel:SetTextColor(Color(255, 255, 255))
+                itemLabelLevel:SetExpensiveShadow(1, Color(0, 0, 0))
+                itemLabelLevel.Think = function()
+                    if LocalPlayer():GetLevel() >= Level then
+                        itemLabelLevel:SetTextColor(Color(0, 255, 0))
+                    else
+                        itemLabelLevel:SetTextColor(Color(255, 0, 0))
+                    end
+                end
+                itemLabelLevel.Paint = function(self, w, h)
+                    return 
+                end
+            end
+            -- draw the level at the top
+            
             
     
-            itemButton.DoClick = function()
-                -- buy feature
+            itemButton.DoClick = function(self)
+                LocalPlayer():BuyEntity(self.itemUUID)
             end
         end
     end

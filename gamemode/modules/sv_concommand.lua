@@ -13,16 +13,7 @@ concommand.Add("gm_spawnsent", function(ply, cmd, args)
     ent:SetPos(ply:GetEyeTrace().HitPos)
 
     -- initialize modules
-    if ent.InitializeModules then
-        ent:InitializeModules()
 
-        -- initialize upgrade module
-        for _, module in pairs(ent.Modules) do
-            if module.Initialize then
-                module:Initialize(ent)
-            end
-        end
-    end
 
     ent:Spawn()
 

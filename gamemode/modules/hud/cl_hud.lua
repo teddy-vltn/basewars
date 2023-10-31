@@ -38,8 +38,20 @@ local function DrawHUD()
     local armorTextWidth = surface.GetTextSize("Armure: " .. armor)
     local money = client:GetMoney()
 
+
     -- Dessinez l'argent (à gauche de l'armure)
     DrawTextWithShadow("Argent: " .. money, "HUDFont", baseX + healthTextWidth + armorTextWidth + 30, baseY, Color(0, 255, 0), Color(0, 0, 0), 1, 1)
+
+    local moneyTextWidth = surface.GetTextSize("Argent: " .. money)
+    local level = client:GetLevel()
+    local xp = client:GetXP()
+    local xpForLevel = client:GetXPForNextLevel()
+
+    -- Dessinez le niveau (à gauche de l'argent)
+    DrawTextWithShadow("Niveau: " .. level, "HUDFont", baseX + healthTextWidth + armorTextWidth + moneyTextWidth + 40, baseY, Color(255, 255, 0), Color(0, 0, 0), 1, 1)
+
+    local levelTextWidth = surface.GetTextSize("Niveau: " .. level)
+    DrawTextWithShadow("XP: " .. xp .. "/" .. xpForLevel, "HUDFont", baseX + healthTextWidth + armorTextWidth + moneyTextWidth + levelTextWidth + 50, baseY, Color(255, 255, 0), Color(0, 0, 0), 1, 1)
 
 end
 

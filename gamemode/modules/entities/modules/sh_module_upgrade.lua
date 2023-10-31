@@ -20,12 +20,12 @@ function BW_UPGRADE_MODULE.New()
     return self
 end
 
-function BW_UPGRADE_MODULE.Initialize(ent)
+function BW_UPGRADE_MODULE:Initialize(ent)
     self.InitializedEntities[ent] = true -- Mark the entity as initialized
     print("Upgrade module initialized")
 end
 
-function BW_UPGRADE_MODULE.Upgrade(ent)
+function BW_UPGRADE_MODULE:Upgrade(ent)
     ent:SetUpgradeLevel(ent:GetUpgradeLevel() + 1)
 end
 

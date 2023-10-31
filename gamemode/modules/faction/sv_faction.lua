@@ -20,7 +20,7 @@ function BaseWars.Faction.CreateFaction(name, leader, password, icon)
     BaseWars.Faction.Factions[name] = {
         Name = name,
         Leader = leader,
-        Members = {leader = true},
+        Members = { [leader] = true },
         Password = password or "",
         Icon = icon or "icon16/group.png"
     }

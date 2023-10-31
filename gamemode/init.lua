@@ -3,11 +3,6 @@ include("shared.lua")
 BaseWars = BaseWars or {}
 BaseWars.Notify = BaseWars.Notify or {}
 
-function GM:Initialize()
-    
-    -- create random faction to test
-    BaseWars.Faction.Initialize()
-end
 
 -- on player initial spawn
 function GM:PlayerInitialSpawn(ply)
@@ -22,3 +17,6 @@ function GM:PlayerInitialSpawn(ply)
 
 
 end
+
+
+
