@@ -26,9 +26,6 @@ function CreateBoutiquePanel(parent)
     local itemDisplay = vgui.Create("DPanel", splitter)
     splitter:SetRight(itemDisplay)
 
-    
-    
-
     function displayItemsFiltered(categoryTable, filter)
         itemDisplay:Clear()
         local itemList = vgui.Create("DIconLayout", itemDisplay)

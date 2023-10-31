@@ -44,6 +44,8 @@ function BW_PRINTER_MODULE:OnThink(ent)
         ent:SetMoney(money + printRate)
         ent.LastTimePrinted = CurTime()
     end
+
+    return true
 end
 
 function BW_PRINTER_MODULE:Use(ent, ply)
@@ -56,6 +58,10 @@ function BW_PRINTER_MODULE:Use(ent, ply)
     if money > 0 then
         ply:AddMoney(money)
         ent:SetMoney(0)
+
+        -- give xp 
+        local xp = math.Round(money / 10)
+        ply:AddXP(xp)
     else
         return false
     end
