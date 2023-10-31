@@ -3,17 +3,6 @@
 BaseWars = BaseWars or {}
 BaseWars.Config = BaseWars.Config or {}
 
-BaseWars.Config.Level = {
-
-    MaxLevel = 100,
-
-    -- Do not change these values unless you know how to use the formula
-    -- https://blog.jakelee.co.uk/converting-levels-into-xp-vice-versa/#:~:text=First%2C%20come%20up%20with%20a,%3D%20larger%20gaps%20between%20levels).
-    FormulaX = 0.3,
-    FormulaY = 2,
-
-}
-
 BaseWars.Config.Printers = {
     ["bw_printer_emerald"] = {
         PrintName = "Emerald Printer",
@@ -86,6 +75,17 @@ BaseWars.Config.Shop = {
 }
 
 BaseWars.Config.MaxShopRecursiveDepth = 5
+
+BaseWars.Config.Level = {
+
+    MaxLevel = 100,
+
+    -- Do not change these values unless you know how to use the formula
+    -- https://blog.jakelee.co.uk/converting-levels-into-xp-vice-versa/#:~:text=First%2C%20come%20up%20with%20a,%3D%20larger%20gaps%20between%20levels).
+    FormulaX = 0.3,
+    FormulaY = 2,
+
+}
 
 BaseWars.Config.Navigation = {
     {
