@@ -1,64 +1,63 @@
--- Définissez d'abord les polices que vous allez utiliser
+-- Définir les polices
 surface.CreateFont("HUDFont", {
     font = "Tahoma",
-    size = 24,
+    size = 20,
     weight = 500,
     antialias = true,
-    shadow = false,
+    shadow = true,
 })
 
-local function DrawTextWithShadow(text, font, x, y, color, shadowColor, offsetX, offsetY)
-    draw.SimpleText(text, font, x + offsetX, y + offsetY, shadowColor)
-    draw.SimpleText(text, font, x, y, color)
-end
-
--- Puis, dessinez le HUD
 local function DrawHUD()
     local client = LocalPlayer()
     if not IsValid(client) then return end
 
     local health = client:Health()
     local armor = client:Armor()
+    local money = client:GetMoney() or 0
+    local level = client:GetLevel() or 0
+    local xp = client:GetXP() or 0
+    local xpForLevel = client:GetXPForNextLevel() or 100
 
-    local screenW = ScrW()
-    local screenH = ScrH()
-
+    local screenW, screenH = ScrW(), ScrH()
     local baseX = 10
-    local baseY = screenH - 30
+    local baseY = screenH - 3
+    local spacing = 15
 
-    surface.SetFont("HUDFont")
+    -- Dessinez le fond
+    surface.SetDrawColor(30, 30, 30, 252)
+    surface.DrawRect(0, screenH - 30, screenW, 30)
 
     -- Dessinez la vie
-    DrawTextWithShadow("Vie: " .. health, "HUDFont", baseX, baseY, Color(255, 0, 0), Color(0, 0, 0), 1, 1)
+    draw.SimpleText("Vie:", "HUDFont", baseX, baseY, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    baseX = baseX + surface.GetTextSize("Vie: ") + spacing
+    draw.SimpleText(health, "HUDFont", baseX, baseY, Color(255, 50, 50), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    baseX = baseX + surface.GetTextSize(health) + spacing
 
-    -- Dessinez l'armure (à gauche de la vie)
-    local healthTextWidth = surface.GetTextSize("Vie: " .. health)
-    DrawTextWithShadow("Armure: " .. armor, "HUDFont", baseX + healthTextWidth + 20, baseY, Color(0, 0, 255), Color(0, 0, 0), 1, 1)
+    -- Dessinez l'armure
+    draw.SimpleText("Armure:", "HUDFont", baseX, baseY, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    baseX = baseX + surface.GetTextSize("Armure: ") + spacing
+    draw.SimpleText(armor, "HUDFont", baseX, baseY, Color(50, 50, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    baseX = baseX + surface.GetTextSize(armor) + spacing
 
-    local armorTextWidth = surface.GetTextSize("Armure: " .. armor)
-    local money = client:GetMoney()
+    -- Dessinez l'argent
+    draw.SimpleText("Argent:", "HUDFont", baseX, baseY, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    baseX = baseX + surface.GetTextSize("Argent: $") + spacing
+    draw.SimpleText(money, "HUDFont", baseX, baseY, Color(50, 255, 50), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    baseX = baseX + surface.GetTextSize(money) + spacing
 
+    -- Dessinez le niveau et l'XP
+    draw.SimpleText("Niveau:", "HUDFont", baseX, baseY, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    baseX = baseX + surface.GetTextSize("Niveau: ") + spacing
+    draw.SimpleText(level, "HUDFont", baseX, baseY, Color(255, 255, 50), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    baseX = baseX + surface.GetTextSize(level) + spacing
 
-    -- Dessinez l'argent (à gauche de l'armure)
-    DrawTextWithShadow("Argent: " .. money, "HUDFont", baseX + healthTextWidth + armorTextWidth + 30, baseY, Color(0, 255, 0), Color(0, 0, 0), 1, 1)
-
-    local moneyTextWidth = surface.GetTextSize("Argent: " .. money)
-    local level = client:GetLevel()
-    local xp = client:GetXP()
-    local xpForLevel = client:GetXPForNextLevel()
-
-    -- Dessinez le niveau (à gauche de l'argent)
-    DrawTextWithShadow("Niveau: " .. level, "HUDFont", baseX + healthTextWidth + armorTextWidth + moneyTextWidth + 40, baseY, Color(255, 255, 0), Color(0, 0, 0), 1, 1)
-
-    local levelTextWidth = surface.GetTextSize("Niveau: " .. level)
-    DrawTextWithShadow("XP: " .. xp .. "/" .. xpForLevel, "HUDFont", baseX + healthTextWidth + armorTextWidth + moneyTextWidth + levelTextWidth + 50, baseY, Color(255, 255, 0), Color(0, 0, 0), 1, 1)
-
+    draw.SimpleText("XP:", "HUDFont", baseX, baseY, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    baseX = baseX + surface.GetTextSize("XP: ") + spacing
+    draw.SimpleText(xp .. "/" .. xpForLevel, "HUDFont", baseX, baseY, Color(255, 255, 50), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 end
 
--- Enfin, associez votre dessin au HUD
 hook.Add("HUDPaint", "DrawCustomHUD", DrawHUD)
 
--- Cachez le HUD par défaut de Garry's Mod pour la vie et l'armure
 hook.Add("HUDShouldDraw", "HideDefaultHUD", function(name)
     if name == "CHudHealth" or name == "CHudBattery" then
         return false
