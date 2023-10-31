@@ -14,6 +14,40 @@ BaseWars.Config.Level = {
 
 }
 
+BaseWars.Config.Printers = {
+    ["bw_printer_emerald"] = {
+        PrintName = "Emerald Printer",
+        Model = "models/props_lab/reciever01a.mdl",
+        BaseCapacity = 2000,
+        BasePrintRate = 20,
+        BasePrintCoolDown = 1,
+        PowerUsage = 20,
+        PowerCapacity = 200,
+        PrinterColor = Color(0, 255, 0),
+    },
+    ["bw_printer_diamond"] = {
+        PrintName = "Diamond Printer",
+        Model = "models/props_lab/reciever01a.mdl",
+        BaseCapacity = 4000,
+        BasePrintRate = 40,
+        BasePrintCoolDown = 1,
+        PowerUsage = 40,
+        PowerCapacity = 400,
+        PrinterColor = Color(0, 0, 255),
+    },
+    ["bw_printer_ruby"] = {
+        PrintName = "Ruby Printer",
+        Model = "models/props_lab/reciever01a.mdl",
+        BaseCapacity = 8000,
+        BasePrintRate = 80,
+        BasePrintCoolDown = 1,
+        PowerUsage = 80,
+        PowerCapacity = 800,
+        PrinterColor = Color(255, 0, 0),
+    },
+    -- ... add other printers with their respective classnames and properties
+}
+
 BaseWars.Config.Shop = {
     ["Entités"] = {
         Icon = "icon16/bricks.png",
@@ -21,8 +55,10 @@ BaseWars.Config.Shop = {
             Icon = "icon16/printer.png",
 
             ["T1"] = { 
-                {Name = "Basic Printer", Price = 10, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_base_moneyprinter"},
-                {Name = "Emerald Printer", Price = 100, Level = 3, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_emerald"},
+                --{Name = "Basic Printer", Price = 10, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_base_moneyprinter"},
+                {Name = "Emerald Printer", Price = 100, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_emerald"},
+                {Name = "Diamond Printer", Price = 200, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_diamond"},
+                {Name = "Ruby Printer", Price = 400, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_ruby"},
             }
         },
         ["Générateurs"] = {

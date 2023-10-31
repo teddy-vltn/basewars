@@ -5,7 +5,7 @@ util.AddNetworkString("BaseWars_BuyEntity")
 local function SpawnEntity(ply, class, pos, ang)
 
     local entity = ents.Create(class)
-    if not IsValid(entity) then return end
+    if not IsValid(entity) then return false, "The entity doesn't exist?????" end
 
     if entity.InitializeModules then
         entity:InitializeModules()
@@ -60,6 +60,11 @@ net.Receive("BaseWars_BuyEntity", function(len, ply)
     local pos, ang = BaseWars.SpawnMenu.CalcPosAndAng(ply, uuid)
 
     local status, message = BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
+
+    -- Debug output
+    print("UUID:", uuid)
+    print("Status:", status)
+    print("Message:", message)
 
     BaseWars.Notify.Send(ply, "Acheter une entité", message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)

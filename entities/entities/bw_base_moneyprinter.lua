@@ -31,8 +31,26 @@ local UpgradeModule = nil
 local PrinterModule = nil
 local PowerModule = nil
 
+function ENT:LoadConfig()
+    local printerConfig = BaseWars.Config.Printers[self:GetClass()]
+
+    if not printerConfig then
+        print("Error: Printer configuration not found for ", self:GetClass())
+        return
+    end
+
+    self.BaseCapacity = printerConfig.BaseCapacity
+    self.BasePrintRate = printerConfig.BasePrintRate
+    self.BasePrintCoolDown = printerConfig.BasePrintCoolDown
+    self.PowerUsage = printerConfig.PowerUsage
+    self.PowerCapacity = printerConfig.PowerCapacity
+    self.PrinterColor = printerConfig.PrinterColor
+end
+
 function ENT:Init()
     if CLIENT then return end
+
+    self:LoadConfig()
 
     self:SetColor(self.PrinterColor)
 

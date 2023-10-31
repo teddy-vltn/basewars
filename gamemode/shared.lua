@@ -7,6 +7,8 @@ GM.Website 		= ""
 
 DeriveGamemode("sandbox")
 
+BaseWars = BaseWars or {}
+
 function recursiveInclusion( scanDirectory, isGamemode )
 	-- Null-coalescing for optional argument
 	isGamemode = isGamemode or false
@@ -70,3 +72,30 @@ function recursiveInclusion( scanDirectory, isGamemode )
 end
 
 recursiveInclusion( GM.FolderName .. "/gamemode", true )
+
+function BaseWars.LoadPrinterConfiguration()
+    for printerClassName, printerConfig in pairs(BaseWars.Config.Printers) do
+        local BasePrinter = scripted_ents.Get("bw_base_moneyprinter")
+        if not BasePrinter then
+            ErrorNoHalt("Failed to find base printer entity!")
+            return
+        end
+        local ENT = table.Copy(BasePrinter)
+        
+        ENT.Type = "anim"
+        ENT.PrintName = printerConfig.PrintName
+        ENT.Model = printerConfig.Model
+        ENT.ClassName = printerClassName
+        
+        scripted_ents.Register(ENT, ENT.ClassName)
+        print("Registered printer " .. ENT.ClassName .. " with config " .. printerConfig.PrintName)
+    end
+end
+
+function GM:Initialize()
+	if SERVER then
+		BaseWars.Faction.Initialize()
+	end
+	
+	BaseWars.LoadPrinterConfiguration()
+end
