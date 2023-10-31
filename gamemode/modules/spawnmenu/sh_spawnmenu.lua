@@ -72,6 +72,8 @@ function BaseWars.SpawnMenu.AddUUIDsToShop(categoryTable)
     return newTable
 end
 
+BaseWars.Config.Shop = BaseWars.SpawnMenu.AddUUIDsToShop(BaseWars.Config.Shop)
+
 -- This function collects items from a category table up to a specified depth.
 -- It's used to extract items from nested categories, creating a flattened view.
 function BaseWars.SpawnMenu.CollectItems(categoryTable, depth)

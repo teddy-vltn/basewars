@@ -19,20 +19,48 @@ end
 -- Register a network string for creating factions
 util.AddNetworkString("BaseWars_CreateFaction")
 -- Function to create a new faction with the given name, leader, password, and icon.
-function BaseWars.Faction.CreateFaction(name, leader, password, icon)
+function BaseWars.Faction.CreateFaction(name, leader, password, color, icon)
+    if not name or name == "" then return false, "Invalid name" end
+
+    -- Remove all non-alphanumeric characters except spaces and accents versions of letters
+    name = name:gsub("[^%w%sÀ-ÖØ-öø-ÿ]", "")
+
+    -- do some simple length checks
+    if #name > 32 then return false, "Name is too long" end
+    if #name < 3 then return false, "Name is too short" end
+
+    if #password > 32 then return false, "Password is too long" end
+
     if BaseWars.Faction.Factions[name] then return false, "Faction already exists" end
+
+    if BaseWars.Faction.GetFactionByMember(leader) then return false, "You are already in a faction" end
 
     BaseWars.Faction.Factions[name] = {
         Name = name,
         Leader = leader,
+        Color = color or Color(255, 255, 255),
         Members = { [leader] = true },
         Password = password or "",
         Icon = icon or "icon16/group.png"
     }
 
+    BaseWars.Faction.SetFaction(leader, name, true)
+
     BaseWars.Faction.SyncFaction(name, BaseWars.Faction.Factions[name]) -- Synchronisation
-    return true
+    return true, "Successfully created faction"
 end
+
+-- Handle networked requests for creating a faction
+net.Receive("BaseWars_CreateFaction", function(len, ply)
+    local factionName = net.ReadString()
+    local factionPassword = net.ReadString()
+    local factionColor = net.ReadColor()
+    local factionIcon = net.ReadString()
+
+    local status, message = BaseWars.Faction.CreateFaction(factionName, ply, factionPassword, factionIcon)
+
+    BaseWars.Notify.Send(ply, "Créer une faction", message, status and Color(0, 255, 0) or Color(255, 0, 0))
+end)
 
 -- Register a network string for updating all factions
 util.AddNetworkString("BaseWars_UpdateFactions")
@@ -105,9 +133,31 @@ function BaseWars.Faction.LeaveFaction(ply)
     factionTable.Members[ply] = nil
     ply:SetFaction("")
 
-    BaseWars.Faction.SyncFaction(factionTable.Name, factionTable) -- Synchronisation
+    PrintTable(factionTable.Members)
+
+    BaseWars.Faction.SyncFaction(factionTable.Name, factionTable)
+
+    -- if there are no more members, delete the faction
+    if table.Count(factionTable.Members) == 0 then
+        BaseWars.Faction.DeleteFaction(factionTable.Name)
+    end
 
     return true, "Successfully left faction"
+end
+
+util.AddNetworkString("BaseWars_FactionIsDeleted")
+-- Function to delete a faction.
+function BaseWars.Faction.DeleteFaction(name)
+    local factionTable = BaseWars.Faction.GetFaction(name)
+    if not factionTable then return false, "Faction does not exist" end
+
+    net.Start("BaseWars_FactionIsDeleted")
+        net.WriteString(name)
+    net.Broadcast()
+
+    BaseWars.Faction.Factions[name] = nil
+
+    return true, "Successfully deleted faction"
 end
 
 -- Handle networked requests for leaving a faction
@@ -121,12 +171,18 @@ net.Receive("BaseWars_LeaveFaction", function(len, ply)
 end)
 
 -- Function to set a player's faction directly, without the need for them to join.
-function BaseWars.Faction.SetFaction(ply, name)
+function BaseWars.Faction.SetFaction(ply, name, leader)
+    if not IsValid(ply) then return false, "Invalid player" end
+
     local factionTable = BaseWars.Faction.GetFaction(name)
     if not factionTable then return false, "Faction does not exist" end
 
     factionTable.Members[ply] = true
     ply:SetFaction(name)
+
+    if leader then
+        factionTable.Leader = ply
+    end
 
     BaseWars.Faction.SyncFaction(name, factionTable) -- Synchronisation
 

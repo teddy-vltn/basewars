@@ -36,6 +36,107 @@ local function AskForPassword(factionName, callback)
     end
 end
 
+local function CreateFactionCreationMenu(callback)
+
+    local frame = vgui.Create("DFrame")
+    frame:SetSize(500, 400)
+    frame:Center()
+    frame:SetTitle("Création de Faction")
+    frame:MakePopup()
+
+    -- Champ de texte pour le nom
+    local nameLabel = vgui.Create("DLabel", frame)
+    nameLabel:Dock(TOP)
+    nameLabel:SetText("Nom de la Faction:")
+    nameLabel:DockMargin(10, 10, 10, 0)
+
+    local nameEntry = vgui.Create("DTextEntry", frame)
+    nameEntry:Dock(TOP)
+    nameEntry:SetTall(25)
+    nameEntry:DockMargin(10, 5, 10, 5)
+
+    -- Choix de couleur
+    local colorPicker = vgui.Create("DColorMixer", frame)
+    colorPicker:Dock(TOP)
+    colorPicker:SetTall(100)
+    colorPicker:DockMargin(10, 5, 10, 5)
+    colorPicker:SetPalette(true)
+    colorPicker:SetAlphaBar(true)
+    colorPicker:SetWangs(true)
+    colorPicker:SetColor(Color(255, 255, 255))
+
+    -- Choix de mot de passe (optionnel)
+    local passwordLabel = vgui.Create("DLabel", frame)
+    passwordLabel:Dock(TOP)
+    passwordLabel:SetText("Mot de Passe (Optionnel):")
+    passwordLabel:DockMargin(10, 10, 10, 0)
+
+    local passwordEntry = vgui.Create("DTextEntry", frame)
+    passwordEntry:Dock(TOP)
+    passwordEntry:SetTall(25)
+    passwordEntry:DockMargin(10, 5, 10, 5)
+
+    -- Choix d'icône pour la faction
+    local iconList = vgui.Create("DIconLayout", frame)
+    iconList:Dock(TOP)
+    iconList:DockMargin(10, 5, 10, 5)
+    iconList:SetSpaceY(5)
+
+    local icons = { -- This is an example list. You can expand it.
+        "icon16/accept.png", "icon16/add.png", "icon16/anchor.png",
+        "icon16/application.png", "icon16/application_add.png"
+        -- ... Add more icons as needed
+    }
+
+    local selectedIcon = icons[1]
+
+    for _, iconName in ipairs(icons) do
+        local iconButton = iconList:Add("DImageButton")
+        iconButton:SetSize(16, 16)
+        iconButton:SetImage(iconName)
+        iconButton.DoClick = function()
+            selectedIcon = iconName
+        end
+    end
+
+    local createButton = vgui.Create("DButton", frame)
+    createButton:Dock(BOTTOM)
+    createButton:SetText("Créer la Faction")
+    createButton:DockMargin(10, 10, 10, 10)
+    createButton:SetEnabled(false) -- Désactivez le bouton par défaut
+    
+    -- Cette fonction vérifie la validité du nom de la faction
+    local function isFactionNameValid(name)
+        -- Exemple de validation: le nom doit comporter au moins 3 caractères. 
+        -- Vous pouvez ajouter d'autres conditions si nécessaire.
+        return #name >= 3
+    end
+    
+    -- Mettez à jour l'état du bouton chaque fois que le contenu du champ de texte change
+    nameEntry.OnChange = function()
+        createButton:SetEnabled(isFactionNameValid(nameEntry:GetValue()))
+    end
+    
+    createButton.DoClick = function()
+        -- Get the data from the form
+        local factionData = {
+            Name = nameEntry:GetValue(),
+            Color = colorPicker:GetColor(),
+            Password = passwordEntry:GetValue(),
+            Icon = selectedIcon
+        }
+
+        -- If a callback function is provided, send the data to it
+        if callback then
+            callback(factionData)
+        end
+
+        frame:Close() -- Close the creation frame
+    end
+
+end
+
+
 local function AskForComfirmation(factionName, callback)
     local confirmationFrame = vgui.Create("DFrame")
     confirmationFrame:SetSize(300, 150)
@@ -145,12 +246,24 @@ function CreateFactionPanel(parent)
     local tree = vgui.Create("DTree", splitter)
     splitter:SetLeft(tree)
 
+    -- bottom of dtree add a button to create a faction
+    local createFactionButton = vgui.Create("DButton", factionPanel)
+    createFactionButton:Dock(BOTTOM)
+    createFactionButton:SetText("Créer une faction")
+    createFactionButton:DockMargin(10, 10, 10, 10)
+    createFactionButton.DoClick = function()
+        CreateFactionCreationMenu(function(factionData)
+            BaseWars.Faction.TryCreateFaction(factionData.Name, factionData.Password, factionData.Color, factionData.Icon)
+        end)
+    end
+
     local factionDetails = vgui.Create("DPanel", splitter)
     splitter:SetRight(factionDetails)
 
     function parent:RefreshFactionData()
         tree:Clear()
 
+        PrintTable(BaseWars.Faction.Factions)
         local factions = BaseWars.Faction.GetFactions()
         local nodeToClick = nil  -- this will store the node that needs to be clicked after refreshing
 
