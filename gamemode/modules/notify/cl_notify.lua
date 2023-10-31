@@ -14,8 +14,9 @@ surface.CreateFont("NotificationText", {
     shadow = true,
 })
 
-local NOTIF_HEIGHT = 50
-local NOTIF_MARGIN = 10
+local NOTIF_HEIGHT = 60
+local NOTIF_MARGIN = 15
+local NOTIF_FADE_TIME = 1 -- Durée de l'animation de disparition en secondes
 
 net.Receive("AddNotification", function()
     local title = net.ReadString()
@@ -33,24 +34,31 @@ net.Receive("AddNotification", function()
 end)
 
 local function DrawNotifications()
-    local startX = 10
-    local startY = 10
+    local startX = 15
+    local startY = 15
 
     for i, notif in ipairs(BaseWars.Notify.Notifications) do
-        if CurTime() - notif.time > 5 then -- Disparaît après 5 secondes
+        local elapsed = CurTime() - notif.time
+        if elapsed > 5 then -- Disparaît après 5 secondes
             table.remove(BaseWars.Notify.Notifications, i)
         else
-
-            local NOTIF_WIDTH = surface.GetTextSize(notif.title) + 10 or 0
-            if surface.GetTextSize(notif.message) + 10 > NOTIF_WIDTH then
-                NOTIF_WIDTH = surface.GetTextSize(notif.message) + 10
+            local alpha = 255
+            if elapsed > 5 - NOTIF_FADE_TIME then
+                alpha = 255 * (1 - (elapsed - (5 - NOTIF_FADE_TIME)) / NOTIF_FADE_TIME)
             end
+
+            local titleWidth, titleHeight = surface.GetTextSize(notif.title)
+            local msgWidth, msgHeight = surface.GetTextSize(notif.message)
+            local NOTIF_WIDTH = math.max(titleWidth, msgWidth) + 20
+
             -- Dessine le fond
-            draw.RoundedBox(4, startX, startY + (i-1) * (NOTIF_HEIGHT + NOTIF_MARGIN), NOTIF_WIDTH, NOTIF_HEIGHT, Color(40, 40, 40, 220))
+            draw.RoundedBox(8, startX, startY + (i-1) * (NOTIF_HEIGHT + NOTIF_MARGIN), NOTIF_WIDTH, NOTIF_HEIGHT, Color(40, 40, 40, alpha))
             
             -- Dessine le titre et le message
-            draw.SimpleText(notif.title, "NotificationTitle", startX + 5, startY + (i-1) * (NOTIF_HEIGHT + NOTIF_MARGIN) + 5, notif.color)
-            draw.SimpleText(notif.message, "NotificationText", startX + 5, startY + (i-1) * (NOTIF_HEIGHT + NOTIF_MARGIN) + 30, notif.color)
+            local titleY = startY + (i-1) * (NOTIF_HEIGHT + NOTIF_MARGIN) + 5
+            local messageY = titleY + titleHeight + 2
+            draw.SimpleText(notif.title, "NotificationTitle", startX + 10, titleY, Color(notif.color.r, notif.color.g, notif.color.b, alpha))
+            draw.SimpleText(notif.message, "NotificationText", startX + 10, messageY, Color(notif.color.r, notif.color.g, notif.color.b, alpha))
         end
     end
 end
