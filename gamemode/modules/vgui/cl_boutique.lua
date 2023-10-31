@@ -1,6 +1,9 @@
 
 function CreateBoutiquePanel(parent)
 
+    PrintTable(BaseWars.Config.Shop)
+    PrintTable(BaseWars.SpawnMenu.FlattenedShop)
+
     local boutiquePanel = vgui.Create("DPanel", parent)
     boutiquePanel:Dock(FILL)
 
@@ -38,13 +41,15 @@ function CreateBoutiquePanel(parent)
 
         local showedItems = 0
     
-        for _, itemProps in pairs(items) do
+        for key, itemProps in pairs(items) do
 
             local Price = itemProps.Price
             local Model = itemProps.Model
             local Name = itemProps.Name
             local ClassName = itemProps.ClassName
             local Level = itemProps.Level or 0
+
+            print(key)
             
             if filter != "" and not string.find(string.lower(Name), string.lower(filter)) then continue end
 
@@ -55,7 +60,7 @@ function CreateBoutiquePanel(parent)
             local itemButton = itemList:Add("DButton")
             itemButton:SetSize(100, 100)
             itemButton:SetText("")
-            itemButton.ClassName = ClassName
+            itemButton.itemUUID = key 
     
             if Model then
                 local itemModel = vgui.Create("DModelPanel", itemButton)
@@ -121,7 +126,7 @@ function CreateBoutiquePanel(parent)
             
     
             itemButton.DoClick = function(self)
-                LocalPlayer():BuyEntity(self.ClassName)
+                LocalPlayer():BuyEntity(self.itemUUID)
             end
         end
     end

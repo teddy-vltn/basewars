@@ -3,8 +3,8 @@ BaseWars.SpawnMenu = BaseWars.SpawnMenu or {}
 
 local Player = FindMetaTable("Player")
 
-function Player:BuyEntity(class)
+function Player:BuyEntity(uuid)
     net.Start("BaseWars_BuyEntity")
-        net.WriteString(class)
+        net.WriteString(uuid)
     net.SendToServer()
 end

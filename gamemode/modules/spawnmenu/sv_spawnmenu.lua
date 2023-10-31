@@ -10,7 +10,7 @@ local function SpawnEntity(ply, class, pos, ang)
     if entity.InitializeModules then
         entity:InitializeModules()
 
-        -- initialize upgrade module
+        -- initialize all modules for a given entity
         for _, module in pairs(entity.Modules) do
             if module.Initialize then
                 module:Initialize(entity)
@@ -25,10 +25,9 @@ local function SpawnEntity(ply, class, pos, ang)
     return true, "Successfully spawned entity"
 end
 
-function BaseWars.SpawnMenu.BuyEntity(ply, class, pos, ang)
-    PrintTable(BaseWars.SpawnMenu.FlattenedShop)
-    local entityTable = BaseWars.SpawnMenu.FlattenedShop[class]
-
+function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
+    local entityTable = BaseWars.SpawnMenu.FlattenedShop[uuid]
+    
     if not entityTable then return false, "Entity does not exist" end
 
     local level = entityTable.Level
@@ -37,6 +36,7 @@ function BaseWars.SpawnMenu.BuyEntity(ply, class, pos, ang)
     local price = entityTable.Price
     if not ply:CanAfford(price) then return false, "You cannot afford this entity" end
 
+    local class = entityTable.ClassName
     local status, message = SpawnEntity(ply, class, pos, ang)
     if not status then return status, message end
 
@@ -55,11 +55,11 @@ function BaseWars.SpawnMenu.CalcPosAndAng(ply, ent)
 end
 
 net.Receive("BaseWars_BuyEntity", function(len, ply)
-    local class = net.ReadString()
+    local uuid = net.ReadString()
 
-    local pos, ang = BaseWars.SpawnMenu.CalcPosAndAng(ply, class)
+    local pos, ang = BaseWars.SpawnMenu.CalcPosAndAng(ply, uuid)
 
-    local status, message = BaseWars.SpawnMenu.BuyEntity(ply, class, pos, ang)
+    local status, message = BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
 
     BaseWars.Notify.Send(ply, "Acheter une entité", message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)
