@@ -7,6 +7,9 @@ surface.CreateFont("HUDFont", {
     shadow = true,
 })
 
+local prevMoney = 0
+local moneyNotifications = {}
+
 local function DrawHUD()
     local client = LocalPlayer()
     if not IsValid(client) then return end
@@ -54,6 +57,36 @@ local function DrawHUD()
     draw.SimpleText("XP:", "HUDFont", baseX, baseY, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
     baseX = baseX + surface.GetTextSize("XP: ") + spacing
     draw.SimpleText(xp .. "/" .. xpForLevel, "HUDFont", baseX, baseY, Color(255, 255, 50), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+    local moneyDifference = client:GetMoney() - prevMoney
+    if moneyDifference ~= 0 then
+        table.insert(moneyNotifications, {
+            value = moneyDifference,
+            positive = moneyDifference > 0, -- Stocke si c'était un gain ou une perte
+            x = baseX + surface.GetTextSize(money),
+            y = baseY - 30,
+            alpha = 255,
+            time = CurTime()
+        })
+        prevMoney = client:GetMoney()
+    end
+
+    -- Dessiner les notifications d'argent
+    for i, notif in ipairs(moneyNotifications) do
+        local fadeTime = 2 -- seconds
+        local elapsedTime = CurTime() - notif.time
+        if elapsedTime > fadeTime then
+            table.remove(moneyNotifications, i)
+        else
+            local alphaDecay = (fadeTime - elapsedTime) / fadeTime
+            notif.alpha = 255 * alphaDecay
+            notif.y = notif.y - 1 -- Fait monter la notification plus rapidement
+            notif.x = notif.x + math.random(-2, 2) -- Mouvement aléatoire horizontal plus prononcé
+            local color = notif.positive and Color(50, 255, 50, notif.alpha) or Color(255, 50, 50, notif.alpha)
+            local prefix = notif.positive and "+" or ""
+            draw.SimpleText(prefix .. notif.value .. "$", "HUDFont", notif.x, notif.y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+        end
+    end
 end
 
 hook.Add("HUDPaint", "DrawCustomHUD", DrawHUD)
