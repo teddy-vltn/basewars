@@ -3,6 +3,17 @@
 BaseWars = BaseWars or {}
 BaseWars.Config = BaseWars.Config or {}
 
+BaseWars.Config.Level = {
+
+    MaxLevel = 100,
+
+    -- Do not change these values unless you know how to use the formula
+    -- https://blog.jakelee.co.uk/converting-levels-into-xp-vice-versa/#:~:text=First%2C%20come%20up%20with%20a,%3D%20larger%20gaps%20between%20levels).
+    FormulaX = 0.3,
+    FormulaY = 2,
+
+}
+
 BaseWars.Config.Shop = {
     ["Entités"] = {
         Icon = "icon16/bricks.png",
@@ -11,7 +22,7 @@ BaseWars.Config.Shop = {
 
             ["T1"] = { 
                 {Name = "Basic Printer", Price = 10, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_base_moneyprinter"},
-            
+                {Name = "Emerald Printer", Price = 100, Level = 3, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_emerald"},
             }
         },
         ["Générateurs"] = {
@@ -36,15 +47,6 @@ BaseWars.Config.Shop = {
         {Name = "Bouncy Ball", Price = 10, Model = "models/maxofs2d/balloon_classic.mdl", ClassName = "gmod_balloon"},
         
     },
-}
-
-BaseWars.Config.Level = {
-
-    MaxLevel = 100,
-
-    FormulaX = 0.3,
-    FormulaY = 2,
-
 }
 
 BaseWars.Config.MaxShopRecursiveDepth = 5

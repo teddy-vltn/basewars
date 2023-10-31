@@ -44,6 +44,7 @@ function CreateBoutiquePanel(parent)
             local Model = itemProps.Model
             local Name = itemProps.Name
             local ClassName = itemProps.ClassName
+            local Level = itemProps.Level or 0
             
             if filter != "" and not string.find(string.lower(Name), string.lower(filter)) then continue end
 
@@ -96,6 +97,27 @@ function CreateBoutiquePanel(parent)
                     itemLabelPrice:SetTextColor(Color(255, 0, 0))
                 end
             end
+
+            if Level != 0 then
+                local itemLabelLevel = vgui.Create("DLabel", itemButton)
+                itemLabelLevel:Dock(TOP)
+                itemLabelLevel:SetText("Level " .. Level)
+                itemLabelLevel:SetContentAlignment(5)
+                itemLabelLevel:SetTextColor(Color(255, 255, 255))
+                itemLabelLevel:SetExpensiveShadow(1, Color(0, 0, 0))
+                itemLabelLevel.Think = function()
+                    if LocalPlayer():GetLevel() >= Level then
+                        itemLabelLevel:SetTextColor(Color(0, 255, 0))
+                    else
+                        itemLabelLevel:SetTextColor(Color(255, 0, 0))
+                    end
+                end
+                itemLabelLevel.Paint = function(self, w, h)
+                    return 
+                end
+            end
+            -- draw the level at the top
+            
             
     
             itemButton.DoClick = function(self)

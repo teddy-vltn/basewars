@@ -31,6 +31,9 @@ function BaseWars.SpawnMenu.BuyEntity(ply, class, pos, ang)
 
     if not entityTable then return false, "Entity does not exist" end
 
+    local level = entityTable.Level
+    if level and level > ply:GetLevel() then return false, "You do not have the required level to buy this entity" end
+
     local price = entityTable.Price
     if not ply:CanAfford(price) then return false, "You cannot afford this entity" end
 
