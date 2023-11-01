@@ -42,25 +42,18 @@ function BW_TESLA_MODULE:OnThink(ent)
             damage:SetDamageType(DMG_SHOCK)
             target:TakeDamageInfo(damage)
 
-            -- Afficher l'effet visuel de l'éclair
-            local effectData = EffectData()
-            effectData:SetStart(teslaPos)
-            effectData:SetOrigin(target:GetPos())
-            effectData:SetMagnitude(5)
-            effectData:SetScale(1)
-            effectData:SetRadius(5)
-            util.Effect("TeslaHitBoxes", effectData, true, true)
+            for i = 1, 10 do  -- Génère 10 étincelles, ajustez ce nombre au besoin
+                local sparkPos = teslaPos + Vector(math.random(-EFFECT_RADIUS, EFFECT_RADIUS), math.random(-EFFECT_RADIUS, EFFECT_RADIUS), 0)
+                local effectData = EffectData()
+                effectData:SetOrigin(sparkPos)
+                effectData:SetMagnitude(1)
+                effectData:SetScale(0.2)
+                util.Effect("Sparks", effectData)
+            end
         end
     end
 
-    for i = 1, 10 do  -- Génère 10 étincelles, ajustez ce nombre au besoin
-        local sparkPos = teslaPos + Vector(math.random(-EFFECT_RADIUS, EFFECT_RADIUS), math.random(-EFFECT_RADIUS, EFFECT_RADIUS), 0)
-        local effectData = EffectData()
-        effectData:SetOrigin(sparkPos)
-        effectData:SetMagnitude(1)
-        effectData:SetScale(0.2)
-        util.Effect("Sparks", effectData)
-    end
+
 end
 
 local teslaModuleInstance = BW_TESLA_MODULE.New()
