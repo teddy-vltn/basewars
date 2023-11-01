@@ -83,15 +83,24 @@ function CreateBoutiquePanel(parent)
                 local itemModel = vgui.Create("DModelPanel", itemButton)
                 itemModel:Dock(FILL)
                 itemModel:SetModel(Model)
-
+                
                 -- Rotate the model
                 itemModel.Angles = Angle(0, 45, 0)
-                itemModel:SetLookAt(Vector(0, 0, 0))
-                itemModel:SetCamPos(Vector(100, 100, 100))
-                itemModel:SetFOV(10)
+                
+                -- Calculate the center and size of the model
+                local mn, mx = itemModel.Entity:GetRenderBounds()
+                local center = (mn + mx) / 2
+                local size = mn:Distance(mx)
+                
+                -- Adjust the camera to focus on the model's center 
+                -- and position it in front of the model based on the model's size
+                itemModel:SetLookAt(center)
+                itemModel:SetCamPos(center + Vector(-size, 0, 0))  -- Adjusted this line to position the camera in front
+                itemModel:SetFOV(70)
+                
+                -- Set lighting
                 itemModel:SetAmbientLight(Color(255, 255, 255))
-                itemModel:SetDirectionalLight(BOX_TOP, Color(255, 255, 255))
-
+                itemModel:SetDirectionalLight(BOX_TOP, Color(255, 255, 255))                
             end
             
             -- draw the name and price at the bottom 
