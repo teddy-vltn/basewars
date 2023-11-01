@@ -32,6 +32,16 @@ BaseWars.Config.Entities = {
             },
         },
     },
+    Turrets = {
+        BaseEntity = "bw_base_turret",
+        Entities = {
+            ["bw_turret"] = {
+                PrintName = "Turret",
+                Model = "models/combine_turrets/floor_turret.mdl",
+                -- ... autres propriétés
+            },
+        },
+    },
     -- ... autres catégories
 }
 
@@ -60,6 +70,10 @@ BaseWars.Config.Shop = {
             {Name = "Basic Generator", Price = 50, Model = "models/props_lab/reciever01b.mdl", ClassName = "bw_base_generator"},
             {Name = "Coal Generator", Price = 50, Model = "models/props_lab/reciever01b.mdl", ClassName = "bw_generator_coal"},
         },
+        ["Tourelle"] = {
+
+            {Name = "Tourelle Basique", Price = 50, Model = "models/combine_turrets/floor_turret.mdl", ClassName = "bw_turret"},
+        }
     },
     ["Armes"] = {
         Icon = "icon16/gun.png",

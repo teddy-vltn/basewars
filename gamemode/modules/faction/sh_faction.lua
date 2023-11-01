@@ -30,3 +30,9 @@ function BaseWars.Faction.HasFactionPassword(name)
 
     if CLIENT then return factionTable.Password else return factionTable.Password != "" end
 end
+
+function Player:IsFriendlyEntity(ent)
+    -- check if owner is friendly
+    -- later 
+    return false
+end
