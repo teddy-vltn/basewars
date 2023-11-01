@@ -84,11 +84,17 @@ function ENT:Initialize()
 end
 
 function ENT:OnTakeDamage(dmg)
+    if CLIENT then return end
+
     local newHealth = self:Health() - dmg:GetDamage()
     self:SetHealth(newHealth)
 
-    if newHealth <= 0 then
+    if newHealth <= 0 and not self.Destroyed then
         self:OnDeath(dmg)
+
+        self.Destroyed = true
+
+        self:Explode()
     end
 
     for _, module in ipairs(self.Modules) do
@@ -104,6 +110,34 @@ function ENT:OnDeath(dmg)
             module.OnDeath(self, dmg)
         end
     end
+end
+
+function ENT:Explode(e)
+
+    if e == false then
+
+        local vPoint = self:GetPos()
+        local effectdata = EffectData()
+        effectdata:SetOrigin(vPoint)
+        util.Effect("Explosion", effectdata)
+
+        self:Remove()
+        
+    return end
+
+    local ex = ents.Create("env_explosion")
+        ex:SetPos(self:GetPos())
+    ex:Spawn()
+    ex:Activate()
+    
+    ex:SetKeyValue("iMagnitude", 20)
+    
+    ex:Fire("explode")
+
+    self:Remove()
+
+    SafeRemoveEntityDelayed(ex, 0.1)
+
 end
 
 function ENT:InitializeModules()
