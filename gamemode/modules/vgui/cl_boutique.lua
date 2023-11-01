@@ -1,8 +1,23 @@
 
-function CreateBoutiquePanel(parent)
+local function AskForAutoBuy(uuid, callback)
+    Derma_Query("Do you want to auto-buy this item on spawn?", "Auto-buy", 
+        "Yes", 
+        function()
+            if callback then
+                callback(true, uuid) -- Callback indicating they chose "Yes"
+            end
+        end,
+        "No", 
+        function() 
+            if callback then
+                callback(false, uuid) -- Callback indicating they chose "No"
+            end
+        end
+    )
+end
 
-    PrintTable(BaseWars.Config.Shop)
-    PrintTable(BaseWars.SpawnMenu.FlattenedShop)
+
+function CreateBoutiquePanel(parent)
 
     local boutiquePanel = vgui.Create("DPanel", parent)
     boutiquePanel:Dock(FILL)
@@ -29,6 +44,9 @@ function CreateBoutiquePanel(parent)
     local itemDisplay = vgui.Create("DPanel", splitter)
     splitter:SetRight(itemDisplay)
 
+    local boolAutoBuy, weaponAutoBuy = BaseWars.SpawnMenu.GetWeaponAutoBuy(LocalPlayer())
+
+
     function displayItemsFiltered(categoryTable, filter)
         itemDisplay:Clear()
         local itemList = vgui.Create("DIconLayout", itemDisplay)
@@ -48,8 +66,7 @@ function CreateBoutiquePanel(parent)
             local Name = itemProps.Name
             local ClassName = itemProps.ClassName
             local Level = itemProps.Level or 0
-
-            print(key)
+            local Weapon = itemProps.Weapon or false
             
             if filter != "" and not string.find(string.lower(Name), string.lower(filter)) then continue end
 
@@ -100,6 +117,54 @@ function CreateBoutiquePanel(parent)
                     itemLabelPrice:SetTextColor(Color(0, 255, 0))
                 else
                     itemLabelPrice:SetTextColor(Color(255, 0, 0))
+                end
+            end
+
+            -- if it's a weapon add a button to allow auto-purchase on spawn
+            if Weapon then
+
+
+                -- the button is just an icon16/accept.png on the top right
+                -- the button is disabled if you can't afford it
+                -- the button draws over the item 
+                local itemButtonAutoBuy = vgui.Create("DImageButton", itemButton)
+                itemButtonAutoBuy:SetSize(16, 16)
+
+                if key == weaponAutoBuy then
+                    itemButtonAutoBuy:SetImage("icon16/cancel.png")
+                else
+                    itemButtonAutoBuy:SetImage("icon16/arrow_rotate_clockwise.png")
+                end
+                itemButtonAutoBuy:SetPos(84 - 5, 0 + 5)
+                itemButtonAutoBuy:SetEnabled(LocalPlayer():GetMoney() >= Price)
+                itemButtonAutoBuy.DoClick = function(self)
+                    print(boolAutoBuy, weaponAutoBuy)
+
+                    if boolAutoBuy and key != weaponAutoBuy then
+                        return -- send notify
+                    end
+
+                    if key == weaponAutoBuy then
+                        LocalPlayer():SetAutoBuy(false, "")
+
+                        boolAutoBuy = false
+                        weaponAutoBuy = ""
+
+                        self:SetImage("icon16/arrow_rotate_clockwise.png")
+                    else
+                        AskForAutoBuy(key, function(didChooseYes, weaponUUID)
+                            if didChooseYes then
+                                LocalPlayer():SetAutoBuy(true, weaponUUID)
+
+                                boolAutoBuy = true
+                                weaponAutoBuy = weaponUUID
+
+                                self:SetImage("icon16/cancel.png")
+                            else
+                                -- Player chose "No"
+                            end
+                        end)
+                    end
                 end
             end
 

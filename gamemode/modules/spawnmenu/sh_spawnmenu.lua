@@ -110,3 +110,11 @@ function BaseWars.FlattenShop()
 end
 
 BaseWars.FlattenShop()
+
+function BaseWars.SpawnMenu.GetWeaponAutoBuy(ply)
+    return ply:GetNWBool("BaseWars_AutoBuy"), ply:GetNWString("BaseWars_AutoBuyWeapon")
+end
+
+
+
+

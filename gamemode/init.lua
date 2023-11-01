@@ -18,5 +18,3 @@ function GM:PlayerInitialSpawn(ply)
 
 end
 
-
-

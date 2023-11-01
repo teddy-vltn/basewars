@@ -34,6 +34,19 @@ local function SpawnEntity(ply, class, pos, ang)
     return true, "Successfully spawned entity"
 end
 
+local function GiveWeapon(ply, class)
+    -- Create the entity based on its class
+    local entity = ents.Create(class)
+    
+    -- Check if the entity is valid, if not return an error
+    if not IsValid(entity) then return false, "The entity doesn't exist?????" end
+
+    -- Give the weapon to the player
+    ply:Give(class)
+
+    return true, "Successfully spawned entity"
+end
+
 -- Function to handle the purchasing of an entity.
 -- Checks various conditions (e.g., player level, affordability) before spawning the entity.
 function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
@@ -53,7 +66,16 @@ function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
 
     -- Attempt to spawn the entity
     local class = entityTable.ClassName
-    local status, message = SpawnEntity(ply, class, pos, ang)
+    local weapon = entityTable.Weapon
+
+    local status, message
+
+    if weapon then
+        status, message = GiveWeapon(ply, class)
+    else
+        status, message = SpawnEntity(ply, class, pos, ang)
+    end
+
     if not status then return status, message end
 
     -- Deduct the price of the entity from the player's money
@@ -94,3 +116,60 @@ net.Receive("BaseWars_BuyEntity", function(len, ply)
     -- Send a notification to the player about the result of their purchase request
     BaseWars.Notify.Send(ply, "Acheter une entité", message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)
+
+local AUTOBUY_BOOL = "BaseWars_AutoBuy"
+local AUTOBUY_WEAPON = "BaseWars_AutoBuyWeapon"
+
+util.AddNetworkString(AUTOBUY_BOOL)
+
+-- Cette fonction semble redondante, donc nous la supprimons
+-- function BaseWars.SpawnMenu.SetWeaponForAutoBuy(ply, uuid) ...
+function BaseWars.SpawnMenu.DisableWeaponAutoBuy(ply)
+    ply:SetNWBool(AUTOBUY_BOOL, false)
+    ply:SetNWString(AUTOBUY_WEAPON, "")
+
+    return true, "Successfully disabled auto buy for all weapons."
+end
+
+function BaseWars.SpawnMenu.ActivateWeaponAutoBuy(ply, uuid, state)
+    ply:SetNWBool(AUTOBUY_BOOL, state)
+
+    if state then
+        ply:SetNWString(AUTOBUY_WEAPON, uuid)
+        return true, "Successfully enabled auto buy for weapon " .. uuid
+    else
+        ply:SetNWString(AUTOBUY_WEAPON, "")
+        return true, "Successfully disabled auto buy for weapon " .. uuid
+    end
+end
+
+net.Receive(AUTOBUY_BOOL, function(len, ply)
+    local state = net.ReadBool()
+    local uuid = net.ReadString()
+
+    local status, message
+    if state then
+        status, message = BaseWars.SpawnMenu.ActivateWeaponAutoBuy(ply, uuid, state)
+
+        BaseWars.SpawnMenu.BuyEntity(ply, uuid, nil, nil)
+    else
+        status, message = BaseWars.SpawnMenu.DisableWeaponAutoBuy(ply)
+    end
+
+    BaseWars.Notify.Send(ply, "Auto Buy", message, status and Color(0, 255, 0) or Color(255, 0, 0))
+end)
+
+hook.Add("PlayerSpawn", "BaseWars_AutoBuyHook", function(ply)
+    -- call it on the next frame because gmod is dumb
+    timer.Simple(0, function()
+        if not IsValid(ply) then return end  -- Check if the player is still valid
+        
+        if ply:GetNWBool(AUTOBUY_BOOL) then
+            local uuid = ply:GetNWString(AUTOBUY_WEAPON)
+            if uuid and uuid ~= "" then
+                BaseWars.SpawnMenu.BuyEntity(ply, uuid)
+            end
+        end
+    end)
+end)
+

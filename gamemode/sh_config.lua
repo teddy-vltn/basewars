@@ -60,10 +60,10 @@ BaseWars.Config.Shop = {
         Icon = "icon16/gun.png",
 
         ["Pistolets"] = {
-            {Name = "Pistol", Price = 10, Model = "models/weapons/w_pistol.mdl", ClassName = "weapon_pistol"},
+            {Name = "Pistol", Price = 10, Model = "models/weapons/w_pistol.mdl", ClassName = "weapon_pistol", Weapon = true},
         },
         ["Fusils"] = {
-            {Name = "Rifle", Price = 50, Model = "models/weapons/w_rif_ak47.mdl", ClassName = "weapon_ak47"},
+            {Name = "Rifle", Price = 50, Model = "models/weapons/w_rif_ak47.mdl", ClassName = "weapon_ak47", Weapon = true},
         },
     },
     ["Fun"] = {

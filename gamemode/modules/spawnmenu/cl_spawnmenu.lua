@@ -8,3 +8,10 @@ function Player:BuyEntity(uuid)
         net.WriteString(uuid)
     net.SendToServer()
 end
+
+function Player:SetAutoBuy(bool, weapon)
+    net.Start("BaseWars_AutoBuy")
+        net.WriteBool(bool)
+        net.WriteString(weapon)
+    net.SendToServer()
+end
