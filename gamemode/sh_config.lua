@@ -42,6 +42,16 @@ BaseWars.Config.Entities = {
             },
         },
     },
+    Teslas = {
+        BaseEntity = "bw_base_tesla",
+        Entities = {
+            ["bw_tesla"] = {
+                PrintName = "Tesla",
+                Model = "models/props_c17/FurnitureBoiler001a.mdl",
+                -- ... autres propriétés
+            },
+        },
+    },
     -- ... autres catégories
 }
 
@@ -73,6 +83,7 @@ BaseWars.Config.Shop = {
         ["Tourelle"] = {
 
             {Name = "Tourelle Basique", Price = 50, Model = "models/combine_turrets/floor_turret.mdl", ClassName = "bw_turret"},
+            {Name = "Tesla Basique", Price = 50, Model = "models/props_c17/FurnitureBoiler001a.mdl", ClassName = "bw_tesla"},
         }
     },
     ["Armes"] = {
