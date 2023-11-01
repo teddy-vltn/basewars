@@ -119,12 +119,6 @@ BaseWars.Config.Level = {
 
 BaseWars.Config.Navigation = {
     {
-        Name = "Accueil",
-        Icon = "icon16/house.png",
-        Panel = function(parent)
-        end
-    },
-    {
         Name = "Boutique",
         Icon = "icon16/cart.png",
         Panel = function(parent)

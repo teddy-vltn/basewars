@@ -47,10 +47,10 @@ local function DrawNotifications()
                 alpha = 255 * (1 - (elapsed - (5 - NOTIF_FADE_TIME)) / NOTIF_FADE_TIME)
             end
 
-            local titleWidth, titleHeight = surface.GetTextSize(notif.title)
-            local msgWidth, msgHeight = surface.GetTextSize(notif.message)
+            local titleWidth, titleHeight = surface.GetTextSize(notif.title) or 0, 0
+            local msgWidth, msgHeight = surface.GetTextSize(notif.message) or 0, 0
             local NOTIF_WIDTH = math.max(titleWidth, msgWidth) + 20
-
+            
             -- Dessine le fond
             draw.RoundedBox(8, startX, startY + (i-1) * (NOTIF_HEIGHT + NOTIF_MARGIN), NOTIF_WIDTH, NOTIF_HEIGHT, Color(40, 40, 40, alpha))
             

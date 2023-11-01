@@ -32,6 +32,14 @@ local function GiveWeapon(ply, class)
     -- Give the weapon to the player
     ply:Give(class)
 
+    -- Equip the weapon
+    ply:SelectWeapon(class)
+
+    -- Give ammo to the player
+    local ammoType = entity:GetPrimaryAmmoType()
+    local ammoCount = entity:GetMaxClip1() * 2
+    ply:SetAmmo(ammoCount, ammoType)
+
     return true, "Successfully spawned entity"
 end
 
