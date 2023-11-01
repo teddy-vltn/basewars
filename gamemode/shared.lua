@@ -73,22 +73,31 @@ end
 
 recursiveInclusion( GM.FolderName .. "/gamemode", true )
 
-function BaseWars.LoadPrinterConfiguration()
-    for printerClassName, printerConfig in pairs(BaseWars.Config.Printers) do
-        local BasePrinter = scripted_ents.Get("bw_base_moneyprinter")
-        if not BasePrinter then
-            ErrorNoHalt("Failed to find base printer entity!")
+function BaseWars.LoadEntityConfiguration()
+    for category, categoryConfig in pairs(BaseWars.Config.Entities) do
+        local baseEntityName = categoryConfig.BaseEntity
+        local baseEntity = scripted_ents.Get(baseEntityName)
+        
+        if not baseEntity then
+            ErrorNoHalt("Failed to find base entity: " .. baseEntityName)
             return
         end
-        local ENT = table.Copy(BasePrinter)
-        
-        ENT.Type = "anim"
-        ENT.PrintName = printerConfig.PrintName
-        ENT.Model = printerConfig.Model
-        ENT.ClassName = printerClassName
-        
-        scripted_ents.Register(ENT, ENT.ClassName)
-        print("Registered printer " .. ENT.ClassName .. " with config " .. printerConfig.PrintName)
+
+        for entityClassName, entityConfig in pairs(categoryConfig.Entities) do
+            local ENT = table.Copy(baseEntity)
+            
+            ENT.Type = "anim"
+            ENT.PrintName = entityConfig.PrintName
+            ENT.Model = entityConfig.Model
+            ENT.ClassName = entityClassName
+            
+            for key, value in pairs(entityConfig) do
+                ENT[key] = value
+            end
+
+            scripted_ents.Register(ENT, ENT.ClassName)
+            print("Registered " .. category .. " " .. ENT.ClassName .. " with config " .. entityConfig.PrintName)
+        end
     end
 end
 
@@ -96,6 +105,6 @@ function GM:Initialize()
 	if SERVER then
 		BaseWars.Faction.Initialize()
 	end
-	
-	BaseWars.LoadPrinterConfiguration()
+
+	BaseWars.LoadEntityConfiguration()
 end

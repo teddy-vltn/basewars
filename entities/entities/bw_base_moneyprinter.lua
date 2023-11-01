@@ -32,7 +32,7 @@ local PrinterModule = nil
 local PowerModule = nil
 
 function ENT:LoadConfig()
-    local printerConfig = BaseWars.Config.Printers[self:GetClass()]
+    local printerConfig = BaseWars.Config.Entities.Printers[self:GetClass()]
 
     if not printerConfig then
         print("Error: Printer configuration not found for ", self:GetClass())

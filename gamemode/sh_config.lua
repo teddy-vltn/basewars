@@ -3,38 +3,36 @@
 BaseWars = BaseWars or {}
 BaseWars.Config = BaseWars.Config or {}
 
-BaseWars.Config.Printers = {
-    ["bw_printer_emerald"] = {
-        PrintName = "Emerald Printer",
-        Model = "models/props_lab/reciever01a.mdl",
-        BaseCapacity = 2000,
-        BasePrintRate = 20,
-        BasePrintCoolDown = 1,
-        PowerUsage = 20,
-        PowerCapacity = 200,
-        PrinterColor = Color(0, 255, 0),
+BaseWars.Config.Entities = {
+    Printers = {
+        BaseEntity = "bw_base_moneyprinter",
+        Entities = {
+            ["bw_printer_emerald"] = {
+                PrintName = "Emerald Printer",
+                Model = "models/props_lab/reciever01a.mdl",
+                PrinterColor = Color(0, 255, 0),
+                -- ... autres propriétés
+            },
+            ["bw_printer_diamond"] = {
+                PrintName = "Diamond Printer",
+                Model = "models/props_lab/reciever01a.mdl",
+                PrinterColor = Color(0, 0, 255),
+                -- ... autres propriétés
+            },
+            -- ... autres imprimantes
+        },
     },
-    ["bw_printer_diamond"] = {
-        PrintName = "Diamond Printer",
-        Model = "models/props_lab/reciever01a.mdl",
-        BaseCapacity = 4000,
-        BasePrintRate = 40,
-        BasePrintCoolDown = 1,
-        PowerUsage = 40,
-        PowerCapacity = 400,
-        PrinterColor = Color(0, 0, 255),
+    Generators = {
+        BaseEntity = "bw_base_generator",
+        Entities = {
+            ["bw_generator_coal"] = {
+                PrintName = "Coal Generator",
+                Model = "models/props_lab/reciever01b.mdl",
+                -- ... autres propriétés
+            },
+        },
     },
-    ["bw_printer_ruby"] = {
-        PrintName = "Ruby Printer",
-        Model = "models/props_lab/reciever01a.mdl",
-        BaseCapacity = 8000,
-        BasePrintRate = 80,
-        BasePrintCoolDown = 1,
-        PowerUsage = 80,
-        PowerCapacity = 800,
-        PrinterColor = Color(255, 0, 0),
-    },
-    -- ... add other printers with their respective classnames and properties
+    -- ... autres catégories
 }
 
 BaseWars.Config.Shop = {
@@ -48,12 +46,19 @@ BaseWars.Config.Shop = {
                 {Name = "Emerald Printer", Price = 100, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_emerald"},
                 {Name = "Diamond Printer", Price = 200, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_diamond"},
                 {Name = "Ruby Printer", Price = 400, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_ruby"},
+            },
+
+            ["VIP"] = {
+                ["T1"] = {
+
+                }
             }
         },
         ["Générateurs"] = {
             Icon = "icon16/lightning.png",
 
             {Name = "Basic Generator", Price = 50, Model = "models/props_lab/reciever01b.mdl", ClassName = "bw_base_generator"},
+            {Name = "Coal Generator", Price = 50, Model = "models/props_lab/reciever01b.mdl", ClassName = "bw_generator_coal"},
         },
     },
     ["Armes"] = {

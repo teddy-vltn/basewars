@@ -19,8 +19,22 @@ ENT.BasePowerCapacity = 1000
 
 local GeneratorModule = nil
 
+function ENT:LoadConfig()
+    local generatorConfig = BaseWars.Config.Entities.Generators[self:GetClass()]
+
+    if not generatorConfig then
+        print("Error: Generator configuration not found for ", self:GetClass())
+        return
+    end
+
+    self.BasePowerGeneration = generatorConfig.BasePowerGeneration
+    self.BasePowerCapacity = generatorConfig.BasePowerCapacity
+end
+
 function ENT:Init()
     if CLIENT then return end
+
+    self:LoadConfig()
 
     GeneratorModule = BaseWars.Entity.Modules:Get("Generator")
 
