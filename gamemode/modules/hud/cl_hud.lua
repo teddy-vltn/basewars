@@ -91,6 +91,37 @@ end
 
 hook.Add("HUDPaint", "DrawCustomHUD", DrawHUD)
 
+hook.Add("HUDPaint", "EntityInfoDisplay", function()
+    -- Obtenez le joueur local
+    local ply = LocalPlayer()
+    
+    -- Vérifiez si le joueur est valide
+    if not IsValid(ply) then return end
+
+    -- Créez une structure de données pour la trace
+    local traceData = {
+        start = ply:EyePos(),
+        endpos = ply:EyePos() + ply:EyeAngles():Forward() * 1000, -- 1000 est la distance maximale pour détecter une entité
+        filter = ply
+    }
+
+    -- Effectuez la trace
+    local trace = util.TraceLine(traceData)
+
+    -- Vérifiez si la trace a touché une entité valide
+    local ent = trace.Entity
+    if not IsValid(ent) then return end
+
+    -- Récupérez les informations de l'entité
+    local name = ent.PrintName or ent:GetClass()
+    local health = ent:Health()
+
+    -- Affichez les informations
+    draw.SimpleText("Name: " .. name, "Default", ScrW() * 0.5, ScrH() * 0.7, color_white, TEXT_ALIGN_CENTER)
+    draw.SimpleText("Health: " .. health, "Default", ScrW() * 0.5, ScrH() * 0.72, color_white, TEXT_ALIGN_CENTER)
+end)
+
+
 hook.Add("HUDShouldDraw", "HideDefaultHUD", function(name)
     if name == "CHudHealth" or name == "CHudBattery" then
         return false
