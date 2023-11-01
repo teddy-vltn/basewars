@@ -71,12 +71,14 @@ function ENT:Init()
 end
 
 function ENT:Think()
+    print(self:GetMoney())
+
     if CLIENT then return end
 
     PrinterModule:OnThink(self)
     PowerModule:OnThink(self)
 
-    print("Money: " .. self:GetMoney(), "Power: " .. self:GetPower())
+    
 end
 
 if SERVER then 
@@ -99,7 +101,81 @@ if SERVER then
         end
     end
 
+else 
+
+    local fontName = "BaseWars.MoneyPrinter"
+
+    surface.CreateFont(fontName, {
+        font = "Roboto",
+        size = 24,
+        weight = 1000
+    })
+
+    surface.CreateFont(fontName .. ".Big", {
+        font = "Roboto",
+        size = 32,
+        weight = 1000
+    })
+
+    surface.CreateFont(fontName .. ".MedBig", {
+        font = "Roboto",
+        size = 28,
+        weight = 1000
+    })
+
+    
+
+    function ENT:DrawDisplay(pos, ang, scale)
+        local w, h = 216 * 2, 136 * 2
+    
+        -- Background
+        draw.RoundedBox(4, 0, 0, w, h, Color(0, 0, 0, 200))
+
+        -- Afficher le nom de l'imprimante
+        draw.DrawText(self.PrintName, fontName, w / 2, 4, Color(255, 255, 255), TEXT_ALIGN_CENTER)
+
+        -- Afficher le niveau
+        --draw.DrawText("LEVEL: " .. self:GetLevel(), fontName .. ".Big", 4, 32, self.FontColor, TEXT_ALIGN_LEFT)
+        --surface.DrawLine(0, 68, w, 68)
+
+        -- Afficher l'argent actuellement dans l'imprimante
+        local currentMoney = BaseWars.NumberFormat(self:GetMoney())
+        local maxMoney = BaseWars.NumberFormat(self:GetCapacity())
+        draw.DrawText("CASH: " .. currentMoney .. " / " .. maxMoney, fontName .. ".Big", 4, 72, Color(255, 255, 255), TEXT_ALIGN_LEFT)
+
+        -- Afficher le papier restant
+       --local paper = math.floor(self:GetPaper())
+        --draw.DrawText("Paper: " .. paper .. " sheets", fontName .. ".MedBig", 4, 94 + 49, self.FontColor, TEXT_ALIGN_LEFT)
+    end
+
+    function ENT:Calc3D2DParams()
+        local pos = self:GetPos()
+        local ang = self:GetAngles()
+
+        pos = pos + ang:Up() * 3.09
+        pos = pos + ang:Forward() * -7.35
+        pos = pos + ang:Right() * 10.82
+
+        ang:RotateAroundAxis(ang:Up(), 90)
+
+        return pos, ang, 0.1 / 2
+    end
 end
+    
+function ENT:Draw()
+    self:DrawModel()
+
+    if CLIENT then
+        local pos, ang, scale = self:Calc3D2DParams()
+
+        cam.Start3D2D(pos, ang, scale)
+            pcall(self.DrawDisplay, self, pos, ang, scale)
+        cam.End3D2D()
+    end
+end
+
+
+    
 
 
 

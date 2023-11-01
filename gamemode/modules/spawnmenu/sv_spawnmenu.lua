@@ -14,18 +14,6 @@ local function SpawnEntity(ply, class, pos, ang)
     -- Check if the entity is valid, if not return an error
     if not IsValid(entity) then return false, "The entity doesn't exist?????" end
 
-    -- If the entity has modules to initialize, do so
-    if entity.InitializeModules then
-        entity:InitializeModules()
-
-        -- Initialize each module associated with the entity
-        for _, module in pairs(entity.Modules) do
-            if module.Initialize then
-                module:Initialize(entity)
-            end
-        end
-    end
-
     -- Set the entity's position and angle
     entity:SetPos(pos)
     entity:SetAngles(ang)

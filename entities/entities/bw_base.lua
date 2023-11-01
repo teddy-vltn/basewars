@@ -18,7 +18,7 @@ ENT.PresetMaxHealth = 100
 
 -- Modules list
 ENT.Modules         = {}
-ENT.AllNetworkVars  = {}
+ENT.InitializedModules = {}
 
 ENT.IsBaseWarsEntity = true
 
@@ -29,15 +29,31 @@ end
 function ENT:SetupDataTables()
     print("Setting up data tables")
 
-    local i = 0
+    -- Initialiser les modules ici (avant de définir les NetworkVars)
+    self:InitializeModules()
 
-    for _, nwVar in ipairs(self.AllNetworkVars) do
+    local i = 0
+    /*for _, nwVar in ipairs(self.AllNetworkVars) do
         i = i + 1
         local varType, slot, name = unpack(nwVar)
         self:NetworkVar(name, slot + i, varType)
         print("Added network var: " .. name)
+    end*/
+
+    -- for initialized modules only
+    for _, module in ipairs(self.InitializedModules) do
+        if module.NetworkVars then
+            for _, nwVar in ipairs(module.NetworkVars) do
+                i = i + 1
+                local varType, slot, name = unpack(nwVar)
+                self:NetworkVar(name, slot + i, varType)
+                print("Added network var: " .. name)
+
+            end
+        end
     end
 end
+
 
 function ENT:Initialize()
 
@@ -99,23 +115,21 @@ function ENT:InitializeModules()
         local module = moduleManager:Get(moduleName)
 
         if !module then
-            print("Module " .. moduleName .. " does not exist!")
+            print("Module does not exist!")
             continue
         end
 
         self:AddModule(module)
+
+        if module.Initialize then
+            module:Initialize(self)
+        end
     end
 end
 
 function ENT:AddModule(module)
 
-    table.insert(self.Modules, module)
-
-    if module.NetworkVars then
-        for _, nwVar in ipairs(module.NetworkVars) do
-            table.insert(self.AllNetworkVars, nwVar)
-        end
-    end
+    table.insert(self.InitializedModules, module)
 
 end
 

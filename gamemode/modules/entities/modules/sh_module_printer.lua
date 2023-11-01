@@ -25,6 +25,7 @@ end
 
 function BW_PRINTER_MODULE:Initialize(ent)
     self.InitializedEntities[ent] = true -- Mark the entity as initialized
+
     print("Printer module initialized for entity: ", ent)
 end
 
