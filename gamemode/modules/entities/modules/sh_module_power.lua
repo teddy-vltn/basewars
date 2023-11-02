@@ -68,5 +68,9 @@ function BW_POWER_MODULE:DrainPower(ent, power)
     end
 end
 
+function BW_POWER_MODULE:IsPowered(ent)
+    return ent:GetPower() > ent:GetPowerUsage()
+end
+
 local powerModuleInstance = BW_POWER_MODULE.New()
 BaseWars.Entity.Modules:Add(powerModuleInstance)
