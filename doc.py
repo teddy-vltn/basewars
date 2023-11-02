@@ -1,7 +1,7 @@
 import os
 
 # Define the path to the directory containing the Lua files
-lua_files_directory = "gamemode/"  # Assuming the files are uploaded to the 'data' directory
+lua_files_directory = "gamemode/"  # Adjust the path as necessary
 
 # Function to recursively find all Lua files
 def find_lua_files(directory):
@@ -17,15 +17,16 @@ def extract_function_names(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
     
-    # Pattern to look for lines that start with "function BaseWars."
-    pattern = "function BaseWars."
+    # Patterns to look for lines that start with "function BaseWars."
+    pattern1 = "function BaseWars."
+    pattern2 = "function Player:"
     
     # List to hold all function names
     function_names = []
     
     for line in lines:
         # Check if line starts with the pattern
-        if line.strip().startswith(pattern):
+        if line.strip().startswith(pattern1) or line.strip().startswith(pattern2):
             function_names.append(line.strip())
     
     return function_names
@@ -33,13 +34,28 @@ def extract_function_names(file_path):
 # Find all Lua files
 lua_files = find_lua_files(lua_files_directory)
 
-# Extract function names from all Lua files
-all_function_names = []
+# Create a dictionary to hold functions for each category
+categories = {
+    'ServerSide': [],
+    'SharedSide': [],
+    'ClientSide': []
+}
+
+# Extract function names from all Lua files and categorize them
 for lua_file in lua_files:
     function_names = extract_function_names(lua_file)
-    all_function_names.extend(function_names)
+    base_file_name = os.path.basename(lua_file)
+    if base_file_name.startswith('sv_'):
+        categories['ServerSide'].extend(function_names)
+    elif base_file_name.startswith('sh_'):
+        categories['SharedSide'].extend(function_names)
+    elif base_file_name.startswith('cl_'):
+        categories['ClientSide'].extend(function_names)
 
-readme_file_path = "readme.md"
+# Path to the README file
+readme_file_path = "README.md" 
+
+# Open the README file and read the content
 with open(readme_file_path, 'r') as file:
     lines = file.readlines()
 
@@ -51,11 +67,17 @@ contrib_index = next(i for i, line in enumerate(lines) if "## Contributing" in l
 # Remove the old documentation
 lines = lines[:doc_start_index] + lines[contrib_index:]
 
-# Insert the new documentation
-for name in reversed(all_function_names):  # Reverse to keep the order when inserting
-    lines.insert(doc_start_index, f"```\n{name}\n```\n")
+# Function to insert categorized functions into README
+def insert_functions(category_name, functions, insert_index):
+    lines.insert(insert_index, f"### {category_name}\n\n")
+    for name in reversed(functions):  # Reverse to keep the order when inserting
+        lines.insert(insert_index + 1, f"```\n{name}\n```\n")
+
+# Insert the new documentation for each category
+insert_functions('Server Side Functions', categories['ServerSide'], doc_start_index)
+insert_functions('Shared Side Functions', categories['SharedSide'], doc_start_index)
+insert_functions('Client Side Functions', categories['ClientSide'], doc_start_index)
 
 # Write the updated content back to the readme file
 with open(readme_file_path, 'w') as file:
     file.writelines(lines)
-
