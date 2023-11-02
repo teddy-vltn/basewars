@@ -43,16 +43,19 @@ readme_file_path = "readme.md"
 with open(readme_file_path, 'r') as file:
     lines = file.readlines()
 
-# Find the index of the Documentation section and Contributing section
+# Find the index of the Documentation section
 doc_start_index = next(i for i, line in enumerate(lines) if "## Documentation" in line) + 1
+# Find the index of the Contributing section
 contrib_index = next(i for i, line in enumerate(lines) if "## Contributing" in line)
 
-# Insert the function names into the lines list
+# Remove the old documentation
+lines = lines[:doc_start_index] + lines[contrib_index:]
+
+# Insert the new documentation
 for name in reversed(all_function_names):  # Reverse to keep the order when inserting
-    lines.insert(doc_start_index, f"{name}\n")
+    lines.insert(doc_start_index, f"```\n{name}\n```\n")
 
 # Write the updated content back to the readme file
 with open(readme_file_path, 'w') as file:
     file.writelines(lines)
-
 
