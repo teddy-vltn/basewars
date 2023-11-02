@@ -23,6 +23,10 @@ ENT.PowerCapacity = 100
 
 ENT.LastTimeFired = 0
 
+ENT.Radius = 1000
+
+ENT.FOV = 100
+
 local TurretModule = nil
 local PowerModule = nil
 

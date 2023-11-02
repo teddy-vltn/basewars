@@ -11,6 +11,7 @@ BaseWars.Config.Entities = {
                 PrintName = "Emerald Printer",
                 Model = "models/props_lab/reciever01a.mdl",
                 PrinterColor = Color(0, 255, 0),
+                BasePrintRate = 200,
                 -- ... autres propriétés
             },
             ["bw_printer_diamond"] = {
@@ -52,6 +53,45 @@ BaseWars.Config.Entities = {
             },
         },
     },
+    SpawnPoints = {
+        BaseEntity = "bw_base_spawnpoint",
+        Entities = {
+            ["bw_spawnpoint"] = {
+                PrintName = "Spawn Point",
+                Model = "models/props_trainstation/trainstation_clock001.mdl",
+                -- ... autres propriétés
+            },
+        },
+    },
+    Dispensers = {
+        BaseEntity = "bw_base_dispenser",
+        Entities = {
+            ["bw_dispenser_health"] = {
+                PrintName = "Dispenser Health",
+                Model = "models/props_lab/reciever01a.mdl",
+                DispenseType = "Health",
+                BaseDispenseCoolDown = 1,
+                BaseDispenseRate = 10,
+                BaseDispenseCapacity = 100,
+            },
+            ["bw_dispenser_ammo"] = {
+                PrintName = "Dispenser Ammo",
+                Model = "models/props_lab/reciever01a.mdl",
+                DispenseType = "Ammo",
+                BaseDispenseCoolDown = 1,
+                BaseDispenseRate = 100,
+                BaseDispenseCapacity = 1000,
+            },
+            ["bw_dispenser_armor"] = {
+                PrintName = "Dispenser Armor",
+                Model = "models/props_lab/reciever01a.mdl",
+                DispenseType = "Armor",
+                BaseDispenseCoolDown = 1,
+                BaseDispenseRate = 30,
+                BaseDispenseCapacity = 100,
+            },
+        },
+    },
     -- ... autres catégories
 }
 
@@ -84,7 +124,17 @@ BaseWars.Config.Shop = {
 
             {Name = "Tourelle Basique", Price = 50, Model = "models/combine_turrets/floor_turret.mdl", ClassName = "bw_turret"},
             {Name = "Tesla Basique", Price = 50, Model = "models/props_c17/FurnitureBoiler001a.mdl", ClassName = "bw_tesla"},
-        }
+        },
+        ["Base"] = {
+            {Name = "Spawn Point", Price = 50, Model = "models/props_trainstation/trainstation_clock001.mdl", ClassName = "bw_spawnpoint"},
+        },
+        ["Dispenser"] = {
+            Icon = "icon16/heart.png",
+
+            {Name = "Dispenser Health", Price = 50, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_health"},
+            {Name = "Dispenser Ammo", Price = 50, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_ammo"},
+            {Name = "Dispenser Armor", Price = 50, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_armor"},
+        },
     },
     ["Armes"] = {
         Icon = "icon16/gun.png",
@@ -132,4 +182,15 @@ BaseWars.Config.Navigation = {
             CreateFactionPanel(parent)
         end
     },
+}
+
+BaseWars.Config.Sounds = {
+    Accept = "buttons/button14.wav",
+    Deny = "buttons/button11.wav",
+
+    Click = "buttons/button15.wav",
+    Hover = "buttons/lightswitch2.wav",
+
+    Open = "doors/door1_move.wav",
+    Close = "doors/door1_stop.wav",
 }

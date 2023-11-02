@@ -21,7 +21,11 @@ local function CreateBaseWarsMenu()
 
     for _, navItem in pairs(BaseWars.Config.Navigation) do
         local panel = vgui.Create("DPanel", sheet)
-        panel.Paint = function(self, w, h) draw.RoundedBox(4, 0, 0, w, h, Color(60, 60, 60)) end
+        panel.Paint = function(self, w, h) return end
+
+        -- margin
+        local margin = 2
+        panel:DockMargin(margin, margin, margin, margin)
 
         if navItem.Panel then
             navItem.Panel(panel) 

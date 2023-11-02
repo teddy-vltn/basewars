@@ -18,3 +18,12 @@ function GM:PlayerInitialSpawn(ply)
 
 end
 
+hook.Add("PlayerSpawn", "BaseWars_SpawnPoint", function(ply)
+    if not IsValid(ply) then return end
+
+    local spawnPoint = ply.SpawnPoint
+
+    if IsValid(spawnPoint) then
+        ply:SetPos(spawnPoint:GetPos() + Vector(0, 0, 10))
+    end
+end)

@@ -37,8 +37,9 @@ function BW_TURRET_MODULE:OnThink(ent)
     if (CurTime() - ent.LastTimeFired) < ent:GetFireRate() then return end
 
     local turretPos = ent:GetPos()
-    local range = 1000 -- la distance à laquelle la tourelle peut voir des cibles
+    local range = ent.Radius
     local turretForward = ent:GetForward()
+    local fov = ent.FOV
 
     -- Chercher des joueurs à proximité
     local targets = ents.FindInSphere(turretPos, range)
@@ -52,7 +53,7 @@ function BW_TURRET_MODULE:OnThink(ent)
             local dotProduct = turretForward:Dot(directionToTarget)
 
             -- Vérifiez si la cible est dans le champ de vision de la tourelle
-            if dotProduct > math.cos(math.rad(50)) then  -- 50 est la moitié de 100, car le cosinus fonctionne avec un demi-FOV
+            if dotProduct > math.cos(math.rad(fov/2)) then  -- 50 est la moitié de 100, car le cosinus fonctionne avec un demi-FOV
                 if dist < closestDistance then
                     closestTarget = target
                     closestDistance = dist

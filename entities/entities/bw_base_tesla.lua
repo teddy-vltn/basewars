@@ -15,13 +15,15 @@ ENT.Modules = {
     [1] = "Power"
 }
 
-ENT.BaseDamage = 10
+ENT.BaseDamage = 1
 ENT.BaseFireRate = 0.16
 
 ENT.PowerUsage = 10
 ENT.PowerCapacity = 100
 
 ENT.LastTimeFired = 0
+
+ENT.Radius = 300
 
 local TeslaModule = nil
 local PowerModule = nil

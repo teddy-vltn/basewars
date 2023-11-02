@@ -74,14 +74,31 @@ function CreateBoutiquePanel(parent)
 
             if showedItems > 30 then break end
 
-            local itemButton = itemList:Add("DButton")
-            itemButton:SetSize(100, 100)
-            itemButton:SetText("")
-            itemButton.itemUUID = key 
+            local itemPanel = itemList:Add("DPanel")
+            itemPanel:SetSize(100, 100)
+            itemPanel.itemUUID = key 
+
+            itemPanel.Paint = function(self, w, h)
+
+                -- draw the background solid white 230
+                surface.SetDrawColor(230, 230, 230, 255)
+                surface.DrawRect(0, 0, w, h)
+
+                -- draw outline 40
+                surface.SetDrawColor(40, 40, 40, 255)
+                surface.DrawOutlinedRect(0, 0, w, h)
+
+                -- (‘vgui/gradient-u’) material 
+                surface.SetDrawColor(150, 150, 150, 100)
+                surface.SetMaterial(Material("vgui/gradient-d"))
+                surface.DrawTexturedRect(0, 0, w, h)
+
+            end
     
             if Model then
-                local itemModel = vgui.Create("DModelPanel", itemButton)
+                local itemModel = vgui.Create("DModelPanel", itemPanel)
                 itemModel:Dock(FILL)
+
                 itemModel:SetModel(Model)
                 
                 -- Rotate the model
@@ -100,21 +117,22 @@ function CreateBoutiquePanel(parent)
                 
                 -- Set lighting
                 itemModel:SetAmbientLight(Color(255, 255, 255))
-                itemModel:SetDirectionalLight(BOX_TOP, Color(255, 255, 255))                
+                itemModel:SetDirectionalLight(BOX_TOP, Color(255, 255, 255))   
+                             
             end
             
             -- draw the name and price at the bottom 
             -- first name most bottom
             -- everything is centered
             
-            local itemLabelName = vgui.Create("DLabel", itemButton)
+            local itemLabelName = vgui.Create("DLabel", itemPanel)
             itemLabelName:Dock(BOTTOM)
             itemLabelName:SetText(Name)
             itemLabelName:SetContentAlignment(5)
             itemLabelName:SetExpensiveShadow(1, Color(0, 0, 0))
             itemLabelName:SetTextColor(Color(40, 40, 40))
 
-            local itemLabelPrice = vgui.Create("DLabel", itemButton)
+            local itemLabelPrice = vgui.Create("DLabel", itemPanel)
             itemLabelPrice:Dock(BOTTOM)
             itemLabelPrice:SetText("$" .. Price)
             itemLabelPrice:SetContentAlignment(5)
@@ -136,7 +154,7 @@ function CreateBoutiquePanel(parent)
                 -- the button is just an icon16/accept.png on the top right
                 -- the button is disabled if you can't afford it
                 -- the button draws over the item 
-                local itemButtonAutoBuy = vgui.Create("DImageButton", itemButton)
+                local itemButtonAutoBuy = vgui.Create("DImageButton", itemPanel)
                 itemButtonAutoBuy:SetSize(16, 16)
 
                 if key == weaponAutoBuy then
@@ -178,7 +196,7 @@ function CreateBoutiquePanel(parent)
             end
 
             if Level != 0 then
-                local itemLabelLevel = vgui.Create("DLabel", itemButton)
+                local itemLabelLevel = vgui.Create("DLabel", itemPanel)
                 itemLabelLevel:Dock(TOP)
                 itemLabelLevel:SetText("Level " .. Level)
                 itemLabelLevel:SetContentAlignment(5)
@@ -196,10 +214,48 @@ function CreateBoutiquePanel(parent)
                 end
             end
             -- draw the level at the top
+
+            local itemButton = vgui.Create("DButton", itemPanel)
+            itemButton:SetSize(100,100)
+            itemButton:SetPos(0,0)
+            itemButton.itemUUID = key
+
+            itemButton:SetText("")
+
+            
+
+            itemButton.HasBeenHoveredDuringThink = false
+
+            itemButton.Paint = function(self, w, h) 
+                if self.HasBeenHoveredDuringThink then
+                    surface.SetDrawColor(255, 255, 255, 20)
+                    surface.DrawRect(0, 0, w, h)
+                end
+            end
+
+            itemButton.Think = function(self)
+                if LocalPlayer():GetMoney() >= Price then
+                    self:SetAlpha(255)
+                else
+                    self:SetAlpha(100)
+                end
+
+                if self:IsHovered() and not self.HasBeenHoveredDuringThink then
+                    -- little sound
+                    surface.PlaySound(BaseWars.Config.Sounds.Hover)
+
+                    self.HasBeenHoveredDuringThink = true
+                elseif not self:IsHovered() and self.HasBeenHoveredDuringThink then
+                    self.HasBeenHoveredDuringThink = false
+                end
+                
+            end
             
             
-    
             itemButton.DoClick = function(self)
+                -- click sound 
+                surface.PlaySound(BaseWars.Config.Sounds.Click)
+
                 LocalPlayer():BuyEntity(self.itemUUID)
             end
         end
