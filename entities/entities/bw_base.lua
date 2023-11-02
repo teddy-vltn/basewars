@@ -40,15 +40,34 @@ function ENT:SetupDataTables()
         print("Added network var: " .. name)
     end*/
 
+    local i = {
+        ["Int"] = 0,
+        ["Float"] = 0,
+        ["String"] = 0,
+        ["Bool"] = 0,
+        ["Entity"] = 0,
+        ["Vector"] = 0,
+        ["Angle"] = 0,
+        ["Color"] = 0
+    }
+
     -- for initialized modules only
     for _, module in ipairs(self.InitializedModules) do
         if module.NetworkVars then
             for _, nwVar in ipairs(module.NetworkVars) do
-                i = i + 1
-                local varType, slot, name = unpack(nwVar)
-                self:NetworkVar(name, slot + i, varType)
+                
+                local name, slot, varType = unpack(nwVar)
+
+                if not i[varType] then
+                    print("Invalid network var type: " .. varType)
+                    continue
+                end
+
+                self:NetworkVar(varType, i[varType], name)
+
                 print("Added network var: " .. name)
 
+                i[varType] = i[varType] + 1
             end
         end
     end
