@@ -70,6 +70,11 @@ function CreateBoutiquePanel(parent)
             
             if filter != "" and not string.find(string.lower(Name), string.lower(filter)) then continue end
 
+            local itemReasonBlocked = nil
+            local color = nil
+
+            itemReasonBlocked, color = LocalPlayer():GetBuyEntityBlockReason(key)
+
             showedItems = showedItems + 1
 
             if showedItems > 30 then break end
@@ -89,7 +94,7 @@ function CreateBoutiquePanel(parent)
                 surface.DrawOutlinedRect(0, 0, w, h)
 
                 -- (‘vgui/gradient-u’) material 
-                surface.SetDrawColor(150, 150, 150, 100)
+                surface.SetDrawColor(color or Color(210, 210, 210, 140))
                 surface.SetMaterial(Material("vgui/gradient-d"))
                 surface.DrawTexturedRect(0, 0, w, h)
 
@@ -195,25 +200,24 @@ function CreateBoutiquePanel(parent)
                 end
             end
 
-            if Level != 0 then
-                local itemLabelLevel = vgui.Create("DLabel", itemPanel)
-                itemLabelLevel:Dock(TOP)
-                itemLabelLevel:SetText("Level " .. Level)
-                itemLabelLevel:SetContentAlignment(5)
-                itemLabelLevel:SetTextColor(Color(255, 255, 255))
-                itemLabelLevel:SetExpensiveShadow(1, Color(0, 0, 0))
-                itemLabelLevel.Think = function()
-                    if LocalPlayer():GetLevel() >= Level then
-                        itemLabelLevel:SetTextColor(Color(0, 255, 0))
+            if itemReasonBlocked then
+                local itemLabelBlocked = vgui.Create("DLabel", itemPanel)
+                itemLabelBlocked:Dock(TOP)
+                itemLabelBlocked:SetText(itemReasonBlocked)
+                itemLabelBlocked:SetContentAlignment(5)
+                itemLabelBlocked:SetTextColor(color or Color(255, 0, 0))
+                itemLabelBlocked:SetExpensiveShadow(1, Color(0, 0, 0))
+                itemLabelBlocked.Think = function()
+                    if itemReasonBlocked then
+                        itemLabelBlocked:SetVisible(true)
                     else
-                        itemLabelLevel:SetTextColor(Color(255, 0, 0))
+                        itemLabelBlocked:SetVisible(false)
                     end
                 end
-                itemLabelLevel.Paint = function(self, w, h)
+                itemLabelBlocked.Paint = function(self, w, h)
                     return 
                 end
             end
-            -- draw the level at the top
 
             local itemButton = vgui.Create("DButton", itemPanel)
             itemButton:SetSize(100,100)
@@ -221,8 +225,6 @@ function CreateBoutiquePanel(parent)
             itemButton.itemUUID = key
 
             itemButton:SetText("")
-
-            
 
             itemButton.HasBeenHoveredDuringThink = false
 

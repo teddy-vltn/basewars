@@ -9,8 +9,9 @@ function GM:PlayerInitialSpawn(ply)
     -- send the player the notification list
     BaseWars.Notify.Send(ply, "Welcome to BaseWars!", "Welcome to BaseWars! Press F1 to open the menu.", Color(255, 255, 255))
 
-    BaseWars.Faction.CreateFaction("Test Faction", "me", "password", "icon16/gun.png")
-    BaseWars.Faction.CreateFaction("Test Faction 2", "me", "", "icon16/gun.png")
+    -- Faction.new(name, password, color, icon)
+    BaseWars.Faction.CreateFaction("Default", "yes", BaseWars.Color("RED"), "icon16/gun.png", ply)
+
 
     -- send the player the faction list
     BaseWars.Faction.SyncFactions(ply)

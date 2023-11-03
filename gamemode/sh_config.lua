@@ -132,7 +132,7 @@ BaseWars.Config.Shop = {
             Icon = "icon16/heart.png",
 
             {Name = "Dispenser Health", Price = 50, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_health"},
-            {Name = "Dispenser Ammo", Price = 50, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_ammo"},
+            {Name = "Dispenser Ammo", Price = 50, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_ammo", VIP = true},
             {Name = "Dispenser Armor", Price = 50, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_armor"},
         },
     },
@@ -204,5 +204,6 @@ BaseWars.Config.Colors = {
     GREEN = Color(0, 255, 0),
     RED = Color(255, 0, 0),
     BLUE = Color(0, 0, 255),
-    WHITE = Color(255, 255, 255)
+    WHITE = Color(255, 255, 255),
+    YELLOW = Color(255, 255, 0),
 }

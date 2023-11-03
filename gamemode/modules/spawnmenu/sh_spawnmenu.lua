@@ -115,6 +115,21 @@ function BaseWars.SpawnMenu.GetWeaponAutoBuy(ply)
     return ply:GetNWBool("BaseWars_AutoBuy"), ply:GetNWString("BaseWars_AutoBuyWeapon")
 end
 
+local Player = FindMetaTable("Player")
 
+function Player:GetBuyEntityBlockReason(uuid)
+    local entityTable = BaseWars.SpawnMenu.FlattenedShop[uuid]
+    if not entityTable then return "Entity does not exist" end
 
+    local vip = entityTable.VIP
+    if vip and not self:IsVIP() then return "VIP only", BaseWars.Color("YELLOW") end
 
+    local level = entityTable.Level
+    if level and level > self:GetLevel() then return "Level: " .. level, BaseWars.Color("RED") end
+
+    return false
+end
+
+function Player:IsVIP()
+    return false
+end
