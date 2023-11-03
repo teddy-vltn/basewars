@@ -1,50 +1,27 @@
 BaseWars = BaseWars or {}
 BaseWars.Net = BaseWars.Net or {}
 
-local NetVars = BaseWars.Net.Vars
-
 -- Send a network message to all players
-local function BroadcastNetMessage(msgType, data)
+local function Broadcast(msgType, data)
     net.Start(msgType)
-    for k, v in pairs(data) do
-        local writeFunc = NetVars[type(v)]
-        if writeFunc then
-            writeFunc(v)
-        else
-            error("Unhandled data type: " .. type(v))
-        end
-    end
+    BaseWars.Net.Write(msgType, data)
     net.Broadcast()
 end
-BaseWars.Net.Broadcast = BroadcastNetMessage
+BaseWars.Net.Broadcast = Broadcast
 
 -- Send a network message to a specific player
-local function SendNetMessageToPlayer(ply, msgType, data)
+local function SendToPlayer(ply, msgType, data)
     if not IsValid(ply) then return end
     net.Start(msgType)
-    for k, v in pairs(data) do
-        local writeFunc = NetVars[type(v)]
-        if writeFunc then
-            writeFunc(v)
-        else
-            error("Unhandled data type: " .. type(v))
-        end
-    end
+    BaseWars.Net.Write(msgType, data)
     net.Send(ply)
 end
-BaseWars.Net.SendToPlayer = SendNetMessageToPlayer
+BaseWars.Net.SendToPlayer = SendToPlayer
 
 -- Send a network message to a group of players
-local function SendNetMessageToGroup(group, msgType, data)
+local function SendToGroup(group, msgType, data)
     net.Start(msgType)
-    for k, v in pairs(data) do
-        local writeFunc = NetVars[type(v)]
-        if writeFunc then
-            writeFunc(v)
-        else
-            error("Unhandled data type: " .. type(v))
-        end
-    end
+    BaseWars.Net.Write(msgType, data)
     net.Send(group)
 end
-BaseWars.Net.SendToGroup = SendNetMessageToGroup
+BaseWars.Net.SendToGroup = SendToGroup
