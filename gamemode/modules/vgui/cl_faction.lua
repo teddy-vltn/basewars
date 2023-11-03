@@ -203,7 +203,7 @@ local function ShowFactionDetails(panel, factionName, factionData)
     joinButton:SetText("Rejoindre")
     joinButton:Dock(LEFT)
     joinButton.DoClick = function()
-        if BaseWars.Faction.HasFactionPassword(factionName) then
+        if factionData:HasPassword() then
             AskForPassword(factionName, function(password)
                 BaseWars.Faction.TryJoinFaction(factionName, password)
             end)
@@ -268,9 +268,9 @@ function CreateFactionPanel(parent)
         local nodeToClick = nil  -- this will store the node that needs to be clicked after refreshing
 
         for factionName, factionData in pairs(factions) do
-            local isOpenString = !BaseWars.Faction.HasFactionPassword(factionName) and " (Ouvert)" or " (Fermé)"
+            local isOpenString = !factionData:HasPassword() and " (Ouvert)" or " (Fermé)"
             local factionNode = tree:AddNode(factionName .. isOpenString)
-            factionNode.Icon:SetImage(factionData.Icon)
+            factionNode.Icon:SetImage(factionData:GetIcon())
 
             factionNode.DoClick = function()
                 factionDetails:Clear()

@@ -167,6 +167,11 @@ BaseWars.Config.Level = {
 
 }
 
+BaseWars.Config.Raid = {
+    AttackerCooldown = 300,
+    DefenderCooldown = 300,
+}
+
 BaseWars.Config.Navigation = {
     {
         Name = "Boutique",
@@ -193,4 +198,11 @@ BaseWars.Config.Sounds = {
 
     Open = "doors/door1_move.wav",
     Close = "doors/door1_stop.wav",
+}
+
+BaseWars.Config.Colors = {
+    GREEN = Color(0, 255, 0),
+    RED = Color(255, 0, 0),
+    BLUE = Color(0, 0, 255),
+    WHITE = Color(255, 255, 255)
 }
