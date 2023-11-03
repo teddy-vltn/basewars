@@ -71,9 +71,13 @@ function CreateBoutiquePanel(parent)
             if filter != "" and not string.find(string.lower(Name), string.lower(filter)) then continue end
 
             local itemReasonBlocked = nil
-            local color = nil
+            local color = Color(210, 210, 210)
 
-            itemReasonBlocked, color = LocalPlayer():GetBuyEntityBlockReason(key)
+            itemReasonBlocked, _color = LocalPlayer():GetBuyEntityBlockReason(key)
+
+            if itemReasonBlocked then
+                color = _color
+            end
 
             showedItems = showedItems + 1
 
@@ -94,7 +98,7 @@ function CreateBoutiquePanel(parent)
                 surface.DrawOutlinedRect(0, 0, w, h)
 
                 -- (‘vgui/gradient-u’) material 
-                surface.SetDrawColor(color or Color(210, 210, 210, 140))
+                surface.SetDrawColor(Color(color.r, color.g, color.b, 140))
                 surface.SetMaterial(Material("vgui/gradient-d"))
                 surface.DrawTexturedRect(0, 0, w, h)
 

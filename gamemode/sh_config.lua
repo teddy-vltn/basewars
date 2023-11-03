@@ -131,9 +131,9 @@ BaseWars.Config.Shop = {
         ["Dispenser"] = {
             Icon = "icon16/heart.png",
 
-            {Name = "Dispenser Health", Price = 50, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_health"},
+            {Name = "Dispenser Health", Price = 2000, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_health"},
             {Name = "Dispenser Ammo", Price = 50, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_ammo", VIP = true},
-            {Name = "Dispenser Armor", Price = 50, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_armor"},
+            {Name = "Dispenser Armor", Price = 50, Level = 3, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_armor"},
         },
     },
     ["Armes"] = {

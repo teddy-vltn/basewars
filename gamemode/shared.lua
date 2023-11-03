@@ -9,6 +9,16 @@ DeriveGamemode("sandbox")
 
 BaseWars = BaseWars or {}
 
+local colorRed = Color(255, 0, 0)
+local colorBlue = Color(0, 0, 255)
+local colorWhite = Color(255, 255, 255)
+
+function BaseWars.Log(...)
+
+	MsgC(SERVER and colorRed or colorBlue, "[BASEWARS] -		 ", colorWhite, ...)
+	MsgN("")
+end
+
 function recursiveInclusion( scanDirectory, isGamemode )
 	-- Null-coalescing for optional argument
 	isGamemode = isGamemode or false
@@ -106,19 +116,9 @@ recursiveInclusion( GM.FolderName .. "/gamemode", true )
 			─────────────███████████████────────────
 */
 
+
 function BaseWars.Color(code)
 	return BaseWars.Config.Colors[code]
-end
-
-local colorRed = BaseWars.Color("RED")
-local colorBlue = BaseWars.Color("BLUE")
-local colorWhite = BaseWars.Color("WHITE")
-
-function BaseWars.Log(...)
-
-	MsgC(SERVER and colorRed or colorBlue, "[BaseWars] ", colorWhite, ...)
-	MsgN("")
-
 end
 
 function BaseWars.NumberFormat(n)

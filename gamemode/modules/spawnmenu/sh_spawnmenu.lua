@@ -58,7 +58,10 @@ function BaseWars.SpawnMenu.AddUUIDsToShop(categoryTable)
         -- Check if the value represents an item (by the presence of a ClassName)
         if value.ClassName then
             local UUID = BaseWars.SpawnMenu.GenerateUUID(value)
-            print("Adding UUID " .. UUID .. " to " .. value.ClassName)
+
+            BaseWars.Log("Generated UUID " .. UUID .. " for item " .. value.Name)
+
+            -- Copy the item to the new table, adding the UUID
             newTable[UUID] = value
         -- If the value is a table but doesn't represent an item, treat it as a category or subcategory
         elseif type(value) == "table" and not value.ClassName then
