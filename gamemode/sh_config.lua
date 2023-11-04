@@ -175,6 +175,7 @@ BaseWars.Config.Raid = {
 BaseWars.Config.Navigation = {
     {
         Name = "Boutique",
+        Color = Color(255, 255, 0),
         Icon = "icon16/cart.png",
         Panel = function(parent)
             CreateBoutiquePanel(parent)
@@ -182,6 +183,7 @@ BaseWars.Config.Navigation = {
     },
     {
         Name = "Faction",
+        Color = Color(255, 0, 0),
         Icon = "icon16/box.png",
         Panel = function(parent)
             CreateFactionPanel(parent)
@@ -207,3 +209,22 @@ BaseWars.Config.Colors = {
     WHITE = Color(255, 255, 255),
     YELLOW = Color(255, 255, 0),
 }
+
+BaseWars.Config.UI = {
+    HeaderColor = Color(240, 240, 240, 240),
+    HeaderLineColor = Color(200, 200, 200, 255),
+
+    BodyColor = Color(255, 255, 255, 255),
+
+    CloseBtnTextColor = Color(200, 50, 80, 255),
+    TitleTextColor = Color(40, 40, 40, 255),
+
+    Accent = Color(0, 0, 0, 255),
+
+    h2 = Color(0, 0, 0, 255),
+    h3 = Color(0, 0, 0, 255),
+    h4 = Color(0, 0, 0, 255),
+}
+
+
+
