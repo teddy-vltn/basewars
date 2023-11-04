@@ -38,11 +38,6 @@ function Player:TakeXP(xp)
     self:SetXP(self:GetXP() - xp)
 end
 
--- Level + XP stuff
-/*
-    Each levels requires a certain amount of XP to be reached.
-    formula is : (level/x)^y
-*/
 
 
 

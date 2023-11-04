@@ -8,4 +8,3 @@ local function SendToServer(msgType, data)
     net.SendToServer()
 end
 BaseWars.Net.SendToServer = SendToServer
-

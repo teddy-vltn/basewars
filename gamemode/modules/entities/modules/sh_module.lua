@@ -6,13 +6,13 @@ function BaseWars.Entity.Modules:Add(module)
     local name = module.Name
 
     if !name then
-        print("Module has no name!")
+        BaseWars.Log("Module has no name, not adding!")
         return
     end
 
     self[name] = module
 
-    print("Module " .. name .. " added!")
+    BaseWars.Log("Added module " .. name)
 end
 
 function BaseWars.Entity.Modules:Remove(name)
