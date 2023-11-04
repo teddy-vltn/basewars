@@ -87,6 +87,31 @@ function BaseWars.LoadEntityConfiguration()
     end
 end
 
+if CLIENT then
+	-- create some fonts for everyhting to use
+	local font = "Roboto"
+
+	-- loop for creating every size from 12 to 32 with this name format: "BaseWars_12"
+	-- two increments because we want to create a bold font too
+	for i = 12, 32, 2 do
+		surface.CreateFont("BaseWars_" .. i, {
+			font = font,
+			size = i,
+			weight = 500,
+		})
+
+		surface.CreateFont("BaseWars_" .. i .. "_Bold", {
+			font = font,
+			size = i,
+			weight = 1000,
+		})
+
+		BaseWars.Log("Created font: " .. "BaseWars_" .. i)
+	end
+
+end
+
+
 include("sh_config.lua")
 
 include("modules/sh_modules.lua")
