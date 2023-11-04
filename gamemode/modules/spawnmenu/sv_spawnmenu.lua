@@ -2,9 +2,6 @@
 BaseWars = BaseWars or {}
 BaseWars.SpawnMenu = BaseWars.SpawnMenu or {}
 
--- Register a network string for entity purchasing
-util.AddNetworkString("BaseWars_BuyEntity")
-
 -- Function to spawn an entity based on its class, position, and angle.
 -- Returns a status and a message indicating success or the reason for failure.
 local function SpawnEntity(ply, class, pos, ang)
@@ -95,8 +92,11 @@ end
 
 -- Network handler for buying an entity.
 -- Listens for a request from the client, processes the buying logic, and sends a notification back to the client.
-net.Receive("BaseWars_BuyEntity", function(len, ply)
-    local uuid = net.ReadString()
+local netBuyTag = BaseWars.SpawnMenu.Net.BuyEntity
+net.Receive(netBuyTag, function(len, ply)
+    local data = BaseWars.Net.Read(netBuyTag)
+
+    local uuid = data.uuid
 
     -- Calculate the spawn position and angle based on the player's current view
     local pos, ang = BaseWars.SpawnMenu.CalcPosAndAng(ply, uuid)
@@ -105,18 +105,17 @@ net.Receive("BaseWars_BuyEntity", function(len, ply)
     local status, message = BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
 
     -- Print debug information to the server console
-    print("UUID:", uuid)
-    print("Status:", status)
-    print("Message:", message)
+    BaseWars.Log("Player " .. ply:Nick() .. " (" .. ply:SteamID() .. ") attempted to buy entity " .. uuid .. " (" .. (status and "success" or "failure") .. ")")
 
     -- Send a notification to the player about the result of their purchase request
     BaseWars.Notify.Send(ply, "Acheter une entité", message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)
 
-local AUTOBUY_BOOL = "BaseWars_AutoBuy"
+-- NWBool to store whether the player has auto buy enabled
 local AUTOBUY_WEAPON = "BaseWars_AutoBuyWeapon"
+local AUTOBUY_BOOL = "BaseWars_AutoBuyBool"
 
-util.AddNetworkString(AUTOBUY_BOOL)
+local netAutoBuyTag = BaseWars.SpawnMenu.Net.AutoBuy
 
 -- Cette fonction semble redondante, donc nous la supprimons
 -- function BaseWars.SpawnMenu.SetWeaponForAutoBuy(ply, uuid) ...
@@ -139,9 +138,12 @@ function BaseWars.SpawnMenu.ActivateWeaponAutoBuy(ply, uuid, state)
     end
 end
 
-net.Receive(AUTOBUY_BOOL, function(len, ply)
-    local state = net.ReadBool()
-    local uuid = net.ReadString()
+net.Receive(netAutoBuyTag, function(len, ply)
+
+    local data = BaseWars.Net.Read(netAutoBuyTag)
+
+    local uuid = data.uuid
+    local state = data.state
 
     local status, message
     if state then

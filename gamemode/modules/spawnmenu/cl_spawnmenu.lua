@@ -4,14 +4,13 @@ BaseWars.SpawnMenu = BaseWars.SpawnMenu or {}
 local Player = FindMetaTable("Player")
 
 function Player:BuyEntity(uuid)
-    net.Start("BaseWars_BuyEntity")
-        net.WriteString(uuid)
-    net.SendToServer()
+    local netTag = BaseWars.SpawnMenu.Net.BuyEntity
+
+    BaseWars.Net.SendToServer(netTag, {uuid = uuid})
 end
 
 function Player:SetAutoBuy(bool, weapon)
-    net.Start("BaseWars_AutoBuy")
-        net.WriteBool(bool)
-        net.WriteString(weapon)
-    net.SendToServer()
+    local netTag = BaseWars.SpawnMenu.Net.SetAutoBuy
+
+    BaseWars.Net.SendToServer(netTag, {bool = bool, weapon = weapon})
 end

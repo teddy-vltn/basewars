@@ -25,6 +25,7 @@ function BaseWars.Faction.TryLeaveFaction(name)
 ```
 function BaseWars.Faction.TryCreateFaction(name, password, color, icon)
 ```
+
 ### Shared Side Functions
 
 ```
@@ -80,6 +81,21 @@ function Player:GetFaction()
 ```
 ```
 function Player:IsFriendlyEntity(ent)
+```
+```
+function BaseWars.Faction.ValidateName(name)
+```
+```
+function BaseWars.Faction.ValidatePassword(password)
+```
+```
+function BaseWars.Faction.ValidateColor(color)
+```
+```
+function BaseWars.Faction.ValidateIcon(icon)
+```
+```
+function BaseWars.Faction.Exists(name)
 ```
 ```
 function Player:CanAfford(amount)
