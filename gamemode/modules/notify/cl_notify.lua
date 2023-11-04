@@ -18,11 +18,10 @@ local NOTIF_HEIGHT = 60
 local NOTIF_MARGIN = 15
 local NOTIF_FADE_TIME = 1 -- Durée de l'animation de disparition en secondes
 
-net.Receive("AddNotification", function()
-    local title = net.ReadString()
-    local message = net.ReadString()
-    local color = net.ReadColor()
-
+net.Receive(BaseWars.Notify.Net.AddNotification, function()
+    local data = BaseWars.Net.Read(BaseWars.Notify.Net.AddNotification)
+    local title, message, color = data.title, data.message, data.color
+    
     local notif = {
         title = title,
         message = message,
