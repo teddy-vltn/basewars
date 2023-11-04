@@ -102,3 +102,41 @@ function Player:IsFriendlyEntity(ent)
 
     return false
 end
+
+function BaseWars.Faction.ValidateName(name)
+    if not name or name == "" then
+        return false, "Name cannot be empty."
+    elseif #name < 3 then
+        return false, "Name is too short. Minimum 3 characters."
+    elseif #name > 32 then
+        return false, "Name is too long. Maximum 32 characters."
+    elseif not name:match("^[%w%sÀ-ÖØ-öø-ÿ]+$") then
+        return false, "Name contains invalid characters."
+    end
+    return true
+end
+
+function BaseWars.Faction.ValidatePassword(password)
+    if password and #password > 32 then
+        return false, "Password is too long. Maximum 32 characters."
+    end
+    return true
+end
+
+function BaseWars.Faction.ValidateColor(color)
+    if not color or color == Color(0, 0, 0) then
+        return false, "Color cannot be empty."
+    end
+    return true
+end
+
+function BaseWars.Faction.ValidateIcon(icon)
+    if not icon or icon == "" then
+        return false, "Icon cannot be empty."
+    end
+    return true
+end
+
+function BaseWars.Faction.Exists(name)
+    return BaseWars.Faction.Factions[name] ~= nil
+end

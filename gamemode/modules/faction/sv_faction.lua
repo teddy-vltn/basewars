@@ -21,29 +21,34 @@ function BaseWars.Faction.Initialize() -- Initialisation
     BaseWars.Faction.SyncFactions()
 end
 
+local function ValidateFaction(name, password, color, icon)
+    local validName, nameErr = BaseWars.Faction.ValidateName(name)
+    if not validName then return false, nameErr end
+
+    local validPassword, passwordErr = BaseWars.Faction.ValidatePassword(password)
+    if not validPassword then return false, passwordErr end
+
+    local validColor, colorErr = BaseWars.Faction.ValidateColor(color)
+    if not validColor then return false, colorErr end
+
+    local validIcon, iconErr = BaseWars.Faction.ValidateIcon(icon)
+    if not validIcon then return false, iconErr end
+
+    return true
+end
+
 -- Function to create a new faction with the given name, leader, password, and icon.
 function BaseWars.Faction.CreateFaction(name, password, color, icon, leader)
-    if not name or name == "" then return false, "Invalid name" end
 
-    -- Remove all non-alphanumeric characters except spaces and accents versions of letters
-    name = name:gsub("[^%w%sÀ-ÖØ-öø-ÿ]", "")
+    BaseWars.Log("Trying creating faction " .. name .. " with leader " .. leader:Nick())
 
-    -- do some simple length checks
-    if #name > 32 then return false, "Name is too long" end
-    if #name < 3 then return false, "Name is too short" end
-
-    if #password > 32 then return false, "Password is too long" end
-
-    if BaseWars.Faction.Factions[name] then return false, "Faction already exists" end
-
+    if BaseWars.Faction.Exists(name) then return false, "Faction already exists" end
     if BaseWars.Faction.GetFactionByMember(leader) then return false, "You are already in a faction" end
 
-    BaseWars.Log("Creating faction " .. name .. " with leader " .. leader:Nick())
+    local valid, err = ValidateFaction(name, password, color, icon)
+    if not valid then return false, err end
 
-    -- Create the faction and add the leader to it
     local faction = Faction.new(name, password, color, icon, leader)
-
-    -- Add the faction to the list of factions
     BaseWars.Faction.Factions[name] = faction
 
     -- Set the player's faction
@@ -60,6 +65,8 @@ net.Receive(BaseWars.Faction.Net.Create, function(len, ply)
     local data = BaseWars.Net.Read(BaseWars.Faction.Net.Create)
 
     local status, message = BaseWars.Faction.CreateFaction(data.name, data.password, data.color, data.icon, ply)
+
+    BaseWars.Log("Status " .. tostring(status) .. " message " .. message .. " for " .. ply:Nick() .. " creating faction " .. data.name)
 
     BaseWars.Notify.Send(ply, "Créer une faction", message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)
