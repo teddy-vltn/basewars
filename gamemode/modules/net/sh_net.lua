@@ -50,7 +50,7 @@ BaseWars.Net.ReadVars = {
 -- example of use : BaseWars.Net.Register("BaseWars_BuyEntity", { 
 --     uuid = "string",
 -- })
-local function RegisterNetMessageAndStructure(msgType, structure)
+function BaseWars.Net.Register(msgType, structure)
     if BaseWars.Net[msgType] then
         BaseWars.Log("Overwriting net message: " .. msgType)
     end
@@ -61,13 +61,12 @@ local function RegisterNetMessageAndStructure(msgType, structure)
     
     BaseWars.Net[msgType] = structure
 end
-BaseWars.Net.Register = RegisterNetMessageAndStructure
 
 -- read a network message based on a structure
 -- if the structure differs from the one registered, it will error
 -- example of use : local data = BaseWars.Net.Read("BaseWars_BuyEntity")
 -- data.uuid will contain the uuid of the entity to buy
-local function ReadNetMessage(msgType)
+function BaseWars.Net.Read(msgType)
     local structure = BaseWars.Net[msgType]
 
     if not structure then
@@ -86,12 +85,11 @@ local function ReadNetMessage(msgType)
 
     return data
 end
-BaseWars.Net.Read = ReadNetMessage
 
 -- write a network message based on a structure
 -- if the structure differs from the one registered, it will error
 -- example of use : BaseWars.Net.Write("BaseWars_BuyEntity", {uuid = "1234"})
-local function WriteNetMessage(msgType, data)
+function BaseWars.Net.Write(msgType, data)
     local structure = BaseWars.Net[msgType]
 
     if not structure then
@@ -107,4 +105,3 @@ local function WriteNetMessage(msgType, data)
         end
     end
 end
-BaseWars.Net.Write = WriteNetMessage
