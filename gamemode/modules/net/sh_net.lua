@@ -21,6 +21,9 @@ BaseWars.Net.WriteVars = {
     ["table"] = function(v)
         net.WriteTable(v)
     end,
+    ["color"] = function(v)
+        net.WriteColor(v)
+    end,
 }
 
 BaseWars.Net.ReadVars = {
@@ -39,9 +42,19 @@ BaseWars.Net.ReadVars = {
     ["table"] = function()
         return net.ReadTable()
     end,
+    ["color"] = function()
+        return net.ReadColor()
+    end,
 }
 
+-- example of use : BaseWars.Net.Register("BaseWars_BuyEntity", { 
+--     uuid = "string",
+-- })
 local function RegisterNetMessageAndStructure(msgType, structure)
+    if BaseWars.Net[msgType] then
+        BaseWars.Log("Overwriting net message: " .. msgType)
+    end
+
     if SERVER then
         util.AddNetworkString(msgType)
     end
