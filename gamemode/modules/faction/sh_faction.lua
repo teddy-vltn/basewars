@@ -2,6 +2,22 @@ BaseWars = BaseWars or {}
 BaseWars.Faction = BaseWars.Faction or {}
 BaseWars.Faction.Factions = BaseWars.Faction.Factions or {}
 
+BaseWars.Faction.Net = BaseWars.Faction.Net or {
+    Create = "BaseWars_CreateFaction",
+    Join = "BaseWars_JoinFaction",
+    Leave = "BaseWars_LeaveFaction",
+    Delete = "BaseWars_DeleteFaction",
+    Update = "BaseWars_UpdateFaction",
+    UpdateAll = "BaseWars_UpdateFactions"
+}
+
+BaseWars.Net.Register(BaseWars.Faction.Net.Create, { name = "string", password = "string", color = "color", icon = "string" })
+BaseWars.Net.Register(BaseWars.Faction.Net.Join, { name = "string", password = "string" })
+BaseWars.Net.Register(BaseWars.Faction.Net.Leave, { name = "string" })
+BaseWars.Net.Register(BaseWars.Faction.Net.Delete, { name = "string" })
+BaseWars.Net.Register(BaseWars.Faction.Net.Update, { name = "string", faction = "table" })
+BaseWars.Net.Register(BaseWars.Faction.Net.UpdateAll, { factions = "table" })
+
 Faction = {}
 Faction.__index = Faction
 

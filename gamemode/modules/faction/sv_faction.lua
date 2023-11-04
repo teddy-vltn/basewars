@@ -21,8 +21,6 @@ function BaseWars.Faction.Initialize() -- Initialisation
     BaseWars.Faction.SyncFactions()
 end
 
--- Register a network string for creating factions
-util.AddNetworkString("BaseWars_CreateFaction")
 -- Function to create a new faction with the given name, leader, password, and icon.
 function BaseWars.Faction.CreateFaction(name, password, color, icon, leader)
     if not name or name == "" then return false, "Invalid name" end
@@ -58,16 +56,14 @@ function BaseWars.Faction.CreateFaction(name, password, color, icon, leader)
 end
 
 -- Handle networked requests for creating a faction
-net.Receive("BaseWars_CreateFaction", function(len, ply)
-    local factionName = net.ReadString()
-    local factionPassword = net.ReadString()
-    local factionColor = net.ReadColor()
-    local factionIcon = net.ReadString()
+net.Receive(BaseWars.Faction.Net.Create, function(len, ply)
+    local data = BaseWars.Net.Read(BaseWars.Faction.Net.Create)
 
-    local status, message = BaseWars.Faction.CreateFaction(factionName, factionPassword, factionColor, factionIcon, ply)
+    local status, message = BaseWars.Faction.CreateFaction(data.name, data.password, data.color, data.icon, ply)
 
     BaseWars.Notify.Send(ply, "Créer une faction", message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)
+
 
 local function copyFactionForClientSend(faction)
     if not faction then return end
@@ -82,8 +78,6 @@ local function copyFactionForClientSend(faction)
     }
 end
 
--- Register a network string for updating all factions
-util.AddNetworkString("BaseWars_UpdateFactions")
 -- Function to sync all factions with a specific player or all players.
 function BaseWars.Faction.SyncFactions(ply)
 
@@ -94,27 +88,24 @@ function BaseWars.Faction.SyncFactions(ply)
 
     BaseWars.Log("Syncing factions with " .. (IsValid(ply) and ply:Nick() or "everyone"))
 
-    net.Start("BaseWars_UpdateFactions")
-        net.WriteTable(factions)
-    net.Send(ply)
+    BaseWars.Net.SendToPlayer(ply, "BaseWars_UpdateFactions", {
+        factions = factions
+    })
+        
 end
 
--- Register a network string for updating a specific faction
-util.AddNetworkString("BaseWars_UpdateFaction")
 -- Function to sync a specific faction's details across all players.
 function BaseWars.Faction.SyncFaction(faction)
     local copyTable = copyFactionForClientSend(faction)
 
     BaseWars.Log("Syncing faction " .. faction:GetName())
 
-    net.Start("BaseWars_UpdateFaction")
-        net.WriteString(faction:GetName())
-        net.WriteTable(copyTable)
-    net.Broadcast()
+    BaseWars.Net.Broadcast("BaseWars_UpdateFaction", {
+        name = faction:GetName(),
+        faction = copyTable
+    })
 end
 
--- Register a network string for a player joining a faction
-util.AddNetworkString("BaseWars_JoinFaction")
 -- Function to handle a player attempting to join a faction.
 function BaseWars.Faction.JoinFaction(ply, factionName, password)
     local faction = BaseWars.Faction.Factions[factionName]
@@ -141,20 +132,14 @@ function BaseWars.Faction.JoinFaction(ply, factionName, password)
 end
 
 -- Handle networked requests for joining a faction
-net.Receive("BaseWars_JoinFaction", function(len, ply)
-    local factionName = net.ReadString()
-    local factionTable = BaseWars.Faction.GetFaction(factionName)
-    if not factionTable then return end
+net.Receive(BaseWars.Faction.Net.Join, function(len, ply)
+    local data = BaseWars.Net.Read(BaseWars.Faction.Net.Join)
 
-    local password = net.ReadString()
-
-    local status, message = BaseWars.Faction.JoinFaction(ply, factionName, password)
+    local status, message = BaseWars.Faction.JoinFaction(ply, data.name, data.password)
 
     BaseWars.Notify.Send(ply, "Rejoindre une faction", message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)
 
--- Register a network string for a player leaving a faction
-util.AddNetworkString("BaseWars_LeaveFaction")
 -- Function to handle a player leaving a faction.
 function BaseWars.Faction.LeaveFaction(ply)
     local factionTable = BaseWars.Faction.GetFactionByMember(ply)
@@ -173,15 +158,16 @@ function BaseWars.Faction.LeaveFaction(ply)
     return true, "Successfully left faction"
 end
 
-util.AddNetworkString("BaseWars_FactionIsDeleted")
--- Function to delete a faction.
+-- Function to handle a player deleting a faction.
 function BaseWars.Faction.DeleteFaction(name)
     local factionTable = BaseWars.Faction.GetFaction(name)
     if not factionTable then return false, "Faction does not exist" end
 
-    net.Start("BaseWars_FactionIsDeleted")
-        net.WriteString(name)
-    net.Broadcast()
+    BaseWars.Log("Deleting faction " .. name .. " made by " .. factionTable.Leader:Nick())
+
+    BaseWars.Net.Broadcast(BaseWars.Faction.Net.Delete, {
+        name = name
+    })
 
     BaseWars.Faction.Factions[name] = nil
 
@@ -189,14 +175,14 @@ function BaseWars.Faction.DeleteFaction(name)
 end
 
 -- Handle networked requests for leaving a faction
-net.Receive("BaseWars_LeaveFaction", function(len, ply)
-    local factionTable = BaseWars.Faction.GetFactionByMember(ply)
-    if not factionTable then return end
+net.Receive(BaseWars.Faction.Net.Leave, function(len, ply)
+    local data = BaseWars.Net.Read(BaseWars.Faction.Net.Leave)
 
     local status, message = BaseWars.Faction.LeaveFaction(ply)
 
     BaseWars.Notify.Send(ply, "Quitter une faction", message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)
+
 
 -- Function to set a player's faction directly, without the need for them to join.
 function BaseWars.Faction.SetFaction(ply, name, leader)
@@ -216,3 +202,9 @@ function BaseWars.Faction.SetFaction(ply, name, leader)
 
     return true
 end
+
+hook.Add("PlayerInitialSpawn", "BaseWars_FactionSync", function(ply)
+    BaseWars.Faction.CreateFaction("Default", "yes", BaseWars.Color("RED"), "icon16/gun.png", ply)
+
+    BaseWars.Faction.SyncFactions(ply)
+end)
