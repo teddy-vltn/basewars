@@ -1,7 +1,13 @@
 BaseWars = BaseWars or {}
 BaseWars.Net = BaseWars.Net or {}
 
--- Send a network message to server
+/*
+    @description
+    Send a network message to the server.
+
+    @param {string} msgType - The network message type.
+    @param {table} data - The data to send.
+*/
 function BaseWars.Net.SendToServer(msgType, data)
     net.Start(msgType)
     BaseWars.Net.Write(msgType, data)

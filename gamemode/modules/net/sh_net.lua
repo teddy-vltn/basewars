@@ -47,9 +47,19 @@ BaseWars.Net.ReadVars = {
     end,
 }
 
--- example of use : BaseWars.Net.Register("BaseWars_BuyEntity", { 
---     uuid = "string",
--- })
+/*
+    @description
+    Register a network message type.
+
+    @param {string} msgType - The network message type.
+    @param {table} structure - The structure of the network message.
+
+    @example
+    BaseWars.Net.Register("BaseWars_BuyEntity", { 
+        uuid = "string",
+    })
+    @example
+*/
 function BaseWars.Net.Register(msgType, structure)
     if BaseWars.Net[msgType] then
         BaseWars.Log("Overwriting net message: " .. msgType)
@@ -62,10 +72,17 @@ function BaseWars.Net.Register(msgType, structure)
     BaseWars.Net[msgType] = structure
 end
 
--- read a network message based on a structure
--- if the structure differs from the one registered, it will error
--- example of use : local data = BaseWars.Net.Read("BaseWars_BuyEntity")
--- data.uuid will contain the uuid of the entity to buy
+/*
+    @description
+    Read a network message based on a structure.
+
+    @param {string} msgType - The network message type.
+
+    @example
+    local data = BaseWars.Net.Read("BaseWars_BuyEntity")
+    local uuid = data.uuid
+    @example
+*/
 function BaseWars.Net.Read(msgType)
     local structure = BaseWars.Net[msgType]
 
@@ -86,9 +103,19 @@ function BaseWars.Net.Read(msgType)
     return data
 end
 
--- write a network message based on a structure
--- if the structure differs from the one registered, it will error
--- example of use : BaseWars.Net.Write("BaseWars_BuyEntity", {uuid = "1234"})
+/*
+    @description
+    Write a network message based on a structure, this is the opposite of BaseWars.Net.Read.
+
+    @param {string} msgType - The network message type.
+    @param {table} data - The data to send.
+
+    @example
+    BaseWars.Net.Write("BaseWars_BuyEntity", { 
+        uuid = "some_uuid",
+    })
+    @example
+*/
 function BaseWars.Net.Write(msgType, data)
     local structure = BaseWars.Net[msgType]
 

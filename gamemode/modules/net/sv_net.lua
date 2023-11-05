@@ -1,25 +1,46 @@
 BaseWars = BaseWars or {}
 BaseWars.Net = BaseWars.Net or {}
 
--- Send a network message to all players
+/*
+    @description
+    Broadcast a network message to all players.
+
+    @param {string} msgType - The network message type.
+    @param {table} data - The data to send.
+*/
 function BaseWars.Net.Broadcast(msgType, data)
     net.Start(msgType)
     BaseWars.Net.Write(msgType, data)
     net.Broadcast()
 end
 
--- Send a network message to a specific player
+/*
+    @description
+    Send a network message to a player.
+
+    @param {Player} ply - The player to send the message to.
+    @param {string} msgType - The network message type.
+    @param {table} data - The data to send.
+*/
 function BaseWars.Net.SendToPlayer(ply, msgType, data)
     if not IsValid(ply) then return end
+
     net.Start(msgType)
     BaseWars.Net.Write(msgType, data)
     net.Send(ply)
 end
 
--- Send a network message to a group of players
+/*
+    @description
+    Send a network message to a group of players.
+
+    @param {table} group - The group of players to send the message to.
+    @param {string} msgType - The network message type.
+    @param {table} data - The data to send.
+*/
 function BaseWars.Net.SendToGroup(group, msgType, data)
-    net.Start(msgType)
-    BaseWars.Net.Write(msgType, data)
-    net.Send(group)
+    for _, ply in pairs(group) do
+        BaseWars.Net.SendToPlayer(_, msgType, data)
+    end
 end
 

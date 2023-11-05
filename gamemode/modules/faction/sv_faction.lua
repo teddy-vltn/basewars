@@ -1,20 +1,33 @@
 BaseWars = BaseWars or {}
 BaseWars.Faction = BaseWars.Faction or {}
 
--- Retrieve the Player's meta table for later manipulation
 local Player = FindMetaTable("Player")
 
+/*
+    @description
+    Sets the specified player as the leader of the faction.
+
+    @param {Player} leader - The player entity to set as the leader of the faction.
+*/
 function Faction:SetLeader(leader)
     self.Leader = leader
 end
 
+/*
+    @description
+    Sets the faction for the player. If a faction object is provided, it uses the faction's name.
+
+    @param {string|table} faction - The faction name or faction table to associate with the player.
+*/
 function Player:SetFaction(faction)
-    -- Make sure to pass only the faction name if a faction object is given
     local factionName = type(faction) == "table" and faction:GetName() or faction
     self:SetNWString("Faction", factionName)
 end
 
--- Function to initialize the factions. Primarily, this ensures the Factions table is initialized and synced.
+/*
+    @description
+    Initializes the factions system, ensuring the factions table is set up and synchronizes factions.
+*/
 function BaseWars.Faction.Initialize() -- Initialisation
     BaseWars.Faction.Factions = BaseWars.Faction.Factions or {}
 
@@ -37,7 +50,18 @@ local function ValidateFaction(name, password, color, icon)
     return true
 end
 
--- Function to create a new faction with the given name, leader, password, and icon.
+/*
+    @description
+    Attempts to create a new faction with the provided parameters and sets the leader.
+
+    @param {string} name - The unique name of the faction.
+    @param {string} password - The password for the faction, if any.
+    @param {Color} color - The color associated with the faction.
+    @param {string} icon - The icon representing the faction.
+    @param {Player} leader - The player entity to set as the initial leader of the faction.
+
+    @return {boolean, string} A status indicating success or failure, and a message explaining the result.
+*/
 function BaseWars.Faction.CreateFaction(name, password, color, icon, leader)
 
     BaseWars.Log("Trying creating faction " .. name .. " with leader " .. leader:Nick())
@@ -85,7 +109,12 @@ local function copyFactionForClientSend(faction)
     }
 end
 
--- Function to sync all factions with a specific player or all players.
+/*
+    @description
+    Synchronizes all faction data with a specific player or all players if no player is specified.
+
+    @param {Player} ply - The player to synchronize with. If nil, synchronizes with all players.
+*/
 function BaseWars.Faction.SyncFactions(ply)
 
     local factions = {}
@@ -101,7 +130,12 @@ function BaseWars.Faction.SyncFactions(ply)
         
 end
 
--- Function to sync a specific faction's details across all players.
+/*
+    @description
+    Synchronizes a specific faction's details with all players.
+
+    @param {table} faction - The faction table containing faction details to synchronize.
+*/
 function BaseWars.Faction.SyncFaction(faction)
     local copyTable = copyFactionForClientSend(faction)
 
@@ -113,7 +147,16 @@ function BaseWars.Faction.SyncFaction(faction)
     })
 end
 
--- Function to handle a player attempting to join a faction.
+/*
+    @description
+    Handles the process of a player attempting to join a faction, including password verification.
+
+    @param {Player} ply - The player attempting to join the faction.
+    @param {string} factionName - The name of the faction the player is attempting to join.
+    @param {string} password - The password provided by the player for the faction, if required.
+
+    @return {boolean, string} A status indicating success or failure, and a message explaining the result.
+*/
 function BaseWars.Faction.JoinFaction(ply, factionName, password)
     local faction = BaseWars.Faction.Factions[factionName]
     if not faction then return false, "Faction does not exist" end
@@ -147,7 +190,14 @@ net.Receive(BaseWars.Faction.Net.Join, function(len, ply)
     BaseWars.Notify.Send(ply, "Rejoindre une faction", message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)
 
--- Function to handle a player leaving a faction.
+/*
+    @description
+    Handles the process of a player leaving their current faction.
+
+    @param {Player} ply - The player leaving the faction.
+
+    @return {boolean, string} A status indicating success or failure, and a message explaining the result.
+*/
 function BaseWars.Faction.LeaveFaction(ply)
     local factionTable = BaseWars.Faction.GetFactionByMember(ply)
     if not factionTable then return false, "You are not in a faction" end
@@ -165,7 +215,14 @@ function BaseWars.Faction.LeaveFaction(ply)
     return true, "Successfully left faction"
 end
 
--- Function to handle a player deleting a faction.
+/*
+    @description
+    Deletes a faction with the given name from the server.
+
+    @param {string} name - The name of the faction to delete.
+
+    @return {boolean, string} A status indicating success or failure, and a message explaining the result.
+*/
 function BaseWars.Faction.DeleteFaction(name)
     local factionTable = BaseWars.Faction.GetFaction(name)
     if not factionTable then return false, "Faction does not exist" end
@@ -191,7 +248,16 @@ net.Receive(BaseWars.Faction.Net.Leave, function(len, ply)
 end)
 
 
--- Function to set a player's faction directly, without the need for them to join.
+/*
+    @description
+    Sets the faction for a player directly, optionally setting them as the leader.
+
+    @param {Player} ply - The player to set the faction for.
+    @param {string} name - The name of the faction to set.
+    @param {boolean} [leader] - Whether the player should also be set as the leader of the faction.
+
+    @return {boolean, string} A status indicating success or failure, and a message explaining the result.
+*/
 function BaseWars.Faction.SetFaction(ply, name, leader)
     if not IsValid(ply) then return false, "Invalid player" end
 
@@ -211,7 +277,7 @@ function BaseWars.Faction.SetFaction(ply, name, leader)
 end
 
 hook.Add("PlayerInitialSpawn", "BaseWars_FactionSync", function(ply)
-    BaseWars.Faction.CreateFaction("Default", "yes", BaseWars.Color("RED"), "icon16/gun.png", ply)
+   -- BaseWars.Faction.CreateFaction("Default", "yes", BaseWars.Color("RED"), "icon16/gun.png", ply)
 
     BaseWars.Faction.SyncFactions(ply)
 end)
