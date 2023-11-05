@@ -211,13 +211,13 @@ BaseWars.Config.Colors = {
 }
 
 BaseWars.Config.UI = {
-    HeaderColor = Color(240, 240, 240, 240),
+    HeaderColor = Color(40, 40, 40, 110),
     HeaderLineColor = Color(200, 200, 200, 255),
 
     BodyColor = Color(255, 255, 255, 255),
 
     CloseBtnTextColor = Color(200, 50, 80, 255),
-    TitleTextColor = Color(40, 40, 40, 255),
+    TitleTextColor = Color(244, 244, 244, 255),
 
     Accent = Color(0, 0, 0, 255),
 
