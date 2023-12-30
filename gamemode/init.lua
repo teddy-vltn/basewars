@@ -3,6 +3,8 @@ include("shared.lua")
 BaseWars = BaseWars or {}
 BaseWars.Notify = BaseWars.Notify or {}
 
+BaseWars.Persist = BaseWars.Persist or {}
+
 
 -- on player initial spawn
 function GM:PlayerInitialSpawn(ply)
@@ -13,6 +15,8 @@ function GM:PlayerInitialSpawn(ply)
 
 
     -- send the player the faction list
+
+    print(BaseWars.Persist.GetPlayer(ply))
 
 
 

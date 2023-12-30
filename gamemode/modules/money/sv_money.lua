@@ -15,11 +15,3 @@ end
 function Player:GiveMoney(amount)
     self:AddMoney(amount)
 end
-
-hook.Add("PlayerInitialSpawn", "BaseWars.Money.PlayerInitialSpawn", function(ply)
-    ply:LoadData()
-end)
-
-hook.Add("PlayerDisconnected", "BaseWars.Money.PlayerDisconnected", function(ply)
-    ply:SaveData()
-end)
