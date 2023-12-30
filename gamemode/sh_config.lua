@@ -189,6 +189,14 @@ BaseWars.Config.Navigation = {
             CreateFactionPanel(parent)
         end
     },
+    {
+        Name = "Leaderboard",
+        Color = Color(0, 255, 0),
+        Icon = "icon16/award_star_gold_1.png",
+        Panel = function(parent)
+            CreateLeaderboardPanel(parent)
+        end
+    }
 }
 
 BaseWars.Config.Sounds = {

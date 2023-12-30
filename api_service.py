@@ -108,6 +108,27 @@ def save_player(steamid):
     conn.close()
     return get_player(steamid)
 
+## top 20 players by money per page
+@app.route('/top/money/<page>')
+def get_top_money(page):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM players ORDER BY money DESC LIMIT 20 OFFSET ?', (int(page) * 20,))
+    players = c.fetchall()
+    conn.close()
+    return jsonify(players), 200
+
+@app.route("/create/fake/<amount>")
+def create_fake(amount):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    for i in range(30, 30 + int(amount)):
+        c.execute('INSERT INTO players (steamid) VALUES (?)', (i,))
+        c.execute('UPDATE players SET money = ?, level = ?, xp = ?, lastseen = ?, playtime = ? WHERE steamid = ?', (i, i, i, i, i, i))
+    conn.commit()
+    conn.close()
+    return jsonify({'message': 'Created fake players'}), 200
+
 ## run the app
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

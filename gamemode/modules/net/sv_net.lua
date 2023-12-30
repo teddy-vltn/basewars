@@ -12,6 +12,8 @@ function BaseWars.Net.Broadcast(msgType, data)
     net.Start(msgType)
     BaseWars.Net.Write(msgType, data)
     net.Broadcast()
+
+    BaseWars.Log("Broadcasted net message: " .. msgType)
 end
 
 /*

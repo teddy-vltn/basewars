@@ -21,7 +21,9 @@ function Persist.HTTP(endpoint, method, data, headers, callback)
             callback(body)
         end,
         failed = function(reason)
-            callback(reason)
+            BaseWars.Log("HTTP request failed: " .. reason .. " (" .. url .. ")" )
+
+            callback(nil)
         end
     })
 end
@@ -38,13 +40,12 @@ end
 
 function Persist.Test()
     Persist.Get("/test", function(body)
-        print(body)
+        BaseWars.Log(body)
     end)
 end
 
 function Persist.CreatePlayer(ply, callback)
     Persist.Post("/player/" .. ply:SteamID64() .. "/create", {}, function(body)
-        print(body)
         callback(util.JSONToTable(body))
     end)
 end
@@ -52,7 +53,12 @@ end
 function Persist.GetPlayerData(ply, callback)
 
     Persist.Get("/player/" .. ply:SteamID64(), function(body)
-        print(body)
+
+        if not body then
+            callback(nil)
+            return
+        end
+
         local data = util.JSONToTable(body)
 
         if data.code == "2" then
@@ -87,7 +93,22 @@ function Persist.SaveToDatabase(ply)
     }
 
     Persist.Post("/player/" .. ply:SteamID64() .. "/save", data, function(body)
-        print(body)
+        if not body then
+            BaseWars.Log("Failed to save player " .. ply:Nick() .. " (" .. ply:SteamID() .. ") to database.")
+
+            BaseWars.Notify.Send(ply, "Error", "An error occured while saving your data. Please contact an administrator.", Color(255, 0, 0))
+
+            ply:Freeze(true)
+            return
+        end
+
+        BaseWars.Log("Saved player " .. ply:Nick() .. " (" .. ply:SteamID() .. ") to database.")
+    end)
+end
+
+function Persist.GetTopPlayers(page, callback)
+    Persist.Get("/top/money/" .. page, function(body)
+        callback(util.JSONToTable(body))
     end)
 end
 

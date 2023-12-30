@@ -2,8 +2,8 @@ include("shared.lua")
 
 BaseWars = BaseWars or {}
 BaseWars.Notify = BaseWars.Notify or {}
-
 BaseWars.Persist = BaseWars.Persist or {}
+BaseWars.Leaderboard = BaseWars.Leaderboard or {}
 
 hook.Add("Initialize", "BaseWars_Initialize", function()
     if SERVER then
@@ -19,6 +19,14 @@ hook.Add("PlayerInitialSpawn", "BaseWars_PlayerInitialSpawn", function(ply)
 
     -- load the player's data
     BaseWars.Persist.GetPlayerData(ply, function(data)
+        if not data then
+            BaseWars.Notify.Send(ply, "Error", "An error occured while loading your data. Please contact an administrator.", Color(255, 0, 0))
+
+            -- freeze the player
+            ply:Freeze(true)
+            return
+        end
+
         ply:SetMoney(data[2])
         ply:SetLevel(data[3])
         ply:SetXP(data[4])
@@ -26,8 +34,12 @@ hook.Add("PlayerInitialSpawn", "BaseWars_PlayerInitialSpawn", function(ply)
 
 end)
 
+hook.Add("Think", "BaseWars_Think", function()
+    BaseWars.Leaderboard.Think()
+end)
+
 function BaseWars.SequentialDataSaving()
-    timer.Create("BaseWars_SequentialDataSaving", 120, 0, function()
+    timer.Create("BaseWars_SequentialDataSaving", 10, 0, function()
         for k, v in pairs(player.GetAll()) do
             BaseWars.Persist.SaveToDatabase(v)
         end

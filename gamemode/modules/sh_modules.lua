@@ -130,6 +130,7 @@ BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/entities")
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/props")
 
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/persistent")
+BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/leaderboard")
 
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/level")
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/money")
