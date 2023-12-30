@@ -156,54 +156,6 @@ function CreateBoutiquePanel(parent)
                 end
             end
 
-            -- if it's a weapon add a button to allow auto-purchase on spawn
-            if Weapon then
-
-
-                -- the button is just an icon16/accept.png on the top right
-                -- the button is disabled if you can't afford it
-                -- the button draws over the item 
-                local itemButtonAutoBuy = vgui.Create("DImageButton", itemPanel)
-                itemButtonAutoBuy:SetSize(16, 16)
-
-                if key == weaponAutoBuy then
-                    itemButtonAutoBuy:SetImage("icon16/cancel.png")
-                else
-                    itemButtonAutoBuy:SetImage("icon16/arrow_rotate_clockwise.png")
-                end
-                itemButtonAutoBuy:SetPos(84 - 5, 0 + 5)
-                itemButtonAutoBuy:SetEnabled(LocalPlayer():GetMoney() >= Price)
-                itemButtonAutoBuy.DoClick = function(self)
-                    print(boolAutoBuy, weaponAutoBuy)
-
-                    if boolAutoBuy and key != weaponAutoBuy then
-                        return -- send notify
-                    end
-
-                    if key == weaponAutoBuy then
-                        LocalPlayer():SetAutoBuy(false, "")
-
-                        boolAutoBuy = false
-                        weaponAutoBuy = ""
-
-                        self:SetImage("icon16/arrow_rotate_clockwise.png")
-                    else
-                        AskForAutoBuy(key, function(didChooseYes, weaponUUID)
-                            if didChooseYes then
-                                LocalPlayer():SetAutoBuy(true, weaponUUID)
-
-                                boolAutoBuy = true
-                                weaponAutoBuy = weaponUUID
-
-                                self:SetImage("icon16/cancel.png")
-                            else
-                                -- Player chose "No"
-                            end
-                        end)
-                    end
-                end
-            end
-
             if itemReasonBlocked then
                 local itemLabelBlocked = vgui.Create("DLabel", itemPanel)
                 itemLabelBlocked:Dock(TOP)
@@ -263,6 +215,56 @@ function CreateBoutiquePanel(parent)
                 surface.PlaySound(BaseWars.Config.Sounds.Click)
 
                 LocalPlayer():BuyEntity(self.itemUUID)
+            end
+
+            -- if it's a weapon add a button to allow auto-purchase on spawn
+            if Weapon then
+
+
+                -- the button is just an icon16/accept.png on the top right
+                -- the button is disabled if you can't afford it
+                -- the button draws over the item 
+                local itemButtonAutoBuy = vgui.Create("DImageButton", itemPanel)
+                itemButtonAutoBuy:SetSize(16, 16)
+
+                if key == weaponAutoBuy then
+                    itemButtonAutoBuy:SetImage("icon16/cancel.png")
+                else
+                    itemButtonAutoBuy:SetImage("icon16/arrow_rotate_clockwise.png")
+                end
+                itemButtonAutoBuy:SetPos(84 - 5, 0 + 5)
+                itemButtonAutoBuy:SetEnabled(LocalPlayer():GetMoney() >= Price)
+                itemButtonAutoBuy.DoClick = function(self)
+                    print(boolAutoBuy, weaponAutoBuy)
+
+                    if boolAutoBuy and key != weaponAutoBuy then
+                        return -- send notify
+                    end
+
+                    if key == weaponAutoBuy then
+                        LocalPlayer():SetAutoBuy(false, "")
+
+                        boolAutoBuy = false
+                        weaponAutoBuy = ""
+
+                        self:SetImage("icon16/arrow_rotate_clockwise.png")
+                    else
+                        AskForAutoBuy(key, function(didChooseYes, weaponUUID)
+                            if didChooseYes then
+                                LocalPlayer():SetAutoBuy(true, weaponUUID)
+
+                                boolAutoBuy = true
+                                weaponAutoBuy = weaponUUID
+
+                                
+
+                                self:SetImage("icon16/cancel.png")
+                            else
+                                -- Player chose "No"
+                            end
+                        end)
+                    end
+                end
             end
         end
     end

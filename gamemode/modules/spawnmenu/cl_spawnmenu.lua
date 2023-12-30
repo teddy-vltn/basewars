@@ -10,7 +10,9 @@ function Player:BuyEntity(uuid)
 end
 
 function Player:SetAutoBuy(bool, weapon)
-    local netTag = BaseWars.SpawnMenu.Net.SetAutoBuy
+    local netTag = BaseWars.SpawnMenu.Net.AutoBuy
+
+    BaseWars.Log("Player " .. self:Nick() .. " (" .. self:SteamID() .. ") attempted to set auto buy to " .. tostring(bool) .. " for weapon " .. weapon .. ".")
 
     BaseWars.Net.SendToServer(netTag, {bool = bool, weapon = weapon})
 end

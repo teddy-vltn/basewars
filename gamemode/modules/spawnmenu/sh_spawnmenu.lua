@@ -167,3 +167,11 @@ end
 function Player:IsVIP()
     return false
 end
+
+function Player:GetIsWeaponAutoBuy()
+    return self:GetNWBool("BaseWars_AutoBuy")
+end
+
+function Player:GetWeaponAutoBuy()
+    return self:GetNWString("BaseWars_AutoBuyWeapon")
+end

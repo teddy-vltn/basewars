@@ -159,8 +159,10 @@ net.Receive(netAutoBuyTag, function(len, ply)
 
     local data = BaseWars.Net.Read(netAutoBuyTag)
 
-    local uuid = data.uuid
-    local state = data.state
+    local uuid = data.weapon
+    local state = data.bool
+
+    print(uuid, state)
 
     local status, message
     if state then
