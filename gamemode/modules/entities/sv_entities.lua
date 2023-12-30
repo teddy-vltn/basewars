@@ -1,6 +1,12 @@
 BaseWars = BaseWars or {}
 BaseWars.Entities = BaseWars.Entities or {}
 
+/*
+    @description
+    Returns all entities owned by a player.
+
+    @param {Player} ply - The player to find entities for.
+*/
 function BaseWars.Entities.FindPlayerEntities(ply)
     local entities = {}
 

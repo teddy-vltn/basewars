@@ -27,8 +27,14 @@ local function stringHash(input)
     return hash
 end
 
--- This function generates a deterministic UUID for an item based on its properties.
--- The generated UUID is seeded by a hash of the item's properties, ensuring the UUID remains consistent for the same item.
+/*
+    @description
+    Generates a UUID for a given item.
+
+    @param {table} item - The item to generate a UUID for.
+
+    @return {string} The generated UUID.
+*/
 function BaseWars.SpawnMenu.GenerateUUID(item)
     -- Convert the item properties into a single concatenated string
     local itemStr = item.Name .. item.Price .. item.Model .. item.ClassName
@@ -56,8 +62,14 @@ function BaseWars.SpawnMenu.GenerateUUID(item)
     end)
 end
 
--- This function processes a shop's category table, assigning UUIDs to items.
--- It recursively traverses categories and subcategories, ensuring each item is given a unique identifier.
+/*
+    @description
+    Adds UUIDs to the shop's item entries.
+
+    @param {table} categoryTable - The table representing the shop's categories.
+
+    @return {table} The updated category table.
+*/
 function BaseWars.SpawnMenu.AddUUIDsToShop(categoryTable)
     local newTable = {}
 
@@ -85,8 +97,15 @@ end
 
 BaseWars.Config.Shop = BaseWars.SpawnMenu.AddUUIDsToShop(BaseWars.Config.Shop)
 
--- This function collects items from a category table up to a specified depth.
--- It's used to extract items from nested categories, creating a flattened view.
+/*
+    @description
+    Collects all items from the shop's category table, recursively.
+
+    @param {table} categoryTable - The table representing the shop's categories.
+    @param {number} depth - The maximum depth to recurse to.
+
+    @return {table} A table containing all items from the shop's category table.
+*/
 function BaseWars.SpawnMenu.CollectItems(categoryTable, depth)
     -- If the depth limit is reached, stop the recursion
     if depth <= 0 then return {} end
@@ -112,8 +131,12 @@ function BaseWars.SpawnMenu.CollectItems(categoryTable, depth)
     return items
 end
 
--- This function uses the CollectItems function to flatten the shop's structure.
--- The result is a single table containing all items, regardless of their nesting within categories.
+/*
+    @description
+    Flattens the shop's category table into a single table containing all items.
+
+    @return {table} A table containing all items from the shop's category table.
+*/
 function BaseWars.FlattenShop()
     -- Using an arbitrary depth of 10 ensures all items are collected, even from deeply nested categories
     local items = BaseWars.SpawnMenu.CollectItems(BaseWars.Config.Shop, 10)

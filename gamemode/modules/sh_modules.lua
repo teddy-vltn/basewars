@@ -3,7 +3,15 @@ BaseWars.Modules = BaseWars.Modules or {}
 BaseWars.ModulesOrder = BaseWars.ModulesOrder or {}
 BaseWars.LoadedModules = {}
 
--- Registers a module with optional dependencies
+/*
+    @description
+    Registers a module with optional dependencies.
+
+    @param {string} name - The name of the module.
+    @param {table} dependencies - A table of dependencies for the module.
+    @param {string} path - The path to the module.
+    @param {string} prefix - The prefix of the module.
+*/
 function BaseWars.RegisterModule(name, dependencies, path, prefix)
     if not BaseWars.Modules[name] then
         BaseWars.ModulesOrder[#BaseWars.ModulesOrder + 1] = name
@@ -48,7 +56,10 @@ local function DependenciesSatisfied(module)
     return true
 end
 
--- Include all registered modules, respecting dependencies
+/*
+    @description
+    Loads all modules in the order they were registered.
+*/
 function BaseWars.IncludeModules()
     for _, moduleName in ipairs(BaseWars.ModulesOrder) do
         local module = BaseWars.Modules[moduleName]
@@ -61,6 +72,13 @@ function BaseWars.IncludeModules()
     BaseWars.Log("Finished loading modules")
 end
 
+/*
+    @description
+    Registers all modules in a folder with optional dependencies.
+
+    @param {string} folder - The folder to register modules in.
+    @param {table} dependencies - A table of dependencies to use for all modules in the folder.
+*/
 function BaseWars.RegisterModuleFolder(folder, dependencies)
     dependencies = dependencies or {}
 
@@ -128,8 +146,6 @@ BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/vgui/base")
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/vgui")
 
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/hud")
-
-
 
 -- Load all modules
 BaseWars.IncludeModules()

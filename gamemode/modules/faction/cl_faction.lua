@@ -54,15 +54,33 @@ local function sendFactionRequest(netEvent, data)
     BaseWars.Net.SendToServer(netEvent, data)
 end
 
--- Public functions to attempt faction related actions
+/*
+    @description
+    Attempts to join a faction with the given name and password.
+
+    @param {string} name - The name of the faction to join.
+    @param {string} password - The password of the faction to join.
+*/
 function BaseWars.Faction.TryJoinFaction(name, password)
     sendFactionRequest(BaseWars.Faction.Net.Join, {name = name, password = password})
 end
 
+/*
+    @description
+    Attempts to leave the faction with the given name.
+
+    @param {string} name - The name of the faction to leave.
+*/
 function BaseWars.Faction.TryLeaveFaction(name)
     sendFactionRequest(BaseWars.Faction.Net.Leave, {name = name})
 end
 
+/*
+    @description
+    Attempts to delete the faction with the given name.
+
+    @param {string} name - The name of the faction to delete.
+*/
 function BaseWars.Faction.TryCreateFaction(name, password, color, icon)
     sendFactionRequest(BaseWars.Faction.Net.Create, {name = name, password = password, color = color, icon = icon})
 end

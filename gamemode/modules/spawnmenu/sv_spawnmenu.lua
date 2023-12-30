@@ -40,8 +40,17 @@ local function GiveWeapon(ply, class)
     return true, "Successfully spawned entity"
 end
 
--- Function to handle the purchasing of an entity.
--- Checks various conditions (e.g., player level, affordability) before spawning the entity.
+/*
+    @description
+    Attempts to buy an entity for the player.
+
+    @param {Player} ply - The player entity to buy the entity for.
+    @param {string} uuid - The UUID of the entity to buy.
+    @param {Vector} pos - The position to spawn the entity at.
+    @param {Angle} ang - The angle to spawn the entity at.
+
+    @return {boolean, string} A status indicating success or failure, and a message explaining the result.
+*/
 function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
     -- Fetch the entity details from the flattened shop using the UUID
     local entityTable = BaseWars.SpawnMenu.FlattenedShop[uuid]
@@ -77,7 +86,15 @@ function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
     return true, "Successfully bought entity"
 end
 
--- Function to calculate the position and angle where an entity should be spawned relative to the player.
+/*
+    @description
+    Calculates the position and angle to spawn an entity at based on the player's current view.
+
+    @param {Player} ply - The player entity to calculate the position and angle for.
+    @param {string} uuid - The UUID of the entity to calculate the position and angle for.
+
+    @return {Vector, Angle} The position and angle to spawn the entity at.
+*/
 function BaseWars.SpawnMenu.CalcPosAndAng(ply, ent)
     -- Get the position where the player is looking
     local pos = ply:GetEyeTrace().HitPos

@@ -102,11 +102,11 @@ categories = {
 for lua_file in lua_files:
     functions_with_docs = extract_functions_and_docs(lua_file)
     base_file_name = os.path.basename(lua_file)
-    if base_file_name.startswith('sv_'):
+    if base_file_name.startswith('sv_') or base_file_name == 'init.lua':
         categories['ServerSide'].extend(functions_with_docs)
-    elif base_file_name.startswith('sh_'):
+    elif base_file_name.startswith('sh_') or base_file_name == 'shared.lua':
         categories['SharedSide'].extend(functions_with_docs)
-    elif base_file_name.startswith('cl_'):
+    elif base_file_name.startswith('cl_') or base_file_name == 'cl_init.lua':
         categories['ClientSide'].extend(functions_with_docs)
 
 # Path to the README file
@@ -128,7 +128,7 @@ lines = lines[:doc_start_index] + ['\n'] + lines[contrib_index:]
 def insert_functions(category_name, functions_with_docs, insert_index):
     lines.insert(insert_index, f"### {category_name} Functions\n\n")
     for doc, func, location_note in reversed(functions_with_docs):
-        entry = f"{location_note}\n```lua\n{func}\n```\n{doc}\n---\n\n"
+        entry = f"> {location_note}\n```lua\n{func}\n```\n\n\n{doc}\n\n---\n\n"
         lines.insert(insert_index + 1, entry)
 
 # Insert the new documentation for each category

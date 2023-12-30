@@ -13,12 +13,24 @@ local colorRed = Color(255, 0, 0)
 local colorBlue = Color(0, 0, 255)
 local colorWhite = Color(255, 255, 255)
 
+/*
+	@description
+	Logs a message to the console.
+
+	@param {any} ... - The message to log.
+*/
 function BaseWars.Log(...)
 
 	MsgC(SERVER and colorRed or colorBlue, "[BASEWARS] -		 ", colorWhite, ...)
 	MsgN("")
 end
 
+/*
+	@description
+	Loads a module.
+
+	@param {string} name - The name of the module to load.
+*/
 function BaseWars.Color(code)
 	return BaseWars.Config.Colors[code]
 end
@@ -38,11 +50,25 @@ function BaseWars.NumberFormat(n)
 	return n
 end
 
+/*
+	@description
+	Formats a number into a money string.
+
+	@param {number} n - The number to format.
+*/
 function BaseWars.FormatMoney(n)
 	return "$" .. BaseWars.NumberFormat(n)
 end
 
+/*
+	@description
+	Registers a new entity based on an existing entity. Fake registering without having to create a new file.
 
+	@param {string} baseEntity - The base entity to derive from.
+	@param {string} printName - The name of the entity.
+	@param {string} model - The model of the entity.
+	@param {string} ClassName - The class name of the entity.
+*/
 function BaseWars.CreateFakeDerivatedScriptedEnt(baseEntity, printName, model, ClassName)
 	local ENT = table.Copy(baseEntity)
 	
@@ -56,6 +82,10 @@ function BaseWars.CreateFakeDerivatedScriptedEnt(baseEntity, printName, model, C
 	return true 
 end
 
+/*
+	@description
+	Loads Entity configuration from the config file, in order to create entities.
+*/
 function BaseWars.LoadEntityConfiguration()
 
 	if not BaseWars.Config.Entities then

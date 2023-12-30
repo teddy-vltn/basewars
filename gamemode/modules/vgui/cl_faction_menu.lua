@@ -152,7 +152,6 @@ local function AskForComfirmation(factionName, callback)
 
     local submitButton = vgui.Create("DButton", confirmationFrame)
     submitButton:Dock(BOTTOM)
-    submitButton:SetText("Oui")
     submitButton:DockMargin(10, 5, 10, 10)
     submitButton.DoClick = function()
         if callback then
