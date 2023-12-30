@@ -1,151 +1,107 @@
 BaseWars.Persist = BaseWars.Persist or {}
 local Persist = BaseWars.Persist
 
-local ply = FindMetaTable("Player")
+local API_URL = "http://172.20.10.2:5000"
 
-local api = "http://172.20.10.2:5000"
-
-local function GetPlayerID(ply)
-    return ply:SteamID64()
+local function buildEndpoint(endpoint)
+    return API_URL .. endpoint
 end
 
--- unsure the "/" is working
-function Persist.Test()
-    http.Fetch(api .. "/",
-        function(body, len, headers, code)
-            print("Test: ", body)
-        end,
-        function(error)
-            print("Error: ", error)
-        end
-    )
-end
+function Persist.HTTP(endpoint, method, data, headers, callback)
+    local url = buildEndpoint(endpoint)
+    local data = data and util.TableToJSON(data) or nil
 
-function Persist.GetPlayers()
-    http.Fetch(api .. "/players",
-        function(body, len, headers, code)
-            local players = util.JSONToTable(body)
-            -- Process players data here
-            -- Example: Print each player's data
-            for _, player in ipairs(players) do
-                print("Player: ", player)
-            end
-        end,
-        function(error)
-            -- Handle error
-            print("Error fetching players: ", error)
-        end
-    )
-end
-
-function Persist.GetPlayer(ply, load)
-    if load == nil then
-        load = false
-    end
-    local steamid = GetPlayerID(ply)
-
-    http.Fetch(api .. "/player/" .. steamid,
-        function(body, len, headers, code)
-            if code == 404 then
-                local data = util.JSONToTable(body)
-                if data.code == '2' then
-                    
-                    return Persist.CreatePlayer(ply)
-                end
-            else
-                local player = util.JSONToTable(body)
-                -- Process player data here
-                -- Load player data into the game
-                if load then
-                    ply:SetNWInt("money", player[2])
-                end
-            end
-        end,
-        function(error)
-            -- Handle error
-            print("Error fetching player: ", error)
-        end
-    )
-end
-
-function Persist.CreatePlayer(ply)
-    local steamid = GetPlayerID(ply)
-    
-    http.Post(api .. "/player/create/" .. steamid, {},
-        function(body, len, headers, code)
-            local player = util.JSONToTable(body)
-            -- Process newly created player data here
-            return player
-        end,
-        function(error)
-            -- Handle error
-            print("Error creating player: ", error)
-        end
-    )
-end
-
-function Persist.SetPlayerVar(ply, var, value)
-    local steamid = GetPlayerID(ply)
-
-    -- Prepare the data as a JSON string
-    local jsonData = util.TableToJSON({
-        ["var"] = var,
-        ["value"] = value
-    })
-
-    -- Set up the HTTP request
     HTTP({
-        url = api .. "/player/" .. steamid .. "/set",
-        method = "POST",
-        headers = {
-            
-        },
-        type = "application/json",
-        body = jsonData, 
+        url = url,
+        method = method,
+        headers = headers or {},
+        type = "application/json; charset=utf-8",
+        body = data,
         success = function(code, body, headers)
-            print("Player var set successfully: " .. body)
+            callback(body)
         end,
-        failed = function(error)
-            print("Error setting player var: " .. error)
+        failed = function(reason)
+            callback(reason)
         end
     })
 end
 
-
-
-function Persist.SavePlayer(ply, body)
-    local steamid = GetPlayerID(ply)
-
-    print("Saving player: ", body)
-
-    http.Post(api .. "/player/" .. steamid .. "/save", 
-        body,
-        function(body, len, headers, code)
-            -- Success callback
-            print("Player saved successfully")
-        end,
-        function(error)
-            -- Error callback
-            print("Error saving player: ", error)
-        end,
-        {["Content-Type"] = "application/json"}
-    )
+function Persist.Get(endpoint, callback)
+    Persist.HTTP(endpoint, "GET", nil, nil, callback)
 end
 
-
-function Persist.LoadFromDatabase(ply)
-    local plyData = Persist.GetPlayer(ply, true)
+function Persist.Post(endpoint, data, callback)
+    Persist.HTTP(endpoint, "POST", data, {
+        ["Content-Type"] = "application/json"
+    }, callback)
 end
 
-    
-function Persist.SaveToDatabase(ply)
-    local plyData = {
-        ["money"] = ply:GetNWInt("money")
+function Persist.Test()
+    Persist.Get("/test", function(body)
+        print(body)
+    end)
+end
+
+function Persist.CreatePlayer(ply, callback)
+    Persist.Post("/player/" .. ply:SteamID64() .. "/create", {}, function(body)
+        print(body)
+        callback(util.JSONToTable(body))
+    end)
+end
+
+function Persist.GetPlayerData(ply, callback)
+
+    Persist.Get("/player/" .. ply:SteamID64(), function(body)
+        print(body)
+        local data = util.JSONToTable(body)
+
+        if data.code == "2" then
+            Persist.CreatePlayer(ply, callback)
+        else
+            callback(data)
+        end 
+    end)
+end
+
+function Persist.SetPlayerVariable(ply, var, value, callback)
+
+    -- {"var": "money", "value": 100}
+    local data = {
+        var = var,
+        value = value
     }
 
-    BaseWars.Log("Saving player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ")")
-
-    Persist.SetPlayerVar(ply, "money", ply:GetNWInt("money"))
+    Persist.Post("/player/" .. ply:SteamID64() .. "/set", data, function(body)
+        callback(util.JSONToTable(body))
+    end)
 end
 
-print(Persist.Test())
+function Persist.SaveToDatabase(ply)
+    -- money = ?, level = ?, xp = ?, lastseen = ?, playtime = ?
+    local data = {
+        money = ply:GetMoney(),
+        level = ply:GetLevel(),
+        xp = ply:GetXP(),
+        lastseen = os.time(),
+        playtime = 0
+    }
+
+    Persist.Post("/player/" .. ply:SteamID64() .. "/save", data, function(body)
+        print(body)
+    end)
+end
+
+local function test_endpoint_pcall()
+    local success, err = pcall(function()
+        Persist.Get("/", function(body)
+            print(body)
+        end)
+    end)
+
+    if not success then
+        print(err)
+    end
+end
+
+test_endpoint_pcall()
+

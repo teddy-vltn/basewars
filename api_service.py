@@ -59,7 +59,7 @@ def get_players():
     conn.close()
     return jsonify(players), 200
 
-@app.route('/player/create/<steamid>', methods=['POST'])
+@app.route('/player/<steamid>/create', methods=['POST'])
 def create_player(steamid):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
@@ -103,7 +103,7 @@ def set_player_var(steamid):
 def save_player(steamid):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
-    c.execute('UPDATE players SET money = ?, level = ?, xp = ?, xp_needed = ?, lastseen = ?, playtime = ? WHERE steamid = ?', (request.json['money'], request.json['level'], request.json['xp'], request.json['xp_needed'], request.json['lastseen'], request.json['playtime'], steamid))
+    c.execute('UPDATE players SET money = ?, level = ?, xp = ?, lastseen = ?, playtime = ? WHERE steamid = ?', (request.json['money'], request.json['level'], request.json['xp'], request.json['lastseen'], request.json['playtime'], steamid))
     conn.commit()
     conn.close()
     return get_player(steamid)
