@@ -82,14 +82,31 @@ def get_player(steamid):
         return jsonify(player), 200
     
 @app.route('/player/<steamid>/set', methods=['POST'])
-def set_player_var(player, var, value):
+def set_player_var(steamid):
+    var = request.json['var']
+    value = request.json['value']
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
-    c.execute('UPDATE players SET ' + var + ' = ? WHERE steamid = ?', (value, player['steamid']))
+
+    # Ensure 'var' is a valid column name to avoid SQL injection
+    if var in ['money', 'level', 'xp', 'xp_needed', 'lastseen', 'playtime']:
+        query = f'UPDATE players SET {var} = ? WHERE steamid = ?'
+        c.execute(query, (value, steamid))
+        conn.commit()
+    else:
+        return "Invalid column name", 400
+
+    conn.close()
+    return get_player(steamid)
+
+@app.route('/player/<steamid>/save', methods=['POST'])
+def save_player(steamid):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('UPDATE players SET money = ?, level = ?, xp = ?, xp_needed = ?, lastseen = ?, playtime = ? WHERE steamid = ?', (request.json['money'], request.json['level'], request.json['xp'], request.json['xp_needed'], request.json['lastseen'], request.json['playtime'], steamid))
     conn.commit()
     conn.close()
-
-
+    return get_player(steamid)
 
 ## run the app
 if __name__ == '__main__':

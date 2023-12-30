@@ -1,6 +1,8 @@
 BaseWars.Persist = BaseWars.Persist or {}
 local Persist = BaseWars.Persist
 
+local ply = FindMetaTable("Player")
+
 local api = "http://172.20.10.2:5000"
 
 local function GetPlayerID(ply)
@@ -36,24 +38,27 @@ function Persist.GetPlayers()
     )
 end
 
-function Persist.GetPlayer(ply, retry)
-    if retry == nil then retry = true end
+function Persist.GetPlayer(ply, load)
+    if load == nil then
+        load = false
+    end
     local steamid = GetPlayerID(ply)
-
-    print("SteamID: ", steamid)
 
     http.Fetch(api .. "/player/" .. steamid,
         function(body, len, headers, code)
             if code == 404 then
                 local data = util.JSONToTable(body)
                 if data.code == '2' then
-                    -- Player not found, create a new player
-                    print(Persist.CreatePlayer(ply))
+                    
+                    return Persist.CreatePlayer(ply)
                 end
             else
                 local player = util.JSONToTable(body)
                 -- Process player data here
-                PrintTable(player)
+                -- Load player data into the game
+                if load then
+                    ply:SetNWInt("money", player[2])
+                end
             end
         end,
         function(error)
@@ -70,7 +75,7 @@ function Persist.CreatePlayer(ply)
         function(body, len, headers, code)
             local player = util.JSONToTable(body)
             -- Process newly created player data here
-            print("New Player Created: ", player)
+            return player
         end,
         function(error)
             -- Handle error
@@ -81,22 +86,66 @@ end
 
 function Persist.SetPlayerVar(ply, var, value)
     local steamid = GetPlayerID(ply)
-    local data = {
-        [var] = value
-    }
 
-    http.Post(api .. "/player/" .. steamid .. "/set", 
-        data,
+    -- Prepare the data as a JSON string
+    local jsonData = util.TableToJSON({
+        ["var"] = var,
+        ["value"] = value
+    })
+
+    -- Set up the HTTP request
+    HTTP({
+        url = api .. "/player/" .. steamid .. "/set",
+        method = "POST",
+        headers = {
+            
+        },
+        type = "application/json",
+        body = jsonData, 
+        success = function(code, body, headers)
+            print("Player var set successfully: " .. body)
+        end,
+        failed = function(error)
+            print("Error setting player var: " .. error)
+        end
+    })
+end
+
+
+
+function Persist.SavePlayer(ply, body)
+    local steamid = GetPlayerID(ply)
+
+    print("Saving player: ", body)
+
+    http.Post(api .. "/player/" .. steamid .. "/save", 
+        body,
         function(body, len, headers, code)
             -- Success callback
-            print("Variable updated successfully")
+            print("Player saved successfully")
         end,
         function(error)
             -- Error callback
-            print("Error updating player variable: ", error)
-        end
+            print("Error saving player: ", error)
+        end,
+        {["Content-Type"] = "application/json"}
     )
 end
 
-print(Persist.GetPlayers())
+
+function Persist.LoadFromDatabase(ply)
+    local plyData = Persist.GetPlayer(ply, true)
+end
+
+    
+function Persist.SaveToDatabase(ply)
+    local plyData = {
+        ["money"] = ply:GetNWInt("money")
+    }
+
+    BaseWars.Log("Saving player: " .. ply:Nick() .. " (" .. ply:SteamID() .. ")")
+
+    Persist.SetPlayerVar(ply, "money", ply:GetNWInt("money"))
+end
+
 print(Persist.Test())

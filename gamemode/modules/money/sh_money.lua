@@ -22,6 +22,6 @@ function Player:CanAfford(amount)
 end
 
 function Player:GetMoney()
-    return self:GetNWInt("money", BaseWars.Money.Config.StartAmount)
+    return self:GetNWInt("money")
 end
 
