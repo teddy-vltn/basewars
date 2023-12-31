@@ -95,6 +95,25 @@ BaseWars.Config.Entities = {
     -- ... autres catégories
 }
 
+-- only for props replacing the default one
+BaseWars.Config.Props = {
+    ["Basique"] = {
+        Icon = "icon16/bricks.png",
+
+        {Name = "Grille", Price = 10, Model = "models/props_c17/fence01a.mdl"},
+        {Name = "Barrière", Price = 10, Model = "models/props_c17/fence02a.mdl"},
+        {Name = "Barrière 2", Price = 10, Model = "models/props_c17/fence03a.mdl"},
+        {Name = "Barrière 3", Price = 10, Model = "models/props_c17/fence04a.mdl"},
+        {Name = "Barrière 4", Price = 10, Model = "models/props_c17/fence05a.mdl"},
+        {Name = "Barrière 5", Price = 10, Model = "models/props_c17/fence06a.mdl"},
+    },
+    ["Plaque"] = {
+        Icon = "icon16/bricks.png",
+
+        {Name = "Plaque 1", Price = 10, Model = "models/props_c17/gravestone003a.mdl"},
+    }
+}
+
 BaseWars.Config.Shop = {
     ["Entités"] = {
         Icon = "icon16/bricks.png",
@@ -173,6 +192,22 @@ BaseWars.Config.Raid = {
 }
 
 BaseWars.Config.Navigation = {
+    {
+        Name = "Props",
+        Color = Color(255, 0, 0),
+        Icon = "icon16/bricks.png",
+        Panel = function(parent)
+            CreatePropsPanel(parent)
+        end
+    },
+    {
+        Name = "Tools",
+        Color = Color(0, 0, 255),
+        Icon = "icon16/cart.png",
+        Panel = function(parent)
+            CreateToolsPanel(parent)
+        end
+    },
     {
         Name = "Boutique",
         Color = Color(255, 255, 0),

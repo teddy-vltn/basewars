@@ -160,11 +160,3 @@ function GM:Initialize()
 
 	BaseWars.LoadEntityConfiguration()
 end
-
-function GM:PlayerSpawnProp(ply, model)
-
-	self.BaseClass.PlayerSpawnProp(self, ply, model)
-
-	-- logic prop
-
-end

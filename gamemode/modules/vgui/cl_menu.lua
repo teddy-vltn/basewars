@@ -7,7 +7,7 @@ local function CreateBaseWarsMenu()
     end
 
     local frame = vgui.Create("DFrame")
-    frame:SetSize(700, 500)
+    frame:SetSize(900, 500)
     frame:Center()
     frame:SetTitle("BaseWars Menu")
     frame:MakePopup()
@@ -41,10 +41,10 @@ end
 
 concommand.Add("basewars_menu", CreateBaseWarsMenu)
 
--- toggle button for the menu
--- when player presses F3, open the menu
-hook.Add("PlayerBindPress", "OpenBaseWarsMenu", function(ply, bind, pressed)
-    if bind == "gm_showspare1" and pressed then
+hook.Add("SpawnMenuOpen", "OpenBaseWarsMenu", function()
+    if not IsValid(baseWarsMenu) then
         CreateBaseWarsMenu()
     end
+
+    return false -- Prevent the default spawn menu from opening
 end)

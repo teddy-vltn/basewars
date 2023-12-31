@@ -2,13 +2,19 @@ BaseWars = BaseWars or {}
 BaseWars.Leaderboard = BaseWars.Leaderboard or {}
 
 BaseWars.Leaderboard.MaxPages = 2
-BaseWars.Leaderboard.RefreshRate = 3
+BaseWars.Leaderboard.RefreshRate = 300
 BaseWars.Leaderboard.NextRefresh = nil
 
 function BaseWars.Leaderboard.RefreshPage(page)
     BaseWars.Persist.GetTopPlayers(page, function(data)
         BaseWars.Leaderboard.Cache[page] = data
     end)
+end
+
+function BaseWars.Leaderboard.Send(ply)
+    BaseWars.Net.SendToPlayer(ply, BaseWars.Leaderboard.Net.RefreshLeaderboard, {
+        leaderboard = BaseWars.Leaderboard.Cache
+    })
 end
 
 function BaseWars.Leaderboard.Refresh()

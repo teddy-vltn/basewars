@@ -32,6 +32,9 @@ hook.Add("PlayerInitialSpawn", "BaseWars_PlayerInitialSpawn", function(ply)
         ply:SetXP(data[4])
     end)
 
+    -- send the player the leaderboard
+    BaseWars.Leaderboard.Send(ply)
+
 end)
 
 hook.Add("Think", "BaseWars_Think", function()
@@ -39,7 +42,7 @@ hook.Add("Think", "BaseWars_Think", function()
 end)
 
 function BaseWars.SequentialDataSaving()
-    timer.Create("BaseWars_SequentialDataSaving", 10, 0, function()
+    timer.Create("BaseWars_SequentialDataSaving", 180, 0, function()
         for k, v in pairs(player.GetAll()) do
             BaseWars.Persist.SaveToDatabase(v)
         end
@@ -60,12 +63,13 @@ end)
 
 function GM:PlayerLoadout( ply )
 	
-    -- Give the player the weapons they bought here.
     ply:Give("weapon_physgun")
     ply:Give("gmod_tool")
     ply:Give("weapon_physcannon")
 
     ply:Give("weapon_fists")
+
+    ply:Give("bw_inspector")
 
 	-- Prevent default Loadout.
 	return true
