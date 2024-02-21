@@ -17,23 +17,42 @@ hook.Add("PlayerInitialSpawn", "BaseWars_PlayerInitialSpawn", function(ply)
     -- send the player the notification list
     BaseWars.Notify.Send(ply, "Welcome to BaseWars!", "Welcome to BaseWars! Press F1 to open the menu.", Color(255, 255, 255))
 
+    if BaseWars.Config.Debug then
+        BaseWars.Notify.Send(ply, "Debug", "Debug mode is enabled.", Color(255, 255, 255))
+
+        ply:SetMoney(10^6)
+        ply:SetLevel(100)
+        ply:SetXP(0)
+
+        ply.CorruptedData = true
+
+        return
+    end
+
     -- load the player's data
     BaseWars.Persist.GetPlayerData(ply, function(data)
         if not data then
             BaseWars.Notify.Send(ply, "Error", "An error occured while loading your data. Please contact an administrator.", Color(255, 0, 0))
 
             -- freeze the player
-            ply:Freeze(true)
+            ply:Freeze(BaseWars.Config.Globals.FreezePlaterWhenDataLoadingError)
+
+            ply:SetMoney(BaseWars.Config.Globals.DefaultMoney)
+            ply:SetLevel(BaseWars.Config.Globals.DefaultLevel)
+            ply:SetXP(BaseWars.Config.Globals.DefaultXP)
+
+            ply.CorruptedData = true
+
             return
         end
 
         ply:SetMoney(data[2])
         ply:SetLevel(data[3])
         ply:SetXP(data[4])
-    end)
 
-    -- send the player the leaderboard
-    BaseWars.Leaderboard.Send(ply)
+        -- send the player the leaderboard
+        BaseWars.Leaderboard.Send(ply)
+    end)
 
 end)
 

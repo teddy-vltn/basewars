@@ -188,7 +188,8 @@ local function ShowFactionDetails(panel, factionName, factionData)
     listView:AddColumn("Membres")
 
     for member, _ in pairs(factionData.Members) do
-        listView:AddLine(member) -- Suppose que 'member' est un objet Player. Si ce n'est pas le cas, ajustez en conséquence.
+        -- Ajoutez chaque nom de membre à la liste
+        listView:AddLine(member:Nick() || member:Name())
     end
 
     -- Boutons pour rejoindre/quitter la faction
@@ -220,12 +221,25 @@ local function ShowFactionDetails(panel, factionName, factionData)
         end)
     end
 
+    local kickButton = vgui.Create("DButton", buttonPanel)
+    kickButton:SetText("Expulser")
+    kickButton:Dock(LEFT)
+    kickButton.DoClick = function()
+        local selectedIndex = listView:GetSelectedLine() -- This is the index of the selected line
+        if selectedIndex then
+            local selectedLine = listView:GetLine(selectedIndex) -- Retrieve the line object using the index
+            local playerName = selectedLine:GetColumnText(1) -- Now you can safely call GetColumnText
+            BaseWars.Faction.TryKickPlayer(playerName)
+        end
+    end
+
     buttonPanel.Think = function()
         -- Si le joueur est dans la faction, affichez le bouton de quitter
         -- Sinon, affichez le bouton de rejoindre
         local isInFaction = LocalPlayer():GetFaction() == factionName
         joinButton:SetVisible(!isInFaction)
         leaveButton:SetVisible(isInFaction)
+        kickButton:SetVisible(isInFaction)
     end
 
 end
@@ -267,8 +281,7 @@ function CreateFactionPanel(parent)
         local nodeToClick = nil  -- this will store the node that needs to be clicked after refreshing
 
         for factionName, factionData in pairs(factions) do
-            local isOpenString = !factionData:HasPassword() and " (Ouvert)" or " (Fermé)"
-            local factionNode = tree:AddNode(factionName .. isOpenString)
+            local factionNode = tree:AddNode(factionName)
             factionNode.Icon:SetImage(factionData:GetIcon())
 
             factionNode.DoClick = function()
@@ -285,7 +298,15 @@ function CreateFactionPanel(parent)
 
         -- If there was a previously clicked faction, simulate a click on it
         if nodeToClick then
-            nodeToClick:DoClick()
+            -- Check if node still exists eg. if the faction was deleted while the menu was open
+            if IsValid(nodeToClick) then
+                nodeToClick:DoClick()
+            else 
+                lastClickedFaction = nil
+                factionDetails:Clear()
+            end
+        else -- If there is no node to click, clear the details panel
+            factionDetails:Clear()
         end
     end
 

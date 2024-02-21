@@ -3,6 +3,17 @@
 BaseWars = BaseWars or {}
 BaseWars.Config = BaseWars.Config or {}
 
+BaseWars.Config.Debug = true
+
+BaseWars.Config.Globals = {
+
+    FreezePlaterWhenDataLoadingError = false,
+
+    DefaultMoney = 1000,
+    DefaultLevel = 1,
+    DefaultXP = 0,
+}
+
 -- resarch have time to complete, level, max level, cost, name, description, icon
 BaseWars.Config.Research = {
     ["bw_research_health"] = {

@@ -83,6 +83,20 @@ function Persist.SetPlayerVariable(ply, var, value, callback)
 end
 
 function Persist.SaveToDatabase(ply)
+
+    if not IsValid(ply) then return end
+    if not ply:IsPlayer() then return end
+
+    -- Check if data has not been flagged as corrupted
+    if ply.CorruptedData then 
+        
+        BaseWars.Log("Player " .. ply:Nick() .. " (" .. ply:SteamID() .. ") has corrupted data. Skipping save.")
+        BaseWars.Notify.Send(ply, "Error", "An error occured while saving your data. Please contact an administrator.", Color(255, 0, 0))
+
+
+        return 
+    end
+
     -- money = ?, level = ?, xp = ?, lastseen = ?, playtime = ?
     local data = {
         money = ply:GetMoney(),

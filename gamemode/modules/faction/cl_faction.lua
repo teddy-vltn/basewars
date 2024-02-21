@@ -84,3 +84,7 @@ end
 function BaseWars.Faction.TryCreateFaction(name, password, color, icon)
     sendFactionRequest(BaseWars.Faction.Net.Create, {name = name, password = password, color = color, icon = icon})
 end
+
+function BaseWars.Faction.TryKickPlayer(target)
+    sendFactionRequest(BaseWars.Faction.Net.Kick, { target = target})
+end

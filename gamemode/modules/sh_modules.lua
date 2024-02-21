@@ -137,11 +137,12 @@ BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/money")
 
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/entities/modules")
 
+BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/research")
+
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/spawnmenu")
 
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/faction")
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/raid")
-
 
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/vgui/base")
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/vgui")

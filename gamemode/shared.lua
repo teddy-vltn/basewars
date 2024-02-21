@@ -35,6 +35,20 @@ function BaseWars.Color(code)
 	return BaseWars.Config.Colors[code]
 end
 
+function BaseWars.ValidClose(ply, ent, range) 
+	if not IsValid(ply) or not IsValid(ent) then return false end
+
+	return ply:GetPos():DistToSqr(ent:GetPos()) <= range * range
+end
+
+function BaseWars.FindPlayerByName(name)
+	for k, v in pairs(player.GetAll()) do
+		if string.find(string.lower(v:Name()), string.lower(name)) then
+			return v
+		end
+	end
+end
+
 function BaseWars.NumberFormat(n)
 	if not n then return "0" end
 

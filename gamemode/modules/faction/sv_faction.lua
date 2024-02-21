@@ -79,7 +79,7 @@ function BaseWars.Faction.CreateFaction(name, password, color, icon, leader)
     BaseWars.Faction.JoinFaction(leader, name, password)
 
     -- Sync the faction information
-    BaseWars.Faction.SyncFaction(faction)
+    BaseWars.Faction.SyncFaction(name, faction)
 
     return true, "Successfully created faction"
 end
@@ -98,6 +98,12 @@ end)
 
 local function copyFactionForClientSend(faction)
     if not faction then return end
+
+    if faction and faction.GetName then
+        print("Faction Name:", faction:GetName())
+    else
+        print("Invalid faction object or missing GetName method.", faction)
+    end
 
     return {
         Name = faction:GetName(),
@@ -136,10 +142,12 @@ end
 
     @param {table} faction - The faction table containing faction details to synchronize.
 */
-function BaseWars.Faction.SyncFaction(faction)
+function BaseWars.Faction.SyncFaction(factionName, faction)
+    if not faction then faction = BaseWars.Faction.Factions[factionName] end
+
     local copyTable = copyFactionForClientSend(faction)
 
-    BaseWars.Log("Syncing faction " .. faction:GetName())
+    BaseWars.Log("Syncing faction " .. factionName .. " with everyone")
 
     BaseWars.Net.Broadcast("BaseWars_UpdateFaction", {
         name = faction:GetName(),
@@ -176,7 +184,7 @@ function BaseWars.Faction.JoinFaction(ply, factionName, password)
     ply:SetFaction(faction)
 
     -- Sync the faction information
-    BaseWars.Faction.SyncFaction(faction)
+    BaseWars.Faction.SyncFaction(factionName, faction)
 
     return true, "Successfully joined faction"
 end
@@ -205,12 +213,21 @@ function BaseWars.Faction.LeaveFaction(ply)
     factionTable.Members[ply] = nil
     ply:SetFaction("")
 
+
+
     -- if there are no more members, delete the faction
     if table.Count(factionTable.Members) == 0 then
         BaseWars.Faction.DeleteFaction(factionTable.Name)
     else 
+        -- if the player was the leader, set the next member as the leader
+        if factionTable.Leader == ply then
+            factionTable.Leader = table.GetKeys(factionTable.Members)[1]
+        end
+
         BaseWars.Faction.SyncFaction(factionTable.Name, factionTable)
     end
+
+
 
     return true, "Successfully left faction"
 end
@@ -275,6 +292,42 @@ function BaseWars.Faction.SetFaction(ply, name, leader)
 
     return true
 end
+
+function BaseWars.Faction.KickPlayer(ply, target)
+
+    -- If target is a string find the player by name
+    if type(target) == "string" then
+        target = BaseWars.FindPlayerByName(target)
+    end
+
+    local factionTable = BaseWars.Faction.GetFactionByMember(ply)
+    if not factionTable then return false, "You are not in a faction" end
+
+    if not IsValid(target) then return false, "Invalid player" end
+
+    -- Prevent the leader from kicking themselves
+    if target == factionTable.Leader then return false, "You cannot kick the leader" end
+
+    if factionTable.Leader ~= ply then return false, "You are not the leader of the faction" end
+
+    if not factionTable.Members[target] then return false, "Player is not in your faction" end
+
+    factionTable.Members[target] = nil
+    target:SetFaction("")
+
+    BaseWars.Faction.SyncFaction(factionTable.Name, factionTable)
+
+    return true, "Successfully kicked player"
+end
+
+-- Handle networked requests for kicking a player from a faction
+net.Receive(BaseWars.Faction.Net.Kick, function(len, ply)
+    local data = BaseWars.Net.Read(BaseWars.Faction.Net.Kick)
+
+    local status, message = BaseWars.Faction.KickPlayer(ply, data.target)
+
+    BaseWars.Notify.Send(ply, "Expulser un joueur", message, status and Color(0, 255, 0) or Color(255, 0, 0))
+end)
 
 hook.Add("PlayerInitialSpawn", "BaseWars_FactionSync", function(ply)
    -- BaseWars.Faction.CreateFaction("Default", "yes", BaseWars.Color("RED"), "icon16/gun.png", ply)

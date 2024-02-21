@@ -63,6 +63,10 @@ local menuAlwaysOpen --= BaseWars.Config.MenuAlwaysFocus.value
 
 hook.Add("Think", "CloseBaseWarsMenu", function()
 
+    -- Skip if the player is typing in chat or the console is open
+    if IsValid(vgui.GetKeyboardFocus()) then return end
+    if gui.IsConsoleVisible() then return end
+
     menuOpenKey = BaseWars.Config.MenuOpenKey.keycode
     menuAlwaysOpen = BaseWars.Config.MenuAlwaysFocus.value
 
