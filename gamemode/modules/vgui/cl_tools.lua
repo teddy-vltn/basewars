@@ -38,6 +38,9 @@ function CreateToolsPanel(parent)
 
                         -- add the tool to the controlpanel
                         tool.CPanelFunction(controlPanel)
+
+                        -- activate the tool
+                        spawnmenu.ActivateTool(tool.ItemName)
                     end
                 end
             end

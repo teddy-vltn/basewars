@@ -1,4 +1,6 @@
 function CreatePropsPanel(parent)
+    -- TODO: Fix bug where when last tab name is saved the
+    -- tree category gets fucked and becomes tiny in width for some reason
     local propsPanel = vgui.Create("DPanel", parent)
     propsPanel:Dock(FILL)
 
@@ -29,6 +31,7 @@ function CreatePropsPanel(parent)
 
                 icon.DoClick = function()
                     -- standard sandbox spawn function
+                    -- we use it for the props limit of sandbox to work properly
                     RunConsoleCommand("gm_spawn", prop.Model)
 
                 end

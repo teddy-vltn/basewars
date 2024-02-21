@@ -3,6 +3,82 @@
 BaseWars = BaseWars or {}
 BaseWars.Config = BaseWars.Config or {}
 
+-- resarch have time to complete, level, max level, cost, name, description, icon
+BaseWars.Config.Research = {
+    ["bw_research_health"] = {
+        Name = "Health",
+        Description = "Increase your health",
+        Icon = "icon16/heart.png",
+        MaxLevel = 10,
+        time = function(level) return 100 * (level + 1) end,
+        cost = function(level) return 100 * (level + 1) end,
+        effects = function(ply, level) 
+            ply:SetMaxHealth(ply:GetMaxHealth() + 10 * level)
+            ply:SetHealth(ply:GetMaxHealth())
+        end
+    }
+}
+
+BaseWars.Config.Weapons = {
+    Uncommon = {
+        ["bw_weapon_ak47_uncommon"] = {
+            BaseWeapon = "m9k_ak47",
+            PrintName = "Uncommon AK-47",
+            Model = "models/weapons/w_ak47_m9k.mdl",
+            CustomAttributes = {
+                Primary = {
+                    Damage = 30,
+                    ClipSize = 40,
+                    RPM = 3000
+                },
+            },
+        },
+    },
+    Rare = {
+        ["bw_weapon_m4a1_rare"] = {
+            BaseWeapon = "m9k_m4a1",
+            PrintName = "Rare M4A1",
+            Model = "models/weapons/w_m4a1_iron.mdl",
+            CustomAttributes = {
+                Primary = {
+                    Damage = 40,
+                    ClipSize = 40,
+                    RPM = 3000
+                },
+            },
+        },
+    },
+    VeryRare = {
+        ["bw_weapon_m249_veryrare"] = {
+            BaseWeapon = "m9k_m14sp",
+            PrintName = "Very Rare M249",
+            Model = "models/weapons/w_m249_machine_gun.mdl",
+            CustomAttributes = {
+                Primary = {
+                    Damage = 50,
+                    ClipSize = 40,
+                    RPM = 3000
+                },
+            },
+        },
+    },
+    Legendary = {
+        ["bw_weapon_m249_legendary"] = {
+            BaseWeapon = "m9k_m14sp",
+            PrintName = "Legendary M249",
+            Model = "models/weapons/w_m249_machine_gun.mdl",
+            CustomAttributes = {
+                Primary = {
+                    Damage = 60,
+                    ClipSize = 40,
+                    RPM = 3000
+                },
+            },
+        },
+    },
+    -- ... other categories if needed
+}
+
 BaseWars.Config.Entities = {
     Printers = {
         BaseEntity = "bw_base_moneyprinter",
@@ -231,7 +307,15 @@ BaseWars.Config.Navigation = {
         Panel = function(parent)
             CreateLeaderboardPanel(parent)
         end
-    }
+    },
+    {
+        Name = "Settings",
+        Color = Color(0, 0, 255),
+        Icon = "icon16/wrench.png",
+        Panel = function(parent)
+            CreateSettingsPanel(parent)
+        end
+    },
 }
 
 BaseWars.Config.Sounds = {

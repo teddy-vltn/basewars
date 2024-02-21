@@ -26,6 +26,11 @@ function CreateBoutiquePanel(parent)
     searchBar:Dock(TOP)
     searchBar:SetPlaceholderText("Search...")
 
+    -- if we click on the search bar menu should remain focused even if we let go of the key
+    searchBar.OnGetFocus = function(self)
+        BaseWars.Config._MenuFocus = true
+    end
+
     -- margin with the bottom elements
     searchBar:DockMargin(0, 0, 0, 5)
 
@@ -215,6 +220,20 @@ function CreateBoutiquePanel(parent)
                 surface.PlaySound(BaseWars.Config.Sounds.Click)
 
                 LocalPlayer():BuyEntity(self.itemUUID)
+            end
+
+            -- ability to right click to open a context menu
+            -- like: make favorite
+
+            itemButton.DoRightClick = function(self)
+                local menu = vgui.Create("DMenu")
+                menu:SetPos(gui.MousePos())
+                menu:MakePopup()
+                -- icon is a star
+                local itemButtonFavorite = menu:AddOption("Favorite", function()
+                    -- make favorite
+                end)
+                itemButtonFavorite:SetIcon("icon16/star.png")
             end
 
             -- if it's a weapon add a button to allow auto-purchase on spawn

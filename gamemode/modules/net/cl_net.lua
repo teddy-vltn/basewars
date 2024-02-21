@@ -9,6 +9,9 @@ BaseWars.Net = BaseWars.Net or {}
     @param {table} data - The data to send.
 */
 function BaseWars.Net.SendToServer(msgType, data)
+
+    BaseWars.Log("Sending net message: " .. msgType .. " to server")
+
     net.Start(msgType)
     BaseWars.Net.Write(msgType, data)
     net.SendToServer()

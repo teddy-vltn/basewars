@@ -71,6 +71,8 @@ function GM:PlayerLoadout( ply )
 
     ply:Give("bw_inspector")
 
+    ply:Give("weapon_pistol")
+
 	-- Prevent default Loadout.
 	return true
 end

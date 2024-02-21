@@ -27,6 +27,8 @@ end
 function BaseWars.Net.SendToPlayer(ply, msgType, data)
     if not IsValid(ply) then return end
 
+    BaseWars.Log("Sending net message: " .. msgType .. " to " .. ply:Nick())
+
     net.Start(msgType)
     BaseWars.Net.Write(msgType, data)
     net.Send(ply)
