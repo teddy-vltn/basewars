@@ -10,6 +10,8 @@ BaseWars.Config._LastMenuOpen = "0"
 
 local function CreateBaseWarsMenu()
 
+    if IsValid(baseWarsMenu) then return baseWarsMenu end 
+
     local frame = vgui.Create("DFrame")
     frame:SetSize(900, 500)
     frame:Center()
@@ -17,7 +19,10 @@ local function CreateBaseWarsMenu()
     frame:MakePopup()
 
     frame.OnClose = function()
+        frame:SetVisible(false)
         isMenuOpen = false
+
+        return 
     end
 
     local sheet = vgui.Create("DPropertySheet", frame)
@@ -52,6 +57,23 @@ local function CreateBaseWarsMenu()
     return frame
 end
 
+local function ToggleBaseWarsMenu()
+    if IsValid(baseWarsMenu) then
+        if baseWarsMenu:IsVisible() then
+            baseWarsMenu:SetVisible(false)
+            isMenuOpen = false
+        else
+            baseWarsMenu:SetVisible(true)
+            baseWarsMenu:MakePopup() 
+            isMenuOpen = true
+            BaseWars.Config._MenuFocus = menuAlwaysOpen or false
+        end
+    else
+        baseWarsMenu = CreateBaseWarsMenu()
+        isMenuOpen = true
+    end
+end
+
 concommand.Add("basewars_menu", CreateBaseWarsMenu)
 
 hook.Add("SpawnMenuOpen", "OpenBaseWarsMenu", function()
@@ -73,22 +95,13 @@ hook.Add("Think", "CloseBaseWarsMenu", function()
     if input.IsKeyDown(KEY_F1) || input.IsKeyDown(menuOpenKey) then
 
         if !isMenuOpen then
-            baseWarsMenu = CreateBaseWarsMenu()
-            isMenuOpen = true
-
-            -- Work here tho for some reason
-            -- Reset the focus for the menu to properly close when the user is not holding the key
-            -- if another widget didn't take the focus
+            ToggleBaseWarsMenu()
             BaseWars.Config._MenuFocus = menuAlwaysOpen or false
         end
-    else
-        if isMenuOpen && !BaseWars.Config._MenuFocus && IsValid(baseWarsMenu) then
-            baseWarsMenu:Close()
-            isMenuOpen = false
 
-            -- Apparently doesn't work here weird champ
-            --BaseWars.Config._MenuFocus = false
-        end
+    elseif isMenuOpen && !menuAlwaysOpen && not BaseWars.Config._MenuFocus then
+        baseWarsMenu:SetVisible(false)
+        isMenuOpen = false
     end
 end)
 
