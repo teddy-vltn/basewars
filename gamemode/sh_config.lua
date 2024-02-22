@@ -263,7 +263,7 @@ BaseWars.Config.Shop = {
 
             ["T1"] = { 
                 --{Name = "Basic Printer", Price = 10, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_base_moneyprinter"},
-                {Name = "Emerald Printer", Price = 100, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_emerald"},
+                {Name = "Emerald Printer", Price = 100, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_emerald", Limit = 1},
                 {Name = "Diamond Printer", Price = 200, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_diamond"},
                 {Name = "Ruby Printer", Price = 400, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_ruby"},
             },
@@ -304,7 +304,7 @@ BaseWars.Config.Shop = {
         },
         ["Fusils"] = {
             {Name = "Rifle", Price = 50, Model = "models/weapons/w_rif_ak47.mdl", ClassName = "bw_weapon_ak47_uncommon", Weapon = true},
-            
+
         },
     },
     ["Fun"] = {

@@ -2,6 +2,25 @@
 BaseWars = BaseWars or {}
 BaseWars.SpawnMenu = BaseWars.SpawnMenu or {}
 
+local Player = FindMetaTable("Player")
+
+function Player:AddToEntityCount(class, amount)
+    local key = string.format(BaseWars.SpawnMenu.EntityCountFormat, class)
+    local count = self:GetNWInt(key)
+    self:SetNWInt(key, count + amount)
+end
+
+function Player:CheckEntityLimit(class, limit)
+
+    -- Get the current count of the entity
+    local count = self:GetEntityCount(class)
+
+    -- Check if the player has reached the limit
+    if count >= limit then return false, "You have reached the limit for this entity" end
+
+    return true, "Successfully checked entity limit"
+end
+
 -- Function to spawn an entity based on its class, position, and angle.
 -- Returns a status and a message indicating success or the reason for failure.
 local function SpawnEntity(ply, class, pos, ang, value)
@@ -24,6 +43,9 @@ local function SpawnEntity(ply, class, pos, ang, value)
         value = value or 1
         entity:SetValue(value * BaseWars.Config.Globals.PercentageOfMoneyLostOnSell)
     end
+
+    -- Add the entity to the player's count
+    ply:AddToEntityCount(class, 1)
 
     return true, "Successfully spawned entity"
 end
@@ -66,6 +88,13 @@ function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
     
     -- If the entity doesn't exist in the shop, return an error
     if not entityTable then return false, "Entity does not exist" end
+
+    -- Check Limit
+    local limit = entityTable.Limit
+    if limit then
+        local status, message = ply:CheckEntityLimit(entityTable.ClassName, limit)
+        if not status then return status, message end
+    end
 
     -- Check if the player has the required level to buy the entity
     local level = entityTable.Level

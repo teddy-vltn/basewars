@@ -122,6 +122,13 @@ hook.Add("EntityRemoved", "BaseWars_EntityRemoved", function(ent)
 
     if not IsValid(owner) then return end
 
+    -- Check if the entity has an active limit and reduce the count if it does
+    local className = ent:GetClass()
+
+    if owner:GetEntityCount(className) > 0 then
+        owner:AddToEntityCount(className, -1)
+    end
+
     --if not ent:CanSell() then return end
     if not ent.GetValue then return end
 
@@ -135,4 +142,5 @@ hook.Add("EntityRemoved", "BaseWars_EntityRemoved", function(ent)
     end
 
     owner:AddMoney(ent:GetValue())
+
 end)
