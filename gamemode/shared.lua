@@ -23,6 +23,7 @@ function BaseWars.Log(...)
 
 	MsgC(SERVER and colorRed or colorBlue, "[BASEWARS] -		 ", colorWhite, ...)
 	MsgN("")
+	
 end
 
 /*
@@ -33,6 +34,16 @@ end
 */
 function BaseWars.Color(code)
 	return BaseWars.Config.Colors[code]
+end
+
+function table.Equals(a, b)
+	for k, v in pairs(a) do
+		if b[k] ~= v then
+			return false
+		end
+	end
+
+	return true
 end
 
 function BaseWars.ValidClose(ply, ent, range) 

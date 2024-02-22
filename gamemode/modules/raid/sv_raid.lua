@@ -4,6 +4,7 @@ local RAID_TICKET_LOSS_ON_DEATH = 90 -- Points lost when an attacker is killed
 local RAID_ENTITY_THRESHOLD = 0.75 -- When entities left < 75%, the raid stops
 local GLOBAL_RAID_COOLDOWN = 60 * 60 -- 1 hour cooldown between raids
 local BASE_TICKETS = 100 -- 500 tickets = 500 seconds = 8 minutes and 20 seconds
+local RAID_DURATION = 500 -- 500 seconds = 8 minutes and 20 seconds
 
 -- Raid class
 local Raid = {}
@@ -28,24 +29,29 @@ local function GetEntitiesCount(factionName)
 end
 
 -- Constructor for a new raid
-function Raid.new(factionName, targetName, startingPoints)
+function Raid.new(attackerName, defenderName, startingPoints)
     -- Validate factions before creating a new raid
-    if not BaseWars.Faction.Exists(factionName) or not BaseWars.Faction.Exists(targetName) then
+    if not BaseWars.Faction.Exists(attackerName) or not BaseWars.Faction.Exists(defenderName) then
         BaseWars.Log("Attempted to start a raid with one or more invalid factions.")
         return nil
     end
 
     local self = setmetatable({}, Raid)
-    self.Faction = factionName
-    self.Target = targetName
+    self.Attacker = attackerName
+    self.Defender = defenderName
 
     self.Points = startingPoints
 
     -- Obtain initial entity count for the attacking faction
-    self.BaseEntitiesCount = GetEntitiesCount(factionName)
-    self.EntitiesDestroyed = 0
+    self.BaseEntitiesCountAttacker = GetEntitiesCount(attackerName)
+    self.BaseEntitiesCountDefender = GetEntitiesCount(defenderName)
+    self.entitiesDestroyedAttacker = 0
+    self.entitiesDestroyedDefender = 0
 
     self.StartTime = CurTime() + RAID_PREPARE_TIME
+
+    self._LastUpdateDataSent = {}
+
     return self
 end
 
@@ -57,8 +63,8 @@ function Raid:StartPreparation()
 
     -- Prepare the client-side for the raid start
     BaseWars.Net.Broadcast(BaseWars.Raid.Net.StartRaid, {
-        faction = self.Faction,
-        target = self.Target,
+        attacker = self.Attacker,
+        defender = self.Defender,
         start = self.StartTime
     })
 
@@ -82,11 +88,12 @@ function Raid:Start()
     BaseWars.Net.Broadcast(BaseWars.Raid.Net.RaidHasStarted, {
         start = CurTime(),
         points = self.Points,
-        entitiesCount = self.BaseEntitiesCount
+        entitiesCountAttacker = self.BaseEntitiesCountAttacker,
+        entitiesCountDefender = self.BaseEntitiesCountDefender
     })
 
     -- Start a timer to update the raid periodically
-    timer.Create("Raid_" .. self.Faction .. "_" .. self.Target, 1, 0, function()
+    timer.Create("Raid_" .. self.Attacker .. "_" .. self.Defender, 1, 0, function()
         self:Update()
     end)
 end
@@ -105,7 +112,7 @@ function Raid:Stop(winnerFaction, loserFaction, remainingPoints)
     })
 
     -- Remove the update timer and clear the current raid
-    timer.Remove("Raid_" .. self.Faction .. "_" .. self.Target)
+    timer.Remove("Raid_" .. self.Attacker .. "_" .. self.Defender)
     BaseWars.Raid.CurrentRaid = nil
     BaseWars.Raid.LastRaidEndTime = CurTime()
 end
@@ -113,26 +120,37 @@ end
 -- Updates the raid progress
 function Raid:Update()
 
-    if not BaseWars.Faction.Exists(self.Faction) or not BaseWars.Faction.Exists(self.Target) then
+    if not BaseWars.Faction.Exists(self.Attacker) or not BaseWars.Faction.Exists(self.Defender) then
         BaseWars.Log("One or more factions no longer exist. Stopping the raid.")
-        self:Stop(self.Target, self.Faction, self.Points)
+        self:Stop(self.Defender, self.Attacker, self.Points)
         return
     end
 
     -- Check if the raid has ended
-    if self.StartTime + self.Points <= CurTime() then
-        self:Stop(self.Faction, self.Target, 0)
+    if self.StartTime + RAID_DURATION <= CurTime() then
+        self:Stop(self.Defender, self.Attacker, 0)
         return
     end
 
     -- Check if enough entities have been destroyed to stop the raid
-    if self.EntitiesDestroyed / self.BaseEntitiesCount >= RAID_ENTITY_THRESHOLD then
-        self:Stop(self.Target, self.Faction, self.Points)
+    if self.entitiesDestroyedAttacker / self.BaseEntitiesCountAttacker >= RAID_ENTITY_THRESHOLD then
+        self:Stop(self.Defender, self.Attacker, self.Points)
+    elseif self.entitiesDestroyedDefender / self.BaseEntitiesCountDefender >= RAID_ENTITY_THRESHOLD then
+        self:Stop(self.Attacker, self.Defender, self.Points)
     else
-        -- If not, continue the raid and broadcast the update
-        BaseWars.Net.Broadcast(BaseWars.Raid.Net.UpdateRaid, {
-            entitiesDestroyed = self.EntitiesDestroyed
-        })
+        local updateData =  {
+            entitiesDestroyedAttacker = self.entitiesDestroyedAttacker,
+            entitiesDestroyedDefender = self.entitiesDestroyedDefender,
+            points = self.Points
+        }
+
+        -- Check if the update data has changed since the last broadcast
+        if not table.Equals(updateData, self._LastUpdateDataSent) then
+            self._LastUpdateDataSent = table.Copy(updateData)
+
+            -- If not, continue the raid and broadcast the update
+            BaseWars.Net.Broadcast(BaseWars.Raid.Net.UpdateRaid, updateData)
+        end
     end
 end
 
@@ -143,15 +161,9 @@ function Raid:AttackerKilled(attackerName)
 
     BaseWars.Log("Attacker " .. attackerName .. " was killed. " .. self.Points .. " points remaining.")
 
-    -- Broadcast the attacker's death and point deduction
-    BaseWars.Net.Broadcast(BaseWars.Raid.Net.AttackerHasBeenKilled, {
-        attacker = attackerName,
-        points = self.Points
-    })
-
     -- If the points reach zero, the raid ends
     if self.Points <= 0 then
-        self:Stop(self.Target, self.Faction, 0)
+        self:Stop(self.Attacker, self.Defender, 0)
     end
 end
 
@@ -198,7 +210,8 @@ hook.Add("PlayerDeath", "BaseWars_RaidAttackerKilled", function(victim, inflicto
     if not BaseWars.Raid.CurrentRaid then return end
 
     local attackerName = attacker:GetFaction()
-    if attackerName == BaseWars.Raid.CurrentRaid.Faction then
+    
+    if attackerName == BaseWars.Raid.CurrentRaid.Attacker then
         BaseWars.Raid.CurrentRaid:AttackerKilled(attackerName)
     end
 end)

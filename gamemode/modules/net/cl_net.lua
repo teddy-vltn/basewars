@@ -10,6 +10,11 @@ BaseWars.Net = BaseWars.Net or {}
 */
 function BaseWars.Net.SendToServer(msgType, data)
 
+    if not msgType then
+        BaseWars.Log("No message type specified")
+        return
+    end
+
     BaseWars.Log("Sending net message: " .. msgType .. " to server")
 
     net.Start(msgType)
