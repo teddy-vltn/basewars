@@ -299,10 +299,14 @@ function CreateBoutiquePanel(parent)
                     categoryNode.DoClick = function()
                         displayItemsFiltered(categoryOrItem, "")
                     end
+
+                    -- set expanded
+                    categoryNode:SetExpanded(true)
                 end
             end
         end
     end
 
     populateTree(tree, BaseWars.Config.Shop)
+
 end
