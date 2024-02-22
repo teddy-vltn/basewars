@@ -11,7 +11,8 @@ ENT.AdminOnly       = true
 ENT.IsGenerator = true
 
 ENT.Modules = {
-    [0] = "Generator"
+    [0] = "Generator",
+    [1] = "Value"
 }
 
 ENT.BasePowerGeneration = 100
@@ -48,5 +49,4 @@ function ENT:Think()
 
     GeneratorModule:OnThink(self)
 
-    print("Power: " .. self:GetPower())
 end

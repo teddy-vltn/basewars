@@ -12,7 +12,8 @@ ENT.IsDispenser = true
 
 ENT.Modules = {
     [0] = "Dispenser", 
-    [1] = "Power"
+    [1] = "Power",
+    [2] = "Value"
 }
 
 ENT.BaseDispenseRate = 1

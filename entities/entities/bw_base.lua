@@ -18,12 +18,23 @@ ENT.PresetMaxHealth = 100
 
 -- Modules list
 ENT.Modules         = {}
+
 ENT.InitializedModules = {}
 
-ENT.IsBaseWarsEntity = true
-
 function ENT:Init()
+    print("Initialized base entity")
+end
 
+function ENT:CanSell()
+    return self.GetValue and self:GetValue() > 0
+end
+
+function ENT:CanUpgrade()
+    return self.GetUpgradeLevel and self:GetUpgradeLevel() >= 0
+end
+
+function ENT:IsBaseWars()
+    return true
 end
 
 function ENT:SetupDataTables()

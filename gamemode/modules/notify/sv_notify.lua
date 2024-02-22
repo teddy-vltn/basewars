@@ -1,9 +1,9 @@
 -- Fonction pour envoyer une notification à un joueur spécifique
 function BaseWars.Notify.Send(ply, title, message, color)
     BaseWars.Net.SendToPlayer(ply, BaseWars.Notify.Net.AddNotification, {
-        title = title,
-        message = message,
-        color = color or Color(255, 255, 255)
+        title = title or "Notification",
+        message = message or "This is a notification.",
+        color = color or Color(255, 255, 255) 
     })
 end
 

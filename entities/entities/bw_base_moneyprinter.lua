@@ -13,7 +13,8 @@ ENT.UsePower = true
 ENT.Modules = {
     [0] = "Printer",
     [1] = "Upgradeable",
-    [2] = "Power"
+    [2] = "Power",
+    [3] = "Value"
 }
 
 ENT.BaseCapacity = 1000
@@ -76,8 +77,6 @@ function ENT:Think()
 
     PrinterModule:OnThink(self)
     PowerModule:OnThink(self)
-
-    
 end
 
 if SERVER then 
@@ -89,6 +88,8 @@ if SERVER then
 
         self:SetCapacity(self.BaseCapacity * upgradeLevel)
         self:SetPrintRate(self.BasePrintRate * upgradeLevel)
+
+        self:SetValue(upgradeLevel)
         
     end
 

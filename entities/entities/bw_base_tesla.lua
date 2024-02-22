@@ -12,7 +12,8 @@ ENT.IsTurret = true
 
 ENT.Modules = {
     [0] = "Tesla",
-    [1] = "Power"
+    [1] = "Power",
+    [2] = "Value"
 }
 
 ENT.BaseDamage = 1

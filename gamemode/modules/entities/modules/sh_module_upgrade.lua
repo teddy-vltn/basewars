@@ -27,6 +27,8 @@ end
 
 function BW_UPGRADE_MODULE:Upgrade(ent)
     ent:SetUpgradeLevel(ent:GetUpgradeLevel() + 1)
+
+    BaseWars.Log(ent:CPPIGetOwner(), " upgraded their ", ent:GetClass(), " to level ", ent:GetUpgradeLevel())
 end
 
 local upgradeModuleInstance = BW_UPGRADE_MODULE.New()

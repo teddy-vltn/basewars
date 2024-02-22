@@ -10,7 +10,8 @@ ENT.AdminOnly       = true
 
 ENT.Modules = {
     [0] = "SpawnPoint",
-    [1] = "Power"
+    [1] = "Power",
+    [2] = "Value"
 }
 
 local SpawnPointModule = nil

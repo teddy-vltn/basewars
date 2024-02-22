@@ -121,7 +121,6 @@ function BaseWars.RegisterModuleFolder(folder, dependencies)
     BaseWars.Log("Finished registering modules in folder " .. folder)
 end
 
-BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/extras")
 
 -- Register your modules with dependencies
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/net")
@@ -143,6 +142,8 @@ BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/spawnmenu")
 
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/faction")
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/raid")
+
+BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/extras")
 
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/vgui/base")
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/vgui")

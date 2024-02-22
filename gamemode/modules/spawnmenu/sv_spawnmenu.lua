@@ -4,7 +4,8 @@ BaseWars.SpawnMenu = BaseWars.SpawnMenu or {}
 
 -- Function to spawn an entity based on its class, position, and angle.
 -- Returns a status and a message indicating success or the reason for failure.
-local function SpawnEntity(ply, class, pos, ang)
+local function SpawnEntity(ply, class, pos, ang, value)
+
     -- Create the entity based on its class
     local entity = ents.Create(class)
     
@@ -15,6 +16,14 @@ local function SpawnEntity(ply, class, pos, ang)
     entity:SetPos(pos)
     entity:SetAngles(ang)
     entity:Spawn()
+
+    -- Set the entity's owner to the player
+    entity:CPPISetOwner(ply)
+
+    if value && entity.GetValue then
+        value = value or 1
+        entity:SetValue(value * BaseWars.Config.Globals.PercentageOfMoneyLostOnSell)
+    end
 
     return true, "Successfully spawned entity"
 end
@@ -75,7 +84,7 @@ function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
     if weapon then
         status, message = GiveWeapon(ply, class)
     else
-        status, message = SpawnEntity(ply, class, pos, ang)
+        status, message = SpawnEntity(ply, class, pos, ang, price)
     end
 
     if not status then return status, message end

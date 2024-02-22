@@ -1,5 +1,6 @@
 BaseWars = BaseWars or {}
 BaseWars.Net = BaseWars.Net or {}
+BaseWars.Net._Structure = BaseWars.Net._Structure or {}
 
 BaseWars.Net.WriteVars = {
     ["number"] = function(v)
@@ -61,7 +62,7 @@ BaseWars.Net.ReadVars = {
     @example
 */
 function BaseWars.Net.Register(msgType, structure)
-    if BaseWars.Net[msgType] then
+    if BaseWars.Net._Structure[msgType] then
         BaseWars.Log("Overwriting net message: " .. msgType)
     end
 
@@ -69,7 +70,7 @@ function BaseWars.Net.Register(msgType, structure)
         util.AddNetworkString(msgType)
     end
     
-    BaseWars.Net[msgType] = structure
+    BaseWars.Net._Structure[msgType] = structure
 end
 
 /*
@@ -84,7 +85,7 @@ end
     @example
 */
 function BaseWars.Net.Read(msgType)
-    local structure = BaseWars.Net[msgType]
+    local structure = BaseWars.Net._Structure[msgType]
 
     if not structure then
         error("No structure registered for message type: " .. msgType)
@@ -117,7 +118,7 @@ end
     @example
 */
 function BaseWars.Net.Write(msgType, data)
-    local structure = BaseWars.Net[msgType]
+    local structure = BaseWars.Net._Structure[msgType] 
 
     if not structure then
         error("No structure registered for message type: " .. msgType)
