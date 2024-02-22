@@ -78,7 +78,7 @@ end
 -- Menu Open Key
 BaseWars.ConVar.Register("basewars_menu_key", "BaseWars Menu Key", "F4", "The key to open the BaseWars menu")
 -- Always Focus Menu
-BaseWars.ConVar.Register("basewars_menu_focus", "BaseWars Menu Focus", "0", "Whether the menu should always focus on open")
+BaseWars.ConVar.Register("basewars_menu_focus", "BaseWars Menu Focus", "0", "Whether the menu should always focus on open. If enabled the menu will rebuild everytime not saving the previous state. If disabled the menu will save the previous state and rebuild only when needed.")
 
 
 BaseWars.Config = BaseWars.Config or {}

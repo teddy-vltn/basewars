@@ -29,7 +29,12 @@ end
 
 /*
     @description
-    Generates a UUID for a given item.
+    Generates a UUID for a given item. Using the item's properties, a UUID is generated using a simple algorithm.
+    The UUID is generated using a template and a seeded pseudo-random number generator.
+    Which means both client and server will generate the same UUID for the same item.
+    It is useful for identifying items in the shop, and it can also prevent duplicate items from being added to the shop.
+    Futhermore if someone tries manually launching fake items, the UUID will be different and the server will reject it.
+    Was a problem in the original basewars gamemode the server could get confuse and would accept the fake item in very rare cases.
 
     @param {table} item - The item to generate a UUID for.
 
@@ -51,7 +56,9 @@ function BaseWars.SpawnMenu.GenerateUUID(item)
     end
 
     -- Using the seeded random function, replace 'x' and 'y' characters in the UUID template to generate the UUID
+    -- The 4 in the third group ensures the UUID is of version 4 (not necessary, but it's cool to have a version 4 UUID!)
     local template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+
     return string.gsub(template, '[xy]', function (c)
         local r = seededRandom()
         if c == 'x' then
@@ -65,6 +72,7 @@ end
 /*
     @description
     Adds UUIDs to the shop's item entries.
+    The UUIDs are generated using the item's properties, and are used to uniquely identify items in the shop.
 
     @param {table} categoryTable - The table representing the shop's categories.
 
@@ -100,6 +108,7 @@ BaseWars.Config.Shop = BaseWars.SpawnMenu.AddUUIDsToShop(BaseWars.Config.Shop)
 /*
     @description
     Collects all items from the shop's category table, recursively.
+    Go through each category and subcategory, collecting all items into a single table.
 
     @param {table} categoryTable - The table representing the shop's categories.
     @param {number} depth - The maximum depth to recurse to.
@@ -134,6 +143,9 @@ end
 /*
     @description
     Flattens the shop's category table into a single table containing all items.
+    The table is stored in BaseWars.SpawnMenu.FlattenedShop. Useful for searching and filtering items.
+    This is stored in a separate table to avoid modifying the original shop table. Also, it's only computed once. (normally)
+    The client can use this table to display the shop's items, and the server can use it to validate purchases fastly.
 
     @return {table} A table containing all items from the shop's category table.
 */
