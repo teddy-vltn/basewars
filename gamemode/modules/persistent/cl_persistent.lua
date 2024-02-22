@@ -79,10 +79,12 @@ end
 BaseWars.ConVar.Register("basewars_menu_key", "BaseWars Menu Key", "F4", "The key to open the BaseWars menu")
 -- Always Focus Menu
 BaseWars.ConVar.Register("basewars_menu_focus", "BaseWars Menu Focus", "0", "Whether the menu should always focus on open. If enabled the menu will rebuild everytime not saving the previous state. If disabled the menu will save the previous state and rebuild only when needed.")
-
+-- Open default sandbox menu (only in debug mode)
+BaseWars.ConVar.Register("basewars_debug_open_sandbox_menu", "Open Sandbox Menu", "0", "Can the default sandbox menu be opened? (Only in debug mode)")
 
 BaseWars.Config = BaseWars.Config or {}
 
 BaseWars.Config.MenuOpenKey = BaseWars.ConVar.CreateConVarHandler("basewars_menu_key", false)
 BaseWars.Config.MenuAlwaysFocus = BaseWars.ConVar.CreateConVarHandler("basewars_menu_focus", true)
+BaseWars.Config.DebugOpenSandboxMenu = BaseWars.ConVar.CreateConVarHandler("basewars_debug_open_sandbox_menu", true)
 

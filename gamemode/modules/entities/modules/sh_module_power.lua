@@ -11,6 +11,7 @@ function BW_POWER_MODULE.New()
     
     self.Name = MODULE_NAME
     self.Description = MODULE_DESC
+    self.LastTimeGenerated = CurTime()
     self.NetworkVars = {
         {"PowerUsage", 0, "Int"},
         {"PowerCapacity", 0, "Int"},
@@ -31,8 +32,12 @@ end
 function BW_POWER_MODULE:OnThink(ent)
     if CLIENT then return end
 
-    local power = ent:GetPower()
+    if self.LastTimeGenerated + 1 > CurTime() then return end
+
+    --self.LastTimeGenerated = CurTime()
+
     local powerUsage = ent:GetPowerUsage()
+    local power = ent:GetPower()
     local powerCapacity = ent:GetPowerCapacity()
 
     if power > 0 then
@@ -45,6 +50,8 @@ function BW_POWER_MODULE:OnThink(ent)
         ent:SetPower(powerCapacity)
     end
 
+    -- return if the entity is not powered
+    return power > powerUsage
 end
 
 function BW_POWER_MODULE:ReceivePower(ent, power)

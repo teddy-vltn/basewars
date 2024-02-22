@@ -63,8 +63,10 @@ end
 
 function ENT:Think()
     if CLIENT then return end
+    
+    local isPowered = PowerModule:OnThink(self)
+
+    if not isPowered then return end
 
     TurretModule:OnThink(self)
-    PowerModule:OnThink(self)
-
 end

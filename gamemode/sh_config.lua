@@ -303,7 +303,8 @@ BaseWars.Config.Shop = {
             {Name = "Pistol", Price = 10, Model = "models/weapons/w_pistol.mdl", ClassName = "weapon_pistol", Weapon = true},
         },
         ["Fusils"] = {
-            {Name = "Rifle", Price = 50, Model = "models/weapons/w_rif_ak47.mdl", ClassName = "weapon_ak47", Weapon = true},
+            {Name = "Rifle", Price = 50, Model = "models/weapons/w_rif_ak47.mdl", ClassName = "bw_weapon_ak47_uncommon", Weapon = true},
+            
         },
     },
     ["Fun"] = {

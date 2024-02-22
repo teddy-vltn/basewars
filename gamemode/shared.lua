@@ -206,7 +206,9 @@ function BaseWars.LoadWeaponConfiguration()
 
             if success then
                 BaseWars.Log("Created weapon: " .. ClassName .. " from base weapon: " .. baseWeaponName)
-            end
+			else 
+				BaseWars.Log("Failed to create weapon: " .. ClassName .. " from base weapon: " .. baseWeaponName)
+			end
         end
     end
 end

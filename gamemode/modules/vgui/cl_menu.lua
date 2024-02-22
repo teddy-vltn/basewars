@@ -76,12 +76,22 @@ end
 
 concommand.Add("basewars_menu", CreateBaseWarsMenu)
 
+local menuOpenKey --= BaseWars.Config.MenuOpenKey.keycode 
+local menuAlwaysOpen --= BaseWars.Config.MenuAlwaysFocus.value
+local openSandboxMenu --= BaseWars.Config.OpenSandboxMenu.value
+
 hook.Add("SpawnMenuOpen", "OpenBaseWarsMenu", function()
+
+    openSandboxMenu = BaseWars.Config.DebugOpenSandboxMenu.value
+
+    if BaseWars.Config.Debug && openSandboxMenu then
+        return true
+    end
+
     return false
 end)
 
-local menuOpenKey --= BaseWars.Config.MenuOpenKey.keycode 
-local menuAlwaysOpen --= BaseWars.Config.MenuAlwaysFocus.value
+
 
 hook.Add("Think", "CloseBaseWarsMenu", function()
 

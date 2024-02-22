@@ -25,8 +25,18 @@ function BW_UPGRADE_MODULE:Initialize(ent)
     print("Upgrade module initialized")
 end
 
-function BW_UPGRADE_MODULE:Upgrade(ent)
+function BW_UPGRADE_MODULE:Upgrade(ent, ply)
+    local cost = ent:GetUpgradeLevel() * ent:GetValue()
+
+    if not ply:CanAfford(cost) then
+        BaseWars.Notify.Send(ply, "You cannot afford to upgrade this entity!")
+        return
+    end
+
+    ply:AddMoney(-cost)
+
     ent:SetUpgradeLevel(ent:GetUpgradeLevel() + 1)
+    ent:SetValue(ent:GetValue() + cost * 0.5)
 
     BaseWars.Log(ent:CPPIGetOwner(), " upgraded their ", ent:GetClass(), " to level ", ent:GetUpgradeLevel())
 end

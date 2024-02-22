@@ -62,7 +62,11 @@ end
 function ENT:Think()
     if CLIENT then return end
 
+    local isPowered = PowerModule:OnThink(self)
+
+    if not isPowered then return end
+
     TeslaModule:OnThink(self)
-    PowerModule:OnThink(self)
+
 
 end

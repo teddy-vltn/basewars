@@ -11,6 +11,7 @@ function BW_GENERATOR_MODULE.New()
     
     self.Name = MODULE_NAME
     self.Description = MODULE_DESC
+    self.LastTimeGenerated = CurTime()
     self.NetworkVars = {
         {"PowerGeneration", 0, "Int"},
         {"PowerCapacity", 0, "Int"},
@@ -29,19 +30,46 @@ end
 
 function BW_GENERATOR_MODULE:TransmitPowerToNearbyEntities(ent)
     local nearbyEntities = ents.FindInSphere(ent:GetPos(), 600)
+    local entitiesNeedingPower = {}
 
-    for _, toTransmit in pairs(nearbyEntities) do
-        if toTransmit.UsePower and toTransmit != ent then
-            local powerNeeded = toTransmit:GetPowerCapacity() - toTransmit:GetPower()
-            local powerToTransmit = math.min(ent:GetPower(), powerNeeded)
+    for _, nearbyEnt in ipairs(nearbyEntities) do
+        if not IsValid(nearbyEnt) then continue end
+        if not nearbyEnt.Modules then continue end
+        if not nearbyEnt.GetPowerUsage then continue end
+        if nearbyEnt == ent then continue end
 
-            local powerModule = BaseWars.Entity.Modules:Get("Power")
-            
-            powerModule:ReceivePower(toTransmit, powerToTransmit)
-            self:DrainPower(ent, powerToTransmit)
+        table.insert(entitiesNeedingPower, nearbyEnt)
+    end
+
+    if #entitiesNeedingPower == 0 then return end
+
+    local power = ent:GetPower()
+    local powerCapacity = ent:GetPowerCapacity()
+    local powerGeneration = ent:GetPowerGeneration()
+
+    local powerToTransmit = powerGeneration
+
+    if power < powerGeneration then
+        powerToTransmit = power
+    end
+
+    for _, nearbyEnt in ipairs(entitiesNeedingPower) do
+        local powerNeeded = nearbyEnt:GetPowerCapacity() - nearbyEnt:GetPower()
+
+        if powerNeeded > 0 then
+            if powerToTransmit > powerNeeded then
+                self:DrainPower(ent, powerNeeded)
+                nearbyEnt:SetPower(nearbyEnt:GetPower() + powerNeeded)
+                powerToTransmit = powerToTransmit - powerNeeded
+            else
+                self:DrainPower(ent, powerToTransmit)
+                nearbyEnt:SetPower(nearbyEnt:GetPower() + powerToTransmit)
+                powerToTransmit = 0
+            end
         end
     end
 end
+
 
 function BW_GENERATOR_MODULE:DrainPower(ent, power)
     local actualPower = ent:GetPower()
@@ -56,16 +84,25 @@ end
 function BW_GENERATOR_MODULE:OnThink(ent)
     if CLIENT then return end
 
+    if self.LastTimeGenerated + 1 > CurTime() then return end
+
+    --self.LastTimeGenerated = CurTime()
+
     local power = ent:GetPower()
+    local powerCapacity = ent:GetPowerCapacity()
     local powerGeneration = ent:GetPowerGeneration()
 
-    if power < ent:GetPowerCapacity() then
+    self:TransmitPowerToNearbyEntities(ent)
+
+    if power < powerCapacity then
         ent:SetPower(power + powerGeneration)
     else
-        ent:SetPower(ent:GetPowerCapacity())
+        ent:SetPower(powerCapacity)
     end
 
-    self:TransmitPowerToNearbyEntities(ent)
+    if power > powerCapacity then
+        ent:SetPower(powerCapacity)
+    end
 
 end
 

@@ -16,6 +16,7 @@ properties.Add("bw_base_sell", {
     Filter = function(self, ent, ply)
         if not IsValid(ent) then return false end
         if not ent:CanSell() then return false end
+        self.MenuLabel = "Sell for $" .. ent:GetValue()
         return true
     end,
     Action = function(self, ent)
@@ -24,6 +25,10 @@ properties.Add("bw_base_sell", {
     end
 })
 
+function BaseWars.Entities.GetUpgradeCost(ent)
+    return ent:GetUpgradeLevel() * ent:GetValue()
+end
+
 properties.Add("bw_base_upgrade", {
     MenuLabel = "Upgrade",
     Order = 999,
@@ -31,6 +36,7 @@ properties.Add("bw_base_upgrade", {
     Filter = function(self, ent, ply)
         if not IsValid(ent) then return false end
         if not ent:CanUpgrade() then return false end
+        self.MenuLabel = "Upgrade for $" .. BaseWars.Entities.GetUpgradeCost(ent)
         return true
     end,
     Action = function(self, ent)

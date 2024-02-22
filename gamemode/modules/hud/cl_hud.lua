@@ -111,9 +111,32 @@ hook.Add("HUDPaint", "EntityInfoDisplay", function()
 
     local name = ent.PrintName or ent:GetClass()
     local health = ent:Health()
+    local power
+    local maxpower
+    if ent.GetPower then
+        power = ent:GetPower()
+        maxpower = ent:GetPowerCapacity()
+    end
+    local upgradeLevel
+    if ent.GetUpgradeLevel then
+        upgradeLevel = ent:GetUpgradeLevel()
+    end
+    local value
+    if ent.GetValue then
+        value = ent:GetValue()
+    end
 
     draw.SimpleText("Name: " .. name, "HUDSmallFont", ScrW() * 0.5, ScrH() * 0.7, color_white, TEXT_ALIGN_CENTER)
     draw.SimpleText("Health: " .. health, "HUDSmallFont", ScrW() * 0.5, ScrH() * 0.72, color_white, TEXT_ALIGN_CENTER)
+    if power and maxpower then
+        draw.SimpleText("Power: " .. power .. "/" .. maxpower, "HUDSmallFont", ScrW() * 0.5, ScrH() * 0.74, color_white, TEXT_ALIGN_CENTER)
+    end
+    if upgradeLevel then
+        draw.SimpleText("Upgrade level: " .. upgradeLevel, "HUDSmallFont", ScrW() * 0.5, ScrH() * 0.76, color_white, TEXT_ALIGN_CENTER)
+    end
+    if value then
+        draw.SimpleText("Value: " .. value, "HUDSmallFont", ScrW() * 0.5, ScrH() * 0.78, color_white, TEXT_ALIGN_CENTER)
+    end
 end)
 
 -- Hide default HUD elements

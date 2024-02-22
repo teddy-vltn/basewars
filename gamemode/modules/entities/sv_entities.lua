@@ -29,17 +29,18 @@ end
 function BaseWars.Entities.SellEntity(ply, ent)
     if not IsValid(ply) or not IsValid(ent) then return end
 
-    print("Selling entity in the function")
+    -- Check if player is not too far from the entity
+    if not BaseWars.ValidClose(ply, ent, 200) then
+        BaseWars.Notify.Send(ply, "You are too far away from the entity!")
+        return
+    end
 
     if not ent:CanSell() then
         BaseWars.Notify.Send(ply, "You cannot sell this entity!")
         return
     end
 
-    local value = ent:GetValue() or 0
     local owner = ent:CPPIGetOwner()
-
-    print(owner)
 
     if not IsValid(owner) then 
         
@@ -59,9 +60,11 @@ function BaseWars.Entities.SellEntity(ply, ent)
         return
     end*/
 
-    ply:AddMoney(value)
+    -- Will call the remove hook and give the player money back no need to do it here
+    -- ply:AddMoney(value)
     ent:Remove()
 
+    local value = ent:GetValue()
     BaseWars.Notify.Send(ply, "You sold an entity for " .. value .. "!")
 end
 
@@ -81,7 +84,7 @@ function BaseWars.Entities.UpgradeEntity(ply, ent)
 
     if not IsValid(owner) then return end
 
-    ent:Upgrade()
+    ent:Upgrade(ply)
 end
 
 -- Receive selling entity from client
@@ -107,4 +110,29 @@ net.Receive(BaseWars.Entities.Net.Upgrade, function(len, ply)
     if not IsValid(ent) then return end
 
     BaseWars.Entities.UpgradeEntity(ply, ent, upgrade)
+end)
+
+-- On entity removed recover money from entity
+hook.Add("EntityRemoved", "BaseWars_EntityRemoved", function(ent)
+    if not IsValid(ent) then return end
+    if not ent:CPPIGetOwner() then return end
+    if not ent:CPPIGetOwner():IsPlayer() then return end
+
+    local owner = ent:CPPIGetOwner()
+
+    if not IsValid(owner) then return end
+
+    --if not ent:CanSell() then return end
+    if not ent.GetValue then return end
+
+    -- Check if the entity health had reached 0
+    if ent:Health() <= 0 then
+        BaseWars.Notify.Send(owner, "Your entity was destroyed!", " ", Color(255, 0, 0))
+
+        owner:AddMoney(ent:GetValue() / 2)
+
+        return
+    end
+
+    owner:AddMoney(ent:GetValue())
 end)

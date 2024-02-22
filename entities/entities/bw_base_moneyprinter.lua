@@ -8,7 +8,6 @@ ENT.Spawnable       = true
 ENT.AdminOnly       = true
 
 ENT.IsPrinter = true
-ENT.UsePower = true
 
 ENT.Modules = {
     [0] = "Printer",
@@ -67,30 +66,33 @@ function ENT:Init()
 
     self:SetPowerUsage(self.PowerUsage)
     self:SetPowerCapacity(self.PowerCapacity)
-
-    self:Upgrade()
 end
 
 function ENT:Think()
 
     if CLIENT then return end
 
+    local isPowered = PowerModule:OnThink(self)
+
+    if not isPowered then return end
+
     PrinterModule:OnThink(self)
-    PowerModule:OnThink(self)
+
 end
 
 if SERVER then 
 
-    function ENT:Upgrade()
-        UpgradeModule:Upgrade(self)
+    function ENT:Upgrade(ply)
+        UpgradeModule:Upgrade(self, ply)
 
         local upgradeLevel = self:GetUpgradeLevel()
 
         self:SetCapacity(self.BaseCapacity * upgradeLevel)
         self:SetPrintRate(self.BasePrintRate * upgradeLevel)
 
-        self:SetValue(upgradeLevel)
-        
+        -- emit a sound to level up
+        self:EmitSound("ambient/levels/labs/electric_explosion1.wav", 100, 100)
+
     end
 
     function ENT:Use(ply)
@@ -127,6 +129,12 @@ else
 
     function ENT:DrawDisplay(pos, ang, scale)
         local w, h = 216 * 2, 136 * 2
+
+        if self:GetPower() < self:GetPowerUsage() then
+            self.FontColor = Color(255, 0, 0)
+        else
+            self.FontColor = Color(0, 255, 0)
+        end
     
         -- Background
         draw.RoundedBox(4, 0, 0, w, h, Color(0, 0, 0, 200))
@@ -135,17 +143,13 @@ else
         draw.DrawText(self.PrintName, fontName, w / 2, 4, Color(255, 255, 255), TEXT_ALIGN_CENTER)
 
         -- Afficher le niveau
-        --draw.DrawText("LEVEL: " .. self:GetLevel(), fontName .. ".Big", 4, 32, self.FontColor, TEXT_ALIGN_LEFT)
-        --surface.DrawLine(0, 68, w, 68)
+        draw.DrawText("LEVEL: " .. self:GetUpgradeLevel(), fontName .. ".Big", 4, 32, self.FontColor, TEXT_ALIGN_LEFT)
+        surface.DrawLine(0, 68, w, 68)
 
         -- Afficher l'argent actuellement dans l'imprimante
         local currentMoney = BaseWars.NumberFormat(self:GetMoney())
         local maxMoney = BaseWars.NumberFormat(self:GetCapacity())
         draw.DrawText("CASH: " .. currentMoney .. " / " .. maxMoney, fontName .. ".Big", 4, 72, Color(255, 255, 255), TEXT_ALIGN_LEFT)
-
-        -- Afficher le papier restant
-       --local paper = math.floor(self:GetPaper())
-        --draw.DrawText("Paper: " .. paper .. " sheets", fontName .. ".MedBig", 4, 94 + 49, self.FontColor, TEXT_ALIGN_LEFT)
     end
 
     function ENT:Calc3D2DParams()
