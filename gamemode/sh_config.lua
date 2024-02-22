@@ -21,9 +21,9 @@ BaseWars.Config.Research = {
         Description = "Increase your health",
         Icon = "icon16/heart.png",
         MaxLevel = 10,
-        time = function(level) return 100 * (level + 1) end,
+        time = function(level) return 5 * (level + 1) end,
         cost = function(level) return 100 * (level + 1) end,
-        effects = function(ply, level) 
+        Apply = function(ply, level) 
             ply:SetMaxHealth(ply:GetMaxHealth() + 10 * level)
             ply:SetHealth(ply:GetMaxHealth())
         end
@@ -186,20 +186,53 @@ BaseWars.Config.Entities = {
 BaseWars.Config.Props = {
     ["Basique"] = {
         Icon = "icon16/bricks.png",
-
         {Name = "Grille", Price = 10, Model = "models/props_c17/fence01a.mdl"},
         {Name = "Barrière", Price = 10, Model = "models/props_c17/fence02a.mdl"},
         {Name = "Barrière 2", Price = 10, Model = "models/props_c17/fence03a.mdl"},
         {Name = "Barrière 3", Price = 10, Model = "models/props_c17/fence04a.mdl"},
         {Name = "Barrière 4", Price = 10, Model = "models/props_c17/fence05a.mdl"},
         {Name = "Barrière 5", Price = 10, Model = "models/props_c17/fence06a.mdl"},
+        {Name = "Caisse", Price = 5, Model = "models/props_junk/wood_crate001a.mdl"},
+        {Name = "Tonneau", Price = 15, Model = "models/props_c17/oildrum001.mdl"},
+        {Name = "Palette", Price = 5, Model = "models/props_junk/wood_pallet001a.mdl"},
+        {Name = "Conteneur", Price = 30, Model = "models/props_junk/ShippingContainer01a.mdl"},
+        {Name = "Échelle", Price = 20, Model = "models/props_c17/metalladder001.mdl"},
+        {Name = "Poubelle", Price = 5, Model = "models/props_junk/TrashBin01a.mdl"},
+        {Name = "Banc", Price = 10, Model = "models/props_c17/bench01a.mdl"},
     },
     ["Plaque"] = {
         Icon = "icon16/bricks.png",
-
         {Name = "Plaque 1", Price = 10, Model = "models/props_c17/gravestone003a.mdl"},
-    }
+        {Name = "Plaque 2", Price = 10, Model = "models/hunter/plates/plate1x2.mdl"},
+        {Name = "Plaque 3", Price = 15, Model = "models/hunter/plates/plate2x2.mdl"},
+        {Name = "Plaque 4", Price = 20, Model = "models/hunter/plates/plate2x4.mdl"},
+        {Name = "Plaque 5", Price = 25, Model = "models/hunter/plates/plate4x4.mdl"},
+        {Name = "Plaque 6", Price = 30, Model = "models/hunter/plates/plate4x8.mdl"},
+    },
+    ["Construction"] = {
+        Icon = "icon16/wrench.png",
+        {Name = "Poutre", Price = 15, Model = "models/props_c17/trussbeam01.mdl"},
+        {Name = "Poutre 2", Price = 20, Model = "models/props_c17/Ibeam02b.mdl"},
+        {Name = "Escalier", Price = 25, Model = "models/props_c17/stairs01a.mdl"},
+        {Name = "Escalier Métal", Price = 30, Model = "models/props_c17/MetalStairs001a.mdl"},
+        {Name = "Porte", Price = 20, Model = "models/props_doors/door03_slotted_left.mdl"},
+    },
+    ["Décoratif"] = {
+        Icon = "icon16/heart.png",
+        {Name = "Lampe", Price = 15, Model = "models/props_c17/lampShade001a.mdl"},
+        {Name = "Arbre", Price = 50, Model = "models/props_foliage/tree_deciduous_01a.mdl"},
+        {Name = "Buisson", Price = 30, Model = "models/props_foliage/bush01.mdl"},
+        {Name = "Table", Price = 20, Model = "models/props_c17/furnitureTable002a.mdl"},
+        {Name = "Chaise", Price = 10, Model = "models/props_c17/FurnitureChair001a.mdl"},
+    },
+    ["Véhicules"] = {
+        Icon = "icon16/car.png",
+        {Name = "Voiture", Price = 200, Model = "models/props_vehicles/car004b_physics.mdl"},
+        {Name = "Camion", Price = 300, Model = "models/props_vehicles/truck003a.mdl"},
+        {Name = "Hélicoptère", Price = 500, Model = "models/props_junk/helicopter001a.mdl"},
+    },
 }
+
 
 BaseWars.Config.Shop = {
     ["Entités"] = {

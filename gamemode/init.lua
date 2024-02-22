@@ -4,6 +4,7 @@ BaseWars = BaseWars or {}
 BaseWars.Notify = BaseWars.Notify or {}
 BaseWars.Persist = BaseWars.Persist or {}
 BaseWars.Leaderboard = BaseWars.Leaderboard or {}
+BaseWars.Research = BaseWars.Research or {}
 
 hook.Add("Initialize", "BaseWars_Initialize", function()
     if SERVER then
@@ -16,6 +17,8 @@ hook.Add("PlayerInitialSpawn", "BaseWars_PlayerInitialSpawn", function(ply)
 
     -- send the player the notification list
     BaseWars.Notify.Send(ply, "Welcome to BaseWars!", "Welcome to BaseWars! Press F1 to open the menu.", Color(255, 255, 255))
+
+    BaseWars.Research.InitializePlayer(ply)
 
     if BaseWars.Config.Debug then
         BaseWars.Notify.Send(ply, "Debug", "Debug mode is enabled.", Color(255, 255, 255))
@@ -77,6 +80,7 @@ hook.Add("PlayerSpawn", "BaseWars_SpawnPoint", function(ply)
         ply:SetPos(spawnPoint:GetPos() + Vector(0, 0, 10))
     end
 
+    BaseWars.Research.ApplyAllEffects(ply)
 
 end)
 

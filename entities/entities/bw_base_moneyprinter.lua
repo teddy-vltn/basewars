@@ -71,7 +71,6 @@ function ENT:Init()
 end
 
 function ENT:Think()
-    print(self:GetMoney())
 
     if CLIENT then return end
 
