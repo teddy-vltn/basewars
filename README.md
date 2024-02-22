@@ -63,6 +63,86 @@ No documentation available for now.
 
 ---
 
+> ***Located at modules/persistent/cl_persistent.lua: Line 4***
+```lua
+function BaseWars.ConVar.Register(var, name, default, helpText)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/persistent/cl_persistent.lua: Line 16***
+```lua
+function BaseWars.ConVar.CreateConVarHandler(convarName, isBool)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/persistent/cl_persistent.lua: Line 47***
+```lua
+function BaseWars.ConVar.Get(name)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/persistent/cl_persistent.lua: Line 56***
+```lua
+function BaseWars.ConVar.Set(name, value)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/persistent/cl_persistent.lua: Line 60***
+```lua
+function BaseWars.ConVar.Reset(name)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/persistent/cl_persistent.lua: Line 64***
+```lua
+function BaseWars.ConVar.GetDefault(name)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/persistent/cl_persistent.lua: Line 68***
+```lua
+function BaseWars.ConVar.GetDescription(name)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/persistent/cl_persistent.lua: Line 72***
+```lua
+function BaseWars.ConVar.GetVar(name)
+```
+
+
+No documentation available for now.
+
+---
+
 > ***Located at modules/faction/cl_faction.lua: Line 57***
 ```lua
 function BaseWars.Faction.TryJoinFaction(name, password)
@@ -100,6 +180,16 @@ Attempts to delete the faction with the given name.
 
 ---
 
+> ***Located at modules/faction/cl_faction.lua: Line 88***
+```lua
+function BaseWars.Faction.TryKickPlayer(target)
+```
+
+
+No documentation available for now.
+
+---
+
 ### Shared-Side Functions
 
 > ***Located at shared.lua: Line 16***
@@ -114,7 +204,7 @@ Logs a message to the console.
 
 ---
 
-> ***Located at shared.lua: Line 28***
+> ***Located at shared.lua: Line 29***
 ```lua
 function BaseWars.Color(code)
 ```
@@ -126,7 +216,27 @@ Loads a module.
 
 ---
 
-> ***Located at shared.lua: Line 38***
+> ***Located at shared.lua: Line 49***
+```lua
+function BaseWars.ValidClose(ply, ent, range)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at shared.lua: Line 55***
+```lua
+function BaseWars.FindPlayerByName(name)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at shared.lua: Line 63***
 ```lua
 function BaseWars.NumberFormat(n)
 ```
@@ -136,7 +246,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at shared.lua: Line 53***
+> ***Located at shared.lua: Line 78***
 ```lua
 function BaseWars.FormatMoney(n)
 ```
@@ -148,7 +258,7 @@ Formats a number into a money string.
 
 ---
 
-> ***Located at shared.lua: Line 63***
+> ***Located at shared.lua: Line 88***
 ```lua
 function BaseWars.CreateFakeDerivatedScriptedEnt(baseEntity, printName, model, ClassName)
 ```
@@ -163,13 +273,38 @@ Registers a new entity based on an existing entity. Fake registering without hav
 
 ---
 
-> ***Located at shared.lua: Line 85***
+> ***Located at shared.lua: Line 111***
+```lua
+function BaseWars.CreateFakeDerivedWeapon(baseWeapon, newPrintName, newClassName, customizations)
+```
+
+
+Registers a new weapon based on an existing weapon. Fake registering without having to create a new file.
+
+- **Parameter** `baseWeapon` (string): The base weapon to derive from.
+- **Parameter** `newPrintName` (string): The name of the weapon.
+- **Parameter** `newClassName` (string): The class name of the weapon.
+- **Parameter** `customizations` (function): A function to customize the weapon.
+
+---
+
+> ***Located at shared.lua: Line 142***
 ```lua
 function BaseWars.LoadEntityConfiguration()
 ```
 
 
 Loads Entity configuration from the config file, in order to create entities.
+
+---
+
+> ***Located at shared.lua: Line 177***
+```lua
+function BaseWars.LoadWeaponConfiguration()
+```
+
+
+No documentation available for now.
 
 ---
 
@@ -211,7 +346,17 @@ Registers all modules in a folder with optional dependencies.
 
 ---
 
-> ***Located at modules/net/sh_net.lua: Line 50***
+> ***Located at modules/research/sh_research.lua: Line 20***
+```lua
+function BaseWars.Research.GetModuleByName(name)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/net/sh_net.lua: Line 51***
 ```lua
 function BaseWars.Net.Register(msgType, structure)
 ```
@@ -231,7 +376,7 @@ uuid = "string",
 
 ---
 
-> ***Located at modules/net/sh_net.lua: Line 75***
+> ***Located at modules/net/sh_net.lua: Line 76***
 ```lua
 function BaseWars.Net.Read(msgType)
 ```
@@ -249,7 +394,7 @@ local uuid = data.uuid
 
 ---
 
-> ***Located at modules/net/sh_net.lua: Line 106***
+> ***Located at modules/net/sh_net.lua: Line 107***
 ```lua
 function BaseWars.Net.Write(msgType, data)
 ```
@@ -354,7 +499,27 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 47***
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 171***
+```lua
+function Player:GetIsWeaponAutoBuy()
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 175***
+```lua
+function Player:GetWeaponAutoBuy()
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/faction/sh_faction.lua: Line 49***
 ```lua
 function Faction:GetMembers()
 ```
@@ -364,7 +529,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 51***
+> ***Located at modules/faction/sh_faction.lua: Line 53***
 ```lua
 function Faction:GetName()
 ```
@@ -374,7 +539,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 55***
+> ***Located at modules/faction/sh_faction.lua: Line 57***
 ```lua
 function Faction:HasPassword()
 ```
@@ -384,7 +549,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 59***
+> ***Located at modules/faction/sh_faction.lua: Line 61***
 ```lua
 function Faction:GetPassword()
 ```
@@ -394,7 +559,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 63***
+> ***Located at modules/faction/sh_faction.lua: Line 65***
 ```lua
 function Faction:GetColor()
 ```
@@ -404,7 +569,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 67***
+> ***Located at modules/faction/sh_faction.lua: Line 69***
 ```lua
 function Faction:GetIcon()
 ```
@@ -414,7 +579,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 71***
+> ***Located at modules/faction/sh_faction.lua: Line 73***
 ```lua
 function Faction:GetLeader()
 ```
@@ -424,7 +589,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 75***
+> ***Located at modules/faction/sh_faction.lua: Line 77***
 ```lua
 function Faction:GetMemberCount()
 ```
@@ -434,7 +599,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 81***
+> ***Located at modules/faction/sh_faction.lua: Line 83***
 ```lua
 function BaseWars.Faction.GetFactions()
 ```
@@ -444,7 +609,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 85***
+> ***Located at modules/faction/sh_faction.lua: Line 87***
 ```lua
 function BaseWars.Faction.GetFaction(name)
 ```
@@ -454,7 +619,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 89***
+> ***Located at modules/faction/sh_faction.lua: Line 91***
 ```lua
 function BaseWars.Faction.GetFactionByMember(ply)
 ```
@@ -464,7 +629,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 97***
+> ***Located at modules/faction/sh_faction.lua: Line 99***
 ```lua
 function Player:GetFaction()
 ```
@@ -474,7 +639,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 101***
+> ***Located at modules/faction/sh_faction.lua: Line 103***
 ```lua
 function Player:IsFriendlyEntity(ent)
 ```
@@ -484,7 +649,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 106***
+> ***Located at modules/faction/sh_faction.lua: Line 108***
 ```lua
 function BaseWars.Faction.ValidateName(name)
 ```
@@ -494,7 +659,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 119***
+> ***Located at modules/faction/sh_faction.lua: Line 121***
 ```lua
 function BaseWars.Faction.ValidatePassword(password)
 ```
@@ -504,7 +669,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 126***
+> ***Located at modules/faction/sh_faction.lua: Line 128***
 ```lua
 function BaseWars.Faction.ValidateColor(color)
 ```
@@ -514,7 +679,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 133***
+> ***Located at modules/faction/sh_faction.lua: Line 135***
 ```lua
 function BaseWars.Faction.ValidateIcon(icon)
 ```
@@ -524,7 +689,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/faction/sh_faction.lua: Line 140***
+> ***Located at modules/faction/sh_faction.lua: Line 142***
 ```lua
 function BaseWars.Faction.Exists(name)
 ```
@@ -563,7 +728,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/raid/sh_raid.lua: Line 30***
+> ***Located at modules/raid/sh_raid.lua: Line 31***
 ```lua
 function BaseWars.Raid.GetRemainingTime(time, points)
 ```
@@ -573,7 +738,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/raid/sh_raid.lua: Line 34***
+> ***Located at modules/raid/sh_raid.lua: Line 35***
 ```lua
 function BaseWars.Raid.GetRemainingPoints(time, points)
 ```
@@ -675,6 +840,66 @@ No documentation available for now.
 
 ### Server-Side Functions
 
+> ***Located at init.lua: Line 66***
+```lua
+function BaseWars.SequentialDataSaving()
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/research/sv_research.lua: Line 3***
+```lua
+function BaseWars.Research.OpenMenu(ent, ply)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/research/sv_research.lua: Line 11***
+```lua
+function BaseWars.Research.ResearchModule(ent, moduleName, ply)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/research/sv_research.lua: Line 38***
+```lua
+function BaseWars.Research.InitializePlayer(ply)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/research/sv_research.lua: Line 44***
+```lua
+function BaseWars.Research.ApplyEffect(ply, module)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/research/sv_research.lua: Line 52***
+```lua
+function BaseWars.Research.ApplyAllEffects(ply)
+```
+
+
+No documentation available for now.
+
+---
+
 > ***Located at modules/notify/sv_notify.lua: Line 2***
 ```lua
 function BaseWars.Notify.Send(ply, title, message, color)
@@ -728,7 +953,7 @@ Broadcast a network message to all players.
 
 ---
 
-> ***Located at modules/net/sv_net.lua: Line 17***
+> ***Located at modules/net/sv_net.lua: Line 19***
 ```lua
 function BaseWars.Net.SendToPlayer(ply, msgType, data)
 ```
@@ -742,7 +967,7 @@ Send a network message to a player.
 
 ---
 
-> ***Located at modules/net/sv_net.lua: Line 33***
+> ***Located at modules/net/sv_net.lua: Line 37***
 ```lua
 function BaseWars.Net.SendToGroup(group, msgType, data)
 ```
@@ -756,7 +981,7 @@ Send a network message to a group of players.
 
 ---
 
-> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 43***
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 52***
 ```lua
 function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
 ```
@@ -773,7 +998,7 @@ Attempts to buy an entity for the player.
 
 ---
 
-> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 89***
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 98***
 ```lua
 function BaseWars.SpawnMenu.CalcPosAndAng(ply, ent)
 ```
@@ -788,7 +1013,7 @@ Calculates the position and angle to spawn an entity at based on the player's cu
 
 ---
 
-> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 138***
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 147***
 ```lua
 function BaseWars.SpawnMenu.SetWeaponForAutoBuy(ply, uuid)
 ```
@@ -798,7 +1023,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 139***
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 148***
 ```lua
 function BaseWars.SpawnMenu.DisableWeaponAutoBuy(ply)
 ```
@@ -808,29 +1033,9 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 146***
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 155***
 ```lua
 function BaseWars.SpawnMenu.ActivateWeaponAutoBuy(ply, uuid, state)
-```
-
-
-No documentation available for now.
-
----
-
-> ***Located at modules/persistent/sv_persistent.lua: Line 5***
-```lua
-function Player:SaveData()
-```
-
-
-No documentation available for now.
-
----
-
-> ***Located at modules/persistent/sv_persistent.lua: Line 13***
-```lua
-function Player:LoadData()
 ```
 
 
@@ -900,7 +1105,7 @@ Attempts to create a new faction with the provided parameters and sets the leade
 
 ---
 
-> ***Located at modules/faction/sv_faction.lua: Line 112***
+> ***Located at modules/faction/sv_faction.lua: Line 118***
 ```lua
 function BaseWars.Faction.SyncFactions(ply)
 ```
@@ -912,9 +1117,9 @@ Synchronizes all faction data with a specific player or all players if no player
 
 ---
 
-> ***Located at modules/faction/sv_faction.lua: Line 133***
+> ***Located at modules/faction/sv_faction.lua: Line 139***
 ```lua
-function BaseWars.Faction.SyncFaction(faction)
+function BaseWars.Faction.SyncFaction(factionName, faction)
 ```
 
 
@@ -924,7 +1129,7 @@ Synchronizes a specific faction's details with all players.
 
 ---
 
-> ***Located at modules/faction/sv_faction.lua: Line 150***
+> ***Located at modules/faction/sv_faction.lua: Line 158***
 ```lua
 function BaseWars.Faction.JoinFaction(ply, factionName, password)
 ```
@@ -940,7 +1145,7 @@ Handles the process of a player attempting to join a faction, including password
 
 ---
 
-> ***Located at modules/faction/sv_faction.lua: Line 193***
+> ***Located at modules/faction/sv_faction.lua: Line 201***
 ```lua
 function BaseWars.Faction.LeaveFaction(ply)
 ```
@@ -954,7 +1159,7 @@ Handles the process of a player leaving their current faction.
 
 ---
 
-> ***Located at modules/faction/sv_faction.lua: Line 218***
+> ***Located at modules/faction/sv_faction.lua: Line 235***
 ```lua
 function BaseWars.Faction.DeleteFaction(name)
 ```
@@ -968,7 +1173,7 @@ Deletes a faction with the given name from the server.
 
 ---
 
-> ***Located at modules/faction/sv_faction.lua: Line 251***
+> ***Located at modules/faction/sv_faction.lua: Line 268***
 ```lua
 function BaseWars.Faction.SetFaction(ply, name, leader)
 ```
@@ -981,6 +1186,56 @@ Sets the faction for a player directly, optionally setting them as the leader.
 @param {boolean} [leader] - Whether the player should also be set as the leader of the faction.
 
 - **Returns** `boolean, string`: A status indicating success or failure, and a message explaining the result.
+
+---
+
+> ***Located at modules/faction/sv_faction.lua: Line 296***
+```lua
+function BaseWars.Faction.KickPlayer(ply, target)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/leaderboard/sv_leaderboard.lua: Line 8***
+```lua
+function BaseWars.Leaderboard.RefreshPage(page)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/leaderboard/sv_leaderboard.lua: Line 14***
+```lua
+function BaseWars.Leaderboard.Send(ply)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/leaderboard/sv_leaderboard.lua: Line 20***
+```lua
+function BaseWars.Leaderboard.Refresh()
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/leaderboard/sv_leaderboard.lua: Line 32***
+```lua
+function BaseWars.Leaderboard.Think()
+```
+
+
+No documentation available for now.
 
 ---
 
@@ -1024,7 +1279,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/raid/sv_raid.lua: Line 163***
+> ***Located at modules/raid/sv_raid.lua: Line 175***
 ```lua
 function BaseWars.Raid.StartRaid(factionName, targetName, start)
 ```
@@ -1103,6 +1358,47 @@ function BaseWars.Entities.FindPlayerEntities(ply)
 Returns all entities owned by a player.
 
 - **Parameter** `ply` (Player): The player to find entities for.
+
+---
+
+> ***Located at modules/entities/sv_entities.lua: Line 22***
+```lua
+function BaseWars.Entities.SellEntity(ply, ent)
+```
+
+
+Sells an entity for a player.
+
+- **Parameter** `ply` (Player): The player selling the entity.
+- **Parameter** `ent` (Entity): The entity being sold.
+
+---
+
+> ***Located at modules/entities/sv_entities.lua: Line 57***
+```lua
+function BaseWars.Entities.UpgradeEntity(ply, ent)
+```
+
+
+if not ent:CanSell() then
+BaseWars.Notify.Send(ply, "You cannot sell this entity!")
+return
+end
+
+ply:AddMoney(value)
+ent:Remove()
+
+BaseWars.Notify.Send(ply, "You sold an entity for " .. value .. "!")
+end
+
+
+
+
+Upgrades an entity for a player.
+
+- **Parameter** `ply` (Player): The player upgrading the entity.
+- **Parameter** `ent` (Entity): The entity being upgraded.
+- **Parameter** `upgrade` (string): The upgrade being applied.
 
 ---
 
