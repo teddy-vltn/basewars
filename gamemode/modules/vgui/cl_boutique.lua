@@ -72,6 +72,7 @@ function CreateBoutiquePanel(parent)
             local ClassName = itemProps.ClassName
             local Level = itemProps.Level or 0
             local Weapon = itemProps.Weapon or false
+            local Limit = itemProps.Limit or 0
             
             if filter != "" and not string.find(string.lower(Name), string.lower(filter)) then continue end
 
@@ -141,7 +142,7 @@ function CreateBoutiquePanel(parent)
             
             local itemLabelName = vgui.Create("DLabel", itemPanel)
             itemLabelName:Dock(BOTTOM)
-            itemLabelName:SetText(Name)
+            itemLabelName:SetText(Name or ClassName or "Unknown")
             itemLabelName:SetContentAlignment(5)
             itemLabelName:SetExpensiveShadow(1, Color(0, 0, 0))
             itemLabelName:SetTextColor(Color(40, 40, 40))

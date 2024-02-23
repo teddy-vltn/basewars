@@ -3,7 +3,7 @@ DEFINE_BASECLASS("bw_base")
 AddCSLuaFile()
 
 ENT.PrintName       = "Bank"
-ENT.Model   = "models/props_lab/reciever01a.mdl"
+ENT.Model   = "models/props_wasteland/controlroom_filecabinet002a.mdl"
 ENT.Spawnable       = true
 ENT.AdminOnly       = true
 
@@ -26,7 +26,7 @@ ENT.Modules = {
 ENT.BaseBankCapacity = 1000
 ENT.BaseBankRate = 100
 ENT.BaseBankCoolDown = 1
-ENT.BaseBankAmount = 10000
+ENT.BaseBankAmount = 0
 ENT.BaseBankRadius = 100
 
 ENT.PowerUsage = 10
@@ -83,6 +83,12 @@ function ENT:Think()
     BankModule:Think(self)
 
     BankModule:Bank(self)
+end
+
+function ENT:Use(ply)
+    if not ply:IsPlayer() then return end
+
+    BankModule:Use(self, ply)
 end
 
 

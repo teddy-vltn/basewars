@@ -101,6 +101,8 @@ function BaseWars.Net.Read(msgType)
         end
     end
 
+    BaseWars.Log("Read net message: " .. msgType, data)
+
     return data
 end
 

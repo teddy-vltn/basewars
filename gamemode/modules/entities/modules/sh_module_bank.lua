@@ -57,7 +57,6 @@ function BW_BANK_MODULE:Bank(ent)
 
     ent:SetBankAmount(totalBanked + ent:GetBankAmount())
 
-    print("Banked: ", totalBanked)
 end
 
 function BW_BANK_MODULE:Think(ent)
@@ -68,6 +67,26 @@ function BW_BANK_MODULE:Think(ent)
     if BankCoolDown > 0 then
         ent:SetBankCoolDown(BankCoolDown - 1)
     end
+end
+
+-- Use function to bank money
+function BW_BANK_MODULE:Use(ent, ply)
+    if not self.InitializedEntities[ent] then return end
+
+    local owner = ent:CPPIGetOwner()
+
+    if not IsValid(ply) or not IsValid(owner) then return end
+
+    if ply ~= owner then return end
+
+    if ent:GetBankAmount() <= 0 then return end
+
+    local amt = ent:GetBankAmount()
+    ent:SetBankAmount(0)
+
+    ply:AddMoney(amt)
+
+    BaseWars.Log(ply, " has banked ", BaseWars.NumberFormat(amt), " from a bank.")
 end
 
 local bankModule = BW_BANK_MODULE.New()
