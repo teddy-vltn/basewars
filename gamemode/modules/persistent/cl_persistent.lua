@@ -48,6 +48,14 @@ end
 
 function BaseWars.ConVar.Get(name)
     local conVarData = BaseWars.ConVar.Cache[name]
+
+    if not conVarData then
+        -- Look in normal gmod convars
+        convarData = GetConVar(name)
+
+        return convarData:GetString():upper()
+    end
+
     if not conVarData then
         error("ConVar '" .. name .. "' not found. Make sure it is registered before accessing it.")
     end
@@ -126,3 +134,10 @@ BaseWars.Config.FPSBoost = BaseWars.ConVar.CreateConVarHandler("basewars_fps_boo
         end
     end
 end)
+
+-- Create handler for gmod_language convar
+BaseWars.Config.Language = BaseWars.ConVar.CreateConVarHandler("gmod_language", false, function(value)
+    BaseWars.Languages.SetCached(value)
+end)
+
+

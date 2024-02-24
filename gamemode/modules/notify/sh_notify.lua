@@ -6,7 +6,7 @@ BaseWars.Notify.Net = BaseWars.Notify.Net or {
     AddNotification = "Notify_AddNotification"
 }
 
-BaseWars.Net.Register(BaseWars.Notify.Net.AddNotification, { title = "string", message = "string", color = "color" })
+BaseWars.Net.Register(BaseWars.Notify.Net.AddNotification, { title = "table", message = "table", color = "color" })
 
 if CLIENT then
     BaseWars.Notify.Notifications = {}

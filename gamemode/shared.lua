@@ -46,6 +46,42 @@ function table.Equals(a, b)
 	return true
 end
 
+function BaseWars.Lang(phrase, ...)
+
+	if CLIENT then
+
+		local message = BaseWars.Languages._Cached[phrase]
+
+		if not message then
+			BaseWars.Log("No phrase found for: " .. phrase)
+			return "Placeholder for " .. phrase
+		end
+
+		-- Check if ... is a table
+		if type(...) == "table" then
+			local args = ...
+
+			return string.format(message, unpack(args))	
+		else
+			return string.format(message, ...)
+		end
+
+	else
+
+		return {
+			phrase = phrase,
+			args = {...}
+		}
+
+	end
+end
+
+BaseWars.Languages = BaseWars.Languages or {}
+
+function BaseWars.RegisterLanguage(lang, tbl) 
+	BaseWars.Languages[lang] = tbl
+end
+
 function BaseWars.ValidClose(ply, ent, range) 
 	if not IsValid(ply) or not IsValid(ent) then return false end
 

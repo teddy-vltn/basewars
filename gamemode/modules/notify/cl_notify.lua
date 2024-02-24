@@ -21,6 +21,10 @@ local NOTIF_FADE_TIME = 1 -- Durée de l'animation de disparition en secondes
 net.Receive(BaseWars.Notify.Net.AddNotification, function()
     local data = BaseWars.Net.Read(BaseWars.Notify.Net.AddNotification)
     local title, message, color = data.title, data.message, data.color
+
+    title = BaseWars.Lang(title.phrase, title.args)
+    PrintTable(message)
+    message = BaseWars.Lang(message.phrase, message.args) 
     
     surface.SetFont("NotificationTitle")
     local titleWidth, titleHeight = surface.GetTextSize(title)

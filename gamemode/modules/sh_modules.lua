@@ -123,6 +123,11 @@ end
 
 
 -- Register your modules with dependencies
+BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/lang")
+BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/language")
+
+BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/config")
+
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/net")
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/notify")
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/entities")
@@ -144,8 +149,6 @@ BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/spawnmenu")
 
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/faction")
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/modules/raid")
-
-
 
 BaseWars.RegisterModuleFolder(GM.FolderName .. "/gamemode/extras")
 

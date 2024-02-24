@@ -107,34 +107,34 @@ end
 
 function BaseWars.Faction.ValidateName(name)
     if not name or name == "" then
-        return false, "Name cannot be empty."
+        return false, BaseWars.Lang("NameCannotBeEmpty")
     elseif #name < 3 then
-        return false, "Name is too short. Minimum 3 characters."
+        return false, BaseWars.Lang("NameIsTooShort")
     elseif #name > 32 then
-        return false, "Name is too long. Maximum 32 characters."
+        return false, BaseWars.Lang("NameIsTooLong")
     elseif not name:match("^[%w%sÀ-ÖØ-öø-ÿ]+$") then
-        return false, "Name contains invalid characters."
+        return false, BaseWars.Lang("NameContainsInvalidCharacters")
     end
     return true
 end
 
 function BaseWars.Faction.ValidatePassword(password)
     if password and #password > 32 then
-        return false, "Password is too long. Maximum 32 characters."
+        return false, BaseWars.Lang("PasswordIsTooLong")
     end
     return true
 end
 
 function BaseWars.Faction.ValidateColor(color)
     if not color or color == Color(0, 0, 0) then
-        return false, "Color cannot be empty."
+        return false, BaseWars.Lang("ColorCannotBeEmpty")
     end
     return true
 end
 
 function BaseWars.Faction.ValidateIcon(icon)
     if not icon or icon == "" then
-        return false, "Icon cannot be empty."
+        return false, BaseWars.Lang("IconCannotBeEmpty")
     end
     return true
 end

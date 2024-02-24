@@ -16,12 +16,12 @@ hook.Add("PlayerInitialSpawn", "BaseWars_PlayerInitialSpawn", function(ply)
     if not IsValid(ply) then return end
 
     -- send the player the notification list
-    BaseWars.Notify.Send(ply, "Welcome to BaseWars!", "Welcome to BaseWars! Press F1 to open the menu.", Color(255, 255, 255))
+    BaseWars.Notify.Send(ply, BaseWars.Lang("Welcome", "BaseWars"), BaseWars.Lang("Welcome", "BaseWars"), Color(255, 255, 255))
 
     BaseWars.Research.InitializePlayer(ply)
 
     if BaseWars.Config.Debug then
-        BaseWars.Notify.Send(ply, "Debug", "Debug mode is enabled.", Color(255, 255, 255))
+        BaseWars.Notify.Send(ply, BaseWars.Lang("Debug"), BaseWars.Lang("DebugIsEnabled"), Color(255, 255, 255))
 
         ply:SetMoney(10^6)
         ply:SetLevel(100)
@@ -35,7 +35,7 @@ hook.Add("PlayerInitialSpawn", "BaseWars_PlayerInitialSpawn", function(ply)
     -- load the player's data
     BaseWars.Persist.GetPlayerData(ply, function(data)
         if not data then
-            BaseWars.Notify.Send(ply, "Error", "An error occured while loading your data. Please contact an administrator.", Color(255, 0, 0))
+            BaseWars.Notify.Send(ply, BaseWars.Lang("Error"), BaseWars.Lang("AnErrorOccuredWhileLoadingData"), Color(255, 0, 0))
 
             -- freeze the player
             ply:Freeze(BaseWars.Config.Globals.FreezePlaterWhenDataLoadingError)
@@ -86,17 +86,12 @@ end)
 
 function GM:PlayerLoadout( ply )
 	
-    ply:Give("weapon_physgun")
-    ply:Give("gmod_tool")
-    ply:Give("weapon_physcannon")
+    local weapons = BaseWars.Config.Globals.DefaultWeapons
 
-    ply:Give("weapon_fists")
+    for k, v in pairs(weapons) do
+        ply:Give(v)
+    end
 
-    ply:Give("bw_inspector")
-
-    ply:Give("weapon_pistol")
-
-	-- Prevent default Loadout.
 	return true
 end
 
