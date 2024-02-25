@@ -142,7 +142,10 @@ function CreateBoutiquePanel(parent)
             
             local itemLabelName = vgui.Create("DLabel", itemPanel)
             itemLabelName:Dock(BOTTOM)
-            itemLabelName:SetText(Name or ClassName or "Unknown")
+
+            tryTranslation = BaseWars.TryTranslate(Name or ClassName or "Unknown")
+
+            itemLabelName:SetText(tryTranslation or "Unknown")
             itemLabelName:SetContentAlignment(5)
             itemLabelName:SetExpensiveShadow(1, Color(0, 0, 0))
             itemLabelName:SetTextColor(Color(40, 40, 40))
@@ -293,7 +296,10 @@ function CreateBoutiquePanel(parent)
         for categoryName, categoryOrItem in pairs(categoryTable) do
             if type(categoryOrItem) == "table" then
                 if not categoryOrItem.Price then  -- It's a category
-                    local categoryNode = parentNode:AddNode(categoryName)
+
+                    local tryTranslation = BaseWars.TryTranslate(categoryName)
+
+                    local categoryNode = parentNode:AddNode(tryTranslation)
                     -- Put icon if it's a category
                     categoryNode:SetIcon(categoryOrItem.Icon or "icon16/folder.png")
                     populateTree(categoryNode, categoryOrItem)

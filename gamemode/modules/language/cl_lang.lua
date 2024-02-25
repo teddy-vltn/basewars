@@ -26,9 +26,14 @@ function BaseWars.Languages.SetCached(value)
     BaseWars.Languages._Cached = phrases
 end
 
+function BaseWars.GetLocalPlayerLanguage()
+    return GetConVar("gmod_language"):GetString():upper()
+end
+
+
 -- There a convar handler that should handle this, but at this point it's not initialized yet.
 -- So it will double initialize the language, but it's not a big deal overall.
 -- At least we are sure that the language is set.
-local defaultLanguage = GetConVar("gmod_language"):GetString():upper()
+local defaultLanguage = BaseWars.GetLocalPlayerLanguage()
 
 BaseWars.Languages.SetCached( defaultLanguage )

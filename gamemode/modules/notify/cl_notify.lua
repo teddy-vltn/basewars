@@ -23,7 +23,6 @@ net.Receive(BaseWars.Notify.Net.AddNotification, function()
     local title, message, color = data.title, data.message, data.color
 
     title = BaseWars.Lang(title.phrase, title.args)
-    PrintTable(message)
     message = BaseWars.Lang(message.phrase, message.args) 
     
     surface.SetFont("NotificationTitle")

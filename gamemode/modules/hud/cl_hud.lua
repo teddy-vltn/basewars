@@ -16,6 +16,12 @@ surface.CreateFont("HUDSmallFont", {
 local prevMoney = 0
 local moneyNotifications = {}
 
+local HealthText = BaseWars.Lang("Health")
+local ArmorText = BaseWars.Lang("Armor")
+local MoneyText = BaseWars.Lang("Money")
+local LevelText = BaseWars.Lang("Level")
+local XPText = BaseWars.Lang("XP")
+
 local function DrawBar(x, y, w, h, color, value, maxValue)
 
     if not value then value = 1 maxValue = 1 end
@@ -50,16 +56,16 @@ local function DrawHUD()
 
     -- Health
     DrawBar(baseX, baseY, barWidth, barHeight, Color(255, 50, 50), health, 100)
-    draw.SimpleText("Vie: " .. health, "HUDMainFont", baseX + 5, baseY + barHeight / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+    draw.SimpleText(HealthText .. " "  .. health, "HUDMainFont", baseX + 5, baseY + barHeight / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
     -- Armor
     local armorX = baseX + barWidth + spacing
     DrawBar(armorX, baseY, barWidth, barHeight, Color(50, 50, 255), armor, 100)
-    draw.SimpleText("Armure: " .. armor, "HUDMainFont", armorX + 5, baseY + barHeight / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+    draw.SimpleText(ArmorText .. " " .. armor, "HUDMainFont", armorX + 5, baseY + barHeight / 2, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
     -- Money, Level, and XP in a more compact format
     local infoY = baseY - barHeight - spacing
-    draw.SimpleText("Argent: $" .. money .. " | Niveau: " .. level .. " | XP: " .. xp .. "/" .. xpForLevel, "HUDSmallFont", baseX, infoY, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+    draw.SimpleText(MoneyText .. " " .. money .. " | " .. LevelText .. " " .. level .. " | " .. XPText .. " " .. xp .. "/" .. xpForLevel, "HUDSmallFont", baseX, infoY, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
     -- Money notifications
     local moneyDifference = client:GetMoney() - prevMoney

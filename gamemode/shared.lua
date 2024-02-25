@@ -54,7 +54,7 @@ function BaseWars.Lang(phrase, ...)
 
 		if not message then
 			BaseWars.Log("No phrase found for: " .. phrase)
-			return "Placeholder for " .. phrase
+			return phrase
 		end
 
 		-- Check if ... is a table
@@ -73,6 +73,39 @@ function BaseWars.Lang(phrase, ...)
 			args = {...}
 		}
 
+	end
+end
+
+function BaseWars.GetLocalPlayerLanguage()
+	if SERVER then return end
+
+    return GetConVar("gmod_language"):GetString():upper()
+end
+
+function BaseWars.TryTranslate(phrase)
+	if CLIENT then
+
+		-- Check first if the player lanugage 
+		-- is the same as the server language
+		local localLanguage = BaseWars.GetLocalPlayerLanguage()
+		local serverLanguage = BaseWars.Config.Globals.DefaultLanguage:upper()
+
+		if localLanguage == serverLanguage then
+			return phrase
+		end
+
+		-- Explode the phrase into words
+		local words = string.Explode(" ", phrase)
+
+		-- Try translating each words
+		for i, word in ipairs(words) do
+			words[i] = BaseWars.Lang(word)
+		end
+
+		-- Join the words back together
+		return table.concat(words, " ")
+	else
+		return phrase
 	end
 end
 
@@ -132,6 +165,10 @@ end
 */
 function BaseWars.CreateFakeDerivatedScriptedEnt(baseEntity, printName, model, ClassName)
 	local ENT = table.Copy(baseEntity)
+
+	if CLIENT then
+		printName = BaseWars.TryTranslate(printName)
+	end
 	
 	ENT.Type = "anim"
 	ENT.PrintName = printName
@@ -160,6 +197,10 @@ function BaseWars.CreateFakeDerivedWeapon(baseWeapon, newPrintName, newClassName
         print("Base weapon not found:", baseWeapon)
         return false
     end
+
+	if CLIENT then
+		newPrintName = BaseWars.TryTranslate(newPrintName)
+	end
 
     local newSWEP = table.Copy(SWEP)
     newSWEP.PrintName = newPrintName

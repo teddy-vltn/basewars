@@ -265,9 +265,9 @@ BaseWars.Config.Props = {
 
 
 BaseWars.Config.Shop = {
-    ["Entités"] = {
+    ["Entities"] = {
         Icon = "icon16/bricks.png",
-        ["Imprimantes"] = {
+        ["Printers"] = {
             Icon = "icon16/printer.png",
 
             ["T1"] = { 
@@ -283,13 +283,13 @@ BaseWars.Config.Shop = {
                 }
             }
         },
-        ["Générateurs"] = {
+        ["Generators"] = {
             Icon = "icon16/lightning.png",
 
             {Name = "Basic Generator", Price = 50, Model = "models/props_lab/reciever01b.mdl", ClassName = "bw_base_generator"},
             {Name = "Coal Generator", Price = 50, Model = "models/props_lab/reciever01b.mdl", ClassName = "bw_generator_coal"},
         },
-        ["Tourelle"] = {
+        ["Turrets"] = {
 
             {Name = "Tourelle Basique", Price = 50, Model = "models/combine_turrets/floor_turret.mdl", ClassName = "bw_turret"},
             {Name = "Tesla Basique", Price = 50, Model = "models/props_c17/FurnitureBoiler001a.mdl", ClassName = "bw_tesla"},
@@ -305,13 +305,13 @@ BaseWars.Config.Shop = {
             {Name = "Dispenser Armor", Price = 50, Level = 3, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_armor"},
         },
     },
-    ["Armes"] = {
+    ["Weapons"] = {
         Icon = "icon16/gun.png",
 
-        ["Pistolets"] = {
+        ["Pistols"] = {
             {Name = "Pistol", Price = 10, Model = "models/weapons/w_pistol.mdl", ClassName = "weapon_pistol", Weapon = true},
         },
-        ["Fusils"] = {
+        ["Rifles"] = {
             {Name = "Rifle", Price = 50, Model = "models/weapons/w_rif_ak47.mdl", ClassName = "bw_weapon_ak47_uncommon", Weapon = true},
 
         },
