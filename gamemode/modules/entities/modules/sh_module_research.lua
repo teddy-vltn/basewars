@@ -68,7 +68,7 @@ function BW_RESEARCH_MODULE:OnThink(ent)
                     end)
 
                     -- Send a notification to the player
-                    BaseWars.Notify.Send(owner, "Research", "You have succesfully researched " .. ent:GetResearchModule(), Color(0, 255, 0))
+                    BaseWars.Notify.Send(owner, BaseWars.Lang("Research"), BaseWars.Lang("ResearchingSuccess", ent:GetResearchModule()), Color(0, 255, 0))
                 end
             end
 

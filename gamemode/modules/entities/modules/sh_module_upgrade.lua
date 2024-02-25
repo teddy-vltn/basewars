@@ -29,7 +29,7 @@ function BW_UPGRADE_MODULE:Upgrade(ent, ply)
     local cost = ent:GetUpgradeLevel() * ent:GetValue()
 
     if not ply:CanAfford(cost) then
-        BaseWars.Notify.Send(ply, "You cannot afford to upgrade this entity!")
+        BaseWars.Notify.Send(ply, BaseWars.Lang("Upgrade"), BaseWars.Lang("NotEnoughMoneyToBuyUpgrade"), Color(255, 0, 0))
         return
     end
 

@@ -6,6 +6,8 @@ timer.Create("BaseWars_MoneyTimer", BaseWars.Config.Globals.MinuteBeforePayout, 
 
         v:AddMoney(BaseWars.Config.Globals.MoneyPerMinute) 
 
-        BaseWars.Notify.Send(v, "Money", "You have been given $" .. BaseWars.Config.Globals.MoneyPerMinute .. " for playing.", Color(0, 255, 0))
+        local moneyGiven = BaseWars.Config.Globals.MoneyPerMinute
+
+        BaseWars.Notify.Send(v, BaseWars.Lang("PayOut"), BaseWars.Lang("PayOutForPlaying", moneyGiven), Color(0, 255, 0))
     end
 end)

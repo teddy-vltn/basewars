@@ -31,12 +31,12 @@ function BaseWars.Entities.SellEntity(ply, ent)
 
     -- Check if player is not too far from the entity
     if not BaseWars.ValidClose(ply, ent, 200) then
-        BaseWars.Notify.Send(ply, "You are too far away from the entity!")
+        BaseWars.Notify.Send(ply, BaseWars.Lang("Sell"), BaseWars.Lang("TooFarAwayToInteract"), Color(255, 0, 0))
         return
     end
 
     if not ent:CanSell() then
-        BaseWars.Notify.Send(ply, "You cannot sell this entity!")
+        BaseWars.Notify.Send(ply, BaseWars.Lang("Sell"), BaseWars.Lang("CantSellThisEntity"), Color(255, 0, 0))
         return
     end
 
@@ -44,14 +44,14 @@ function BaseWars.Entities.SellEntity(ply, ent)
 
     if not IsValid(owner) then 
         
-        BaseWars.Log(ply, " attempted to sell an entity that does not have an owner!")
+        BaseWars.Notify.Send(ply, BaseWars.Lang("Sell"), BaseWars.Lang("CantSellThisEntity"), Color(255, 0, 0))
 
         return 
     end
 
     if owner ~= ply then
         BaseWars.Log(ply, " attempted to sell an entity that does not belong to them!")
-        BaseWars.Notify.Send(ply,  "You cannot sell an entity that does not belong to you!")
+        BaseWars.Notify.Send(ply,  BaseWars.Lang("Sell"), BaseWars.Lang("CantSellOtherPlayersEntities"), Color(255, 0, 0))
         return
     end
 
@@ -60,12 +60,15 @@ function BaseWars.Entities.SellEntity(ply, ent)
         return
     end*/
 
+    local value = ent:GetValue()
+    local printName = ent.PrintName or ent:GetClass()
+
     -- Will call the remove hook and give the player money back no need to do it here
     -- ply:AddMoney(value)
     ent:Remove()
 
-    local value = ent:GetValue()
-    BaseWars.Notify.Send(ply, "You sold an entity for " .. value .. "!")
+
+    BaseWars.Notify.Send(ply, BaseWars.Lang("Sell"), BaseWars.Lang("SoldEntity", printName, BaseWars.FormatMoney(value)), Color(0, 255, 0))
 end
 
 /*
@@ -132,15 +135,18 @@ hook.Add("EntityRemoved", "BaseWars_EntityRemoved", function(ent)
     --if not ent:CanSell() then return end
     if not ent.GetValue then return end
 
+    local printName = ent.PrintName or ent:GetClass()
+    local value = ent:GetValue()
+
     -- Check if the entity health had reached 0
     if ent:Health() <= 0 then
-        BaseWars.Notify.Send(owner, "Your entity was destroyed!", " ", Color(255, 0, 0))
+        BaseWars.Notify.Send(owner, BaseWars.Lang("Sell"), BaseWars.Lang("EntityHasBeenDestroyedBySomeone", printName, value), Color(255, 0, 0))
 
-        owner:AddMoney(ent:GetValue() / 2)
+        owner:AddMoney(value / 2)
 
         return
     end
 
-    owner:AddMoney(ent:GetValue())
+    owner:AddMoney(value)
 
 end)

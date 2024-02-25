@@ -61,6 +61,10 @@ function BaseWars.Lang(phrase, ...)
 		if type(...) == "table" then
 			local args = ...
 
+			if #args == 0 then
+				return message
+			end
+
 			return string.format(message, unpack(args))	
 		else
 			return string.format(message, ...)

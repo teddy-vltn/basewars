@@ -75,7 +75,7 @@ No documentation available for now.
 
 > ***Located at modules/persistent/cl_persistent.lua: Line 16***
 ```lua
-function BaseWars.ConVar.CreateConVarHandler(convarName, isBool)
+function BaseWars.ConVar.CreateConVarHandler(convarName, isBool, callback)
 ```
 
 
@@ -83,7 +83,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/persistent/cl_persistent.lua: Line 47***
+> ***Located at modules/persistent/cl_persistent.lua: Line 49***
 ```lua
 function BaseWars.ConVar.Get(name)
 ```
@@ -93,7 +93,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/persistent/cl_persistent.lua: Line 56***
+> ***Located at modules/persistent/cl_persistent.lua: Line 66***
 ```lua
 function BaseWars.ConVar.Set(name, value)
 ```
@@ -103,7 +103,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/persistent/cl_persistent.lua: Line 60***
+> ***Located at modules/persistent/cl_persistent.lua: Line 70***
 ```lua
 function BaseWars.ConVar.Reset(name)
 ```
@@ -113,7 +113,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/persistent/cl_persistent.lua: Line 64***
+> ***Located at modules/persistent/cl_persistent.lua: Line 74***
 ```lua
 function BaseWars.ConVar.GetDefault(name)
 ```
@@ -123,7 +123,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/persistent/cl_persistent.lua: Line 68***
+> ***Located at modules/persistent/cl_persistent.lua: Line 78***
 ```lua
 function BaseWars.ConVar.GetDescription(name)
 ```
@@ -133,7 +133,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/persistent/cl_persistent.lua: Line 72***
+> ***Located at modules/persistent/cl_persistent.lua: Line 82***
 ```lua
 function BaseWars.ConVar.GetVar(name)
 ```
@@ -190,6 +190,26 @@ No documentation available for now.
 
 ---
 
+> ***Located at modules/language/cl_lang.lua: Line 3***
+```lua
+function BaseWars.Languages.SetCached(value)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/language/cl_lang.lua: Line 29***
+```lua
+function BaseWars.GetLocalPlayerLanguage()
+```
+
+
+No documentation available for now.
+
+---
+
 ### Shared-Side Functions
 
 > ***Located at shared.lua: Line 16***
@@ -218,6 +238,46 @@ Loads a module.
 
 > ***Located at shared.lua: Line 49***
 ```lua
+function BaseWars.Lang(phrase, ...)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at shared.lua: Line 79***
+```lua
+function BaseWars.GetLocalPlayerLanguage()
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at shared.lua: Line 85***
+```lua
+function BaseWars.TryTranslate(phrase)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at shared.lua: Line 114***
+```lua
+function BaseWars.RegisterLanguage(lang, tbl)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at shared.lua: Line 118***
+```lua
 function BaseWars.ValidClose(ply, ent, range)
 ```
 
@@ -226,7 +286,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at shared.lua: Line 55***
+> ***Located at shared.lua: Line 124***
 ```lua
 function BaseWars.FindPlayerByName(name)
 ```
@@ -236,7 +296,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at shared.lua: Line 63***
+> ***Located at shared.lua: Line 132***
 ```lua
 function BaseWars.NumberFormat(n)
 ```
@@ -246,7 +306,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at shared.lua: Line 78***
+> ***Located at shared.lua: Line 147***
 ```lua
 function BaseWars.FormatMoney(n)
 ```
@@ -258,7 +318,7 @@ Formats a number into a money string.
 
 ---
 
-> ***Located at shared.lua: Line 88***
+> ***Located at shared.lua: Line 157***
 ```lua
 function BaseWars.CreateFakeDerivatedScriptedEnt(baseEntity, printName, model, ClassName)
 ```
@@ -273,7 +333,7 @@ Registers a new entity based on an existing entity. Fake registering without hav
 
 ---
 
-> ***Located at shared.lua: Line 111***
+> ***Located at shared.lua: Line 184***
 ```lua
 function BaseWars.CreateFakeDerivedWeapon(baseWeapon, newPrintName, newClassName, customizations)
 ```
@@ -288,7 +348,7 @@ Registers a new weapon based on an existing weapon. Fake registering without hav
 
 ---
 
-> ***Located at shared.lua: Line 142***
+> ***Located at shared.lua: Line 219***
 ```lua
 function BaseWars.LoadEntityConfiguration()
 ```
@@ -298,7 +358,7 @@ Loads Entity configuration from the config file, in order to create entities.
 
 ---
 
-> ***Located at shared.lua: Line 177***
+> ***Located at shared.lua: Line 254***
 ```lua
 function BaseWars.LoadWeaponConfiguration()
 ```
@@ -394,7 +454,7 @@ local uuid = data.uuid
 
 ---
 
-> ***Located at modules/net/sh_net.lua: Line 107***
+> ***Located at modules/net/sh_net.lua: Line 109***
 ```lua
 function BaseWars.Net.Write(msgType, data)
 ```
@@ -414,13 +474,18 @@ uuid = "some_uuid",
 
 ---
 
-> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 30***
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 32***
 ```lua
 function BaseWars.SpawnMenu.GenerateUUID(item)
 ```
 
 
-Generates a UUID for a given item.
+Generates a UUID for a given item. Using the item's properties, a UUID is generated using a simple algorithm.
+The UUID is generated using a template and a seeded pseudo-random number generator.
+Which means both client and server will generate the same UUID for the same item.
+It is useful for identifying items in the shop, and it can also prevent duplicate items from being added to the shop.
+Futhermore if someone tries manually launching fake items, the UUID will be different and the server will reject it.
+Was a problem in the original basewars gamemode the server could get confuse and would accept the fake item in very rare cases.
 
 - **Parameter** `item` (table): The item to generate a UUID for.
 
@@ -428,13 +493,14 @@ Generates a UUID for a given item.
 
 ---
 
-> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 65***
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 74***
 ```lua
 function BaseWars.SpawnMenu.AddUUIDsToShop(categoryTable)
 ```
 
 
 Adds UUIDs to the shop's item entries.
+The UUIDs are generated using the item's properties, and are used to uniquely identify items in the shop.
 
 - **Parameter** `categoryTable` (table): The table representing the shop's categories.
 
@@ -442,13 +508,14 @@ Adds UUIDs to the shop's item entries.
 
 ---
 
-> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 100***
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 110***
 ```lua
 function BaseWars.SpawnMenu.CollectItems(categoryTable, depth)
 ```
 
 
 Collects all items from the shop's category table, recursively.
+Go through each category and subcategory, collecting all items into a single table.
 
 - **Parameter** `categoryTable` (table): The table representing the shop's categories.
 - **Parameter** `depth` (number): The maximum depth to recurse to.
@@ -457,19 +524,22 @@ Collects all items from the shop's category table, recursively.
 
 ---
 
-> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 134***
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 145***
 ```lua
 function BaseWars.FlattenShop()
 ```
 
 
 Flattens the shop's category table into a single table containing all items.
+The table is stored in BaseWars.SpawnMenu.FlattenedShop. Useful for searching and filtering items.
+This is stored in a separate table to avoid modifying the original shop table. Also, it's only computed once. (normally)
+The client can use this table to display the shop's items, and the server can use it to validate purchases fastly.
 
 - **Returns** `table`: A table containing all items from the shop's category table.
 
 ---
 
-> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 148***
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 162***
 ```lua
 function BaseWars.SpawnMenu.GetWeaponAutoBuy(ply)
 ```
@@ -479,7 +549,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 154***
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 168***
 ```lua
 function Player:GetBuyEntityBlockReason(uuid)
 ```
@@ -489,7 +559,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 167***
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 181***
 ```lua
 function Player:IsVIP()
 ```
@@ -499,7 +569,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 171***
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 185***
 ```lua
 function Player:GetIsWeaponAutoBuy()
 ```
@@ -509,9 +579,19 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 175***
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 189***
 ```lua
 function Player:GetWeaponAutoBuy()
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/spawnmenu/sh_spawnmenu.lua: Line 193***
+```lua
+function Player:GetEntityCount(class)
 ```
 
 
@@ -808,6 +888,16 @@ No documentation available for now.
 
 ---
 
+> ***Located at modules/entities/sh_entities.lua: Line 28***
+```lua
+function BaseWars.Entities.GetUpgradeCost(ent)
+```
+
+
+No documentation available for now.
+
+---
+
 > ***Located at modules/entities/modules/sh_module.lua: Line 5***
 ```lua
 function BaseWars.Entity.Modules:Add(module)
@@ -981,7 +1071,27 @@ Send a network message to a group of players.
 
 ---
 
-> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 52***
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 7***
+```lua
+function Player:AddToEntityCount(class, amount)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 13***
+```lua
+function Player:CheckEntityLimit(class, limit)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 74***
 ```lua
 function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
 ```
@@ -998,7 +1108,7 @@ Attempts to buy an entity for the player.
 
 ---
 
-> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 98***
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 127***
 ```lua
 function BaseWars.SpawnMenu.CalcPosAndAng(ply, ent)
 ```
@@ -1013,7 +1123,7 @@ Calculates the position and angle to spawn an entity at based on the player's cu
 
 ---
 
-> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 147***
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 176***
 ```lua
 function BaseWars.SpawnMenu.SetWeaponForAutoBuy(ply, uuid)
 ```
@@ -1023,7 +1133,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 148***
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 177***
 ```lua
 function BaseWars.SpawnMenu.DisableWeaponAutoBuy(ply)
 ```
@@ -1033,7 +1143,7 @@ No documentation available for now.
 
 ---
 
-> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 155***
+> ***Located at modules/spawnmenu/sv_spawnmenu.lua: Line 184***
 ```lua
 function BaseWars.SpawnMenu.ActivateWeaponAutoBuy(ply, uuid, state)
 ```
@@ -1159,7 +1269,7 @@ Handles the process of a player leaving their current faction.
 
 ---
 
-> ***Located at modules/faction/sv_faction.lua: Line 235***
+> ***Located at modules/faction/sv_faction.lua: Line 234***
 ```lua
 function BaseWars.Faction.DeleteFaction(name)
 ```
@@ -1173,7 +1283,7 @@ Deletes a faction with the given name from the server.
 
 ---
 
-> ***Located at modules/faction/sv_faction.lua: Line 268***
+> ***Located at modules/faction/sv_faction.lua: Line 267***
 ```lua
 function BaseWars.Faction.SetFaction(ply, name, leader)
 ```
@@ -1189,7 +1299,7 @@ Sets the faction for a player directly, optionally setting them as the leader.
 
 ---
 
-> ***Located at modules/faction/sv_faction.lua: Line 296***
+> ***Located at modules/faction/sv_faction.lua: Line 295***
 ```lua
 function BaseWars.Faction.KickPlayer(ply, target)
 ```
@@ -1349,6 +1459,46 @@ No documentation available for now.
 
 ---
 
+> ***Located at modules/radar/sv_radar.lua: Line 4***
+```lua
+function BaseWars.Radar.GetRaidableEntitieWithinRadius(pos, radius)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/radar/sv_radar.lua: Line 19***
+```lua
+function BaseWars.Radar.FindRaidableEntitiesAroundRadar(radar)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/radar/sv_radar.lua: Line 27***
+```lua
+function BaseWars.Radar.SendRaidableEntities(ply, radar)
+```
+
+
+No documentation available for now.
+
+---
+
+> ***Located at modules/radar/sv_radar.lua: Line 33***
+```lua
+function BaseWars.Radar.AskForRaidableEntities(ply, radar)
+```
+
+
+No documentation available for now.
+
+---
+
 > ***Located at modules/entities/sv_entities.lua: Line 4***
 ```lua
 function BaseWars.Entities.FindPlayerEntities(ply)
@@ -1374,7 +1524,7 @@ Sells an entity for a player.
 
 ---
 
-> ***Located at modules/entities/sv_entities.lua: Line 57***
+> ***Located at modules/entities/sv_entities.lua: Line 58***
 ```lua
 function BaseWars.Entities.UpgradeEntity(ply, ent)
 ```
@@ -1385,9 +1535,11 @@ BaseWars.Notify.Send(ply, "You cannot sell this entity!")
 return
 end
 
-ply:AddMoney(value)
+-- Will call the remove hook and give the player money back no need to do it here
+-- ply:AddMoney(value)
 ent:Remove()
 
+local value = ent:GetValue()
 BaseWars.Notify.Send(ply, "You sold an entity for " .. value .. "!")
 end
 

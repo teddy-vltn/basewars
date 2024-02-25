@@ -16,9 +16,9 @@ function Player:CheckEntityLimit(class, limit)
     local count = self:GetEntityCount(class)
 
     -- Check if the player has reached the limit
-    if count >= limit then return false, "You have reached the limit for this entity" end
+    if count >= limit then return false, BaseWars.Lang("LimitReached", count, limit) end
 
-    return true, "Successfully checked entity limit"
+    return true, BaseWars.Lang("Success")
 end
 
 -- Function to spawn an entity based on its class, position, and angle.
@@ -29,7 +29,7 @@ local function SpawnEntity(ply, class, pos, ang, value)
     local entity = ents.Create(class)
     
     -- Check if the entity is valid, if not return an error
-    if not IsValid(entity) then return false, "The entity doesn't exist?????" end
+    if not IsValid(entity) then return false, BaseWars.Lang("EntityDoesntExist", class) end
 
     -- Set the entity's position and angle
     entity:SetPos(pos)
@@ -47,7 +47,7 @@ local function SpawnEntity(ply, class, pos, ang, value)
     -- Add the entity to the player's count
     ply:AddToEntityCount(class, 1)
 
-    return true, "Successfully spawned entity"
+    return true, BaseWars.Lang("SuccessfullySpawnedEntity")
 end
 
 local function GiveWeapon(ply, class)
@@ -55,7 +55,7 @@ local function GiveWeapon(ply, class)
     local entity = ents.Create(class)
     
     -- Check if the entity is valid, if not return an error
-    if not IsValid(entity) then return false, "The entity doesn't exist?????" end
+    if not IsValid(entity) then return false, BaseWars.Lang("EntityDoesntExist") end
 
     -- Give the weapon to the player
     ply:Give(class)
@@ -68,7 +68,7 @@ local function GiveWeapon(ply, class)
     local ammoCount = entity:GetMaxClip1() * 2
     ply:SetAmmo(ammoCount, ammoType)
 
-    return true, "Successfully spawned entity"
+    return true, BaseWars.Lang("SuccessfullySpawnedEntity")
 end
 
 /*
@@ -87,7 +87,7 @@ function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
     local entityTable = BaseWars.SpawnMenu.FlattenedShop[uuid]
     
     -- If the entity doesn't exist in the shop, return an error
-    if not entityTable then return false, "Entity does not exist" end
+    if not entityTable then return false, BaseWars.Lang("EntityDoesntExist") end
 
     -- Check Limit
     local limit = entityTable.Limit
@@ -98,11 +98,11 @@ function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
 
     -- Check if the player has the required level to buy the entity
     local level = entityTable.Level
-    if level and level > ply:GetLevel() then return false, "You do not have the required level to buy this entity" end
+    if level and level > ply:GetLevel() then return false, BaseWars.Lang("NotEnoughLevel") end
 
     -- Check if the player can afford the entity
     local price = entityTable.Price
-    if not ply:CanAfford(price) then return false, "You cannot afford this entity" end
+    if not ply:CanAfford(price) then return false, BaseWars.Lang("NotEnoughMoney") end
 
     -- Attempt to spawn the entity
     local class = entityTable.ClassName
@@ -121,7 +121,7 @@ function BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
     -- Deduct the price of the entity from the player's money
     ply:AddMoney(-price)
 
-    return true, "Successfully bought entity"
+    return true, BaseWars.Lang("BoughtEntity", entityTable.Name, price)
 end
 
 /*
@@ -160,10 +160,10 @@ net.Receive(netBuyTag, function(len, ply)
     local status, message = BaseWars.SpawnMenu.BuyEntity(ply, uuid, pos, ang)
 
     -- Print debug information to the server console
-    BaseWars.Log("Player " .. ply:Nick() .. " (" .. ply:SteamID() .. ") attempted to buy entity " .. uuid .. " (" .. (status and "success" or "failure") .. ")")
+    BaseWars.Log("Player " .. ply:Nick() .. " (" .. ply:SteamID() .. ") attempted to buy entity " .. uuid .. " (" .. (status and "success" or "failure") .. ")" .. " (" .. message.phrase .. ")")
 
     -- Send a notification to the player about the result of their purchase request
-    BaseWars.Notify.Send(ply, "Acheter une entité", message, status and Color(0, 255, 0) or Color(255, 0, 0))
+    BaseWars.Notify.Send(ply, BaseWars.Lang("Shop"), message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)
 
 -- NWBool to store whether the player has auto buy enabled
@@ -178,7 +178,7 @@ function BaseWars.SpawnMenu.DisableWeaponAutoBuy(ply)
     ply:SetNWBool(AUTOBUY_BOOL, false)
     ply:SetNWString(AUTOBUY_WEAPON, "")
 
-    return true, "Successfully disabled auto buy for all weapons."
+    return true, BaseWars.Lang("DeactivatedBuyOnRespawn")
 end
 
 function BaseWars.SpawnMenu.ActivateWeaponAutoBuy(ply, uuid, state)
@@ -186,10 +186,10 @@ function BaseWars.SpawnMenu.ActivateWeaponAutoBuy(ply, uuid, state)
 
     if state then
         ply:SetNWString(AUTOBUY_WEAPON, uuid)
-        return true, "Successfully enabled auto buy for weapon " .. uuid
+        return true, BaseWars.Lang("ActivatedBuyOnRespawn", uuid)
     else
         ply:SetNWString(AUTOBUY_WEAPON, "")
-        return true, "Successfully disabled auto buy for weapon " .. uuid
+        return true, BaseWars.Lang("DeactivatedBuyOnRespawn")
     end
 end
 
@@ -211,7 +211,7 @@ net.Receive(netAutoBuyTag, function(len, ply)
         status, message = BaseWars.SpawnMenu.DisableWeaponAutoBuy(ply)
     end
 
-    BaseWars.Notify.Send(ply, "Auto Buy", message, status and Color(0, 255, 0) or Color(255, 0, 0))
+    BaseWars.Notify.Send(ply, BaseWars.Lang("Shop"), message, status and Color(0, 255, 0) or Color(255, 0, 0))
 end)
 
 hook.Add("PlayerSpawn", "BaseWars_AutoBuyHook", function(ply)

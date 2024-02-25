@@ -57,7 +57,7 @@ if SERVER then
     function ENT:Use(ply)
         local status, message = SpawnPointModule:UseFunc(self, ply)
 
-        BaseWars.Notify.Send(ply, "Activer le spawnpoint", message, status and Color(0, 255, 0) or Color(255, 0, 0))
+        BaseWars.Notify.Send(ply, BaseWars.Lang("SpawnPoint"), message, status and Color(0, 255, 0) or Color(255, 0, 0))
     end
 
 end

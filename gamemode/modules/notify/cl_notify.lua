@@ -22,6 +22,8 @@ net.Receive(BaseWars.Notify.Net.AddNotification, function()
     local data = BaseWars.Net.Read(BaseWars.Notify.Net.AddNotification)
     local title, message, color = data.title, data.message, data.color
 
+    BaseWars.Log("Received notification: " .. title.phrase .. " - " .. message.phrase .. " - " .. color.r .. " " .. color.g .. " " .. color.b)
+
     title = BaseWars.Lang(title.phrase, title.args)
     message = BaseWars.Lang(message.phrase, message.args) 
     

@@ -91,7 +91,7 @@ function Persist.SaveToDatabase(ply)
     if ply.CorruptedData then 
         
         BaseWars.Log("Player " .. ply:Nick() .. " (" .. ply:SteamID() .. ") has corrupted data. Skipping save.")
-        BaseWars.Notify.Send(ply, "Error", "An error occured while saving your data. Please contact an administrator.", Color(255, 0, 0))
+        BaseWars.Notify.Send(ply, BaseWars.Lang("Error"),  BaseWars.Lang("AnErrorOccuredWhileSavingData"), Color(255, 0, 0))
 
 
         return 
@@ -110,7 +110,7 @@ function Persist.SaveToDatabase(ply)
         if not body then
             BaseWars.Log("Failed to save player " .. ply:Nick() .. " (" .. ply:SteamID() .. ") to database.")
 
-            BaseWars.Notify.Send(ply, "Error", "An error occured while saving your data. Please contact an administrator.", Color(255, 0, 0))
+            BaseWars.Notify.Send(ply, BaseWars.Lang("Error"), BaseWars.Lang("AnErrorOccuredWhileSavingData"), Color(255, 0, 0))
 
             ply:Freeze(true)
             return

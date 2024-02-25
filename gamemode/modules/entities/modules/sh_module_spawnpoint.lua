@@ -34,12 +34,12 @@ function BW_SPAWNPOINT_MODULE:UseFunc(ent, activator, caller)
         ent.OwningPly = ply
         ply.SpawnPoint = ent
 
-        return true, "Spawn point set!"
+        return true, BaseWars.Lang("ActivatedSpawnpoint")
     end
 
     ent:EmitSound("buttons/button10.wav")
 
-    return false, "You must be a player to use this!"
+    return false, BaseWars.Lang("YouMustBeAPlayerToUseThis")
 end
 
 function BW_SPAWNPOINT_MODULE:OnRemove(ent)

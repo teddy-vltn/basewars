@@ -8,6 +8,7 @@ L.Debug = "Debug"
 L.DebugIsEnabled = "Debug mode is enabled."
 
 L.Error = "Error"
+L.Success = "Success"
 L.AnErrorOccured = "An error occured."
 L.AnErrorOccuredWhileLoadingData = "An error occured while loading your data. Please contact an administrator."
 L.AnErrorOccuredWhileSavingData = "An error occured while saving your data. Please contact an administrator."
@@ -46,6 +47,8 @@ L.Next = "Next"
 L.Previous = "Previous"
 L.Current = "Current"
 
+L.PayOutForPlaying = "You have been paid %s for playing on the server."
+
 L.Faction = "Faction"
 L.FactionPassword = "Faction Password"
 L.FactionName = "Faction Name"
@@ -69,6 +72,10 @@ L.UpgradeLevel = "Upgrade Level"
 L.AreYouSureYouWannaBuy = "Are you sure you want to buy %s for %s?"
 L.AreYouSureYouWannaSell = "Are you sure you want to sell %s for %s?"
 L.AreYouSureYouWannaUpgrade = "Are you sure you want to upgrade %s for %s?"
+
+L.NotEnoughMoneyToBuyUpgrade = "You don't have enough money to buy this upgrade."
+L.CantSellThisEntity = "You can't sell this entity."
+L.CantSellOtherPlayersEntities = "You can't sell other players' entities."
 
 L.Refresh = "Refresh"
 
@@ -134,16 +141,24 @@ L.EntityHasBeenDestroyedBySomeone = "Your entity (%s) has been destroyed by some
 
 L.TooFarAwayToInteract = "You are too far away to interact with this entity."
 
+L.SpawnMenu = "Spawn Menu"
 L.UpgradedEntity = "You have upgraded your entity (%s) to level %s."
 L.SoldEntity = "You have sold your entity (%s) for %s."
 L.BoughtEntity = "You have bought the entity (%s) for %s."
+L.LimitReached = "You have reached the limit for this entity. %s / %s"
+L.EntityDoesntExist = "The entity (%s) doesn't exist??? Please contact an administrator."
+L.SuccessfullySpawnedEntity = "Successfully spawned entity."
+L.NotEnoughMoney = "You don't have enough money to buy this entity."
+L.NotEnoughLevel = "You don't have the required level to buy this entity."
 
 L.BoughtWeapon = "You have bought the weapon (%s) for %s."
 L.ActivatedBuyOnRespawn = "You have activated the buy on respawn for the weapon (%s)."
-L.DeactivatedBuyOnRespawn = "You have deactivated the buy on respawn for the weapon (%s)."
+L.DeactivatedBuyOnRespawn = "You have deactivated the buy on respawn for all weapons."
 
-L.ActivatedSpawnpoint = "You will now respawn at the spawnpoint."
-L.DeactivatedSpawnpoint = "You will no longer respawn at the spawnpoint."
+L.ActivatedSpawnpoint = "You will now respawn at this spawnpoint."
+L.DeactivatedSpawnpoint = "You will no longer respawn at this spawnpoint."
+
+L.YouMustBeAPlayerToUseThis = "You must be a player to use this."
 
 L.PickedMoney = "You have picked %s."
 L.PickedMoneyError = "You can't pick money right now."
@@ -185,5 +200,6 @@ L.Explosive = "Explosive"
 L.Explosives = "Explosives"
 L.Melee = "Melee"
 L.Spawn = "Spawn"
+L.SpawnPoint = "Spawn Point"
 
 BaseWars.RegisterLanguage("EN", L)
