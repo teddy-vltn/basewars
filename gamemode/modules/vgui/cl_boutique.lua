@@ -1,13 +1,13 @@
 
 local function AskForAutoBuy(uuid, callback)
-    Derma_Query("Do you want to auto-buy this item on spawn?", "Auto-buy", 
-        "Yes", 
+    Derma_Query(BaseWars.Lang("AutoBuyAreYouSure"), BaseWars.Lang("AutoBuy"), 
+        BaseWars.Lang("Yes"),
         function()
             if callback then
                 callback(true, uuid) -- Callback indicating they chose "Yes"
             end
         end,
-        "No", 
+        BaseWars.Lang("No"), 
         function() 
             if callback then
                 callback(false, uuid) -- Callback indicating they chose "No"
@@ -24,7 +24,7 @@ function CreateBoutiquePanel(parent)
 
     local searchBar = vgui.Create("DTextEntry", boutiquePanel)
     searchBar:Dock(TOP)
-    searchBar:SetPlaceholderText("Search...")
+    searchBar:SetPlaceholderText(BaseWars.Lang("Search") .. "...")
 
     -- if we click on the search bar menu should remain focused even if we let go of the key
     searchBar.OnGetFocus = function(self)
