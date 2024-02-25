@@ -7,10 +7,17 @@ L.MoneyCurrency = "$"
 L.Debug = "Débogage"
 L.DebugIsEnabled = "Le mode débogage est activé."
 
+L.Yes = "Oui"
+L.No = "Non"
+
 L.Error = "Erreur"
-L.AnErrorOccured = "Une erreur s'est produite."
-L.AnErrorOccuredWhileLoadingData = "Une erreur s'est produite lors du chargement de vos données. Veuillez contacter un administrateur."
-L.AnErrorOccuredWhileSavingData = "Une erreur s'est produite lors de l'enregistrement de vos données. Veuillez contacter un administrateur."
+L.Success = "Succès"
+L.Submit = "Soumettre"
+L.Page = "Page"
+L.AreYouSure = "Êtes-vous sûr ?"
+L.AnErrorOccured = "Une erreur est survenue."
+L.AnErrorOccuredWhileLoadingData = "Une erreur est survenue lors du chargement de vos données. Veuillez contacter un administrateur."
+L.AnErrorOccuredWhileSavingData = "Une erreur est survenue lors de l'enregistrement de vos données. Veuillez contacter un administrateur."
 
 L.InvalidPlayer = "Joueur invalide"
 
@@ -42,9 +49,13 @@ L.Name = "Nom"
 L.Color = "Couleur"
 L.Icon = "Icône"
 
+L.Members = "Membres"
+
 L.Next = "Suivant"
 L.Previous = "Précédent"
 L.Current = "Actuel"
+
+L.PayOutForPlaying = "Vous avez été payé %s pour avoir joué sur le serveur."
 
 L.Faction = "Faction"
 L.FactionPassword = "Mot de passe de la faction"
@@ -57,7 +68,10 @@ L.FactionCreate = "Créer une faction"
 L.FactionJoin = "Rejoindre une faction"
 L.FactionLeave = "Quitter une faction"
 L.FactionKick = "Expulser de la faction"
+L.FactionPasswordNeeded = "Mot de passe nécessaire"
 L.FactionPasswordIncorrect = "Le mot de passe est incorrect."
+L.FactionPleaseInputPassword = "Veuillez entrer le mot de passe de la faction."
+L.FactionLeaveAreYouSure = "Êtes-vous sûr de vouloir quitter la faction %s ?"
 
 L.Cost = "Coût"
 L.Value = "Valeur"
@@ -66,19 +80,23 @@ L.Sell = "Vendre"
 L.Upgrade = "Améliorer"
 L.UpgradeLevel = "Niveau d'amélioration"
 
-L.AreYouSureYouWannaBuy = "Êtes-vous sûr de vouloir acheter %s pour %s?"
-L.AreYouSureYouWannaSell = "Êtes-vous sûr de vouloir vendre %s pour %s?"
-L.AreYouSureYouWannaUpgrade = "Êtes-vous sûr de vouloir améliorer %s pour %s?"
+L.AreYouSureYouWannaBuy = "Êtes-vous sûr de vouloir acheter %s pour %s ?"
+L.AreYouSureYouWannaSell = "Êtes-vous sûr de vouloir vendre %s pour %s ?"
+L.AreYouSureYouWannaUpgrade = "Êtes-vous sûr de vouloir améliorer %s pour %s ?"
+
+L.NotEnoughMoneyToBuyUpgrade = "Vous n'avez pas assez d'argent pour acheter cette amélioration."
+L.CantSellThisEntity = "Vous ne pouvez pas vendre cette entité."
+L.CantSellOtherPlayersEntities = "Vous ne pouvez pas vendre les entités d'autres joueurs."
 
 L.Refresh = "Rafraîchir"
 
-L.Search = "Recherche"
+L.Search = "Rechercher"
 
 L.Optionnal = "Optionnel"
 
 L.RaidableEntities = "Entités raidables"
 
-L.Welcome = "Bienvenue à %s !"
+L.Welcome = "Bienvenue sur %s !"
 L.CreatedFaction = "Vous avez créé la faction %s."
 L.FactionAlreadyExists = "La faction %s existe déjà."
 L.FactionLeft = "Vous avez quitté la faction %s."
@@ -91,7 +109,7 @@ L.FactionPlayerNotMemberOfThisFaction = "%s n'est pas membre de la faction."
 L.FactionNotOwner = "Vous n'êtes pas le propriétaire de la faction."
 L.FactionAlreadyMember = "Vous êtes déjà membre d'une faction."
 L.FactionDoesntExist = "La faction %s n'existe pas."
-L.FactionCantCreate = "Vous ne pouvez pas créer de faction."
+L.FactionCantCreate = "Vous ne pouvez pas créer une faction."
 L.FactionCantJoin = "Vous ne pouvez pas rejoindre la faction %s."
 L.FactionCantLeave = "Vous ne pouvez pas quitter la faction %s."
 L.FactionCantKick = "Vous ne pouvez pas expulser %s de la faction."
@@ -106,7 +124,7 @@ L.ColorCannotBeEmpty = "La couleur ne peut pas être vide."
 L.IconCannotBeEmpty = "L'icône ne peut pas être vide."
 
 L.Raid = "Raid"
-L.Raiding = "Raid en cours"
+L.Raiding = "Raiding"
 L.RaidingSuccess = "Vous avez réussi à raider %s."
 L.RaidingFailed = "Vous avez échoué à raider %s."
 L.RaidingSomeone = "Vous êtes raidé par %s."
@@ -119,7 +137,7 @@ L.RaidingTimeLeft = "Temps restant : %s"
 L.RaidingAlready = "Vous êtes déjà en train de raider %s."
 L.RaidingIsOnCooldown = "Vous ne pouvez pas raider %s pour le moment."
 L.RaidingIsOnCooldownFor = "Vous ne pouvez pas raider %s pendant %s."
-L.RaidingIsOnCooldownForAll = "Vous ne pouvez pas raider quelqu'un pendant %s."
+L.RaidingIsOnCooldownForAll = "Vous ne pouvez pas raider qui que ce soit pendant %s."
 
 L.Research = "Recherche"
 L.Researching = "Recherche en cours"
@@ -134,16 +152,26 @@ L.EntityHasBeenDestroyedBySomeone = "Votre entité (%s) a été détruite par qu
 
 L.TooFarAwayToInteract = "Vous êtes trop loin pour interagir avec cette entité."
 
+L.SpawnMenu = "Menu d'apparition"
 L.UpgradedEntity = "Vous avez amélioré votre entité (%s) au niveau %s."
 L.SoldEntity = "Vous avez vendu votre entité (%s) pour %s."
 L.BoughtEntity = "Vous avez acheté l'entité (%s) pour %s."
+L.LimitReached = "Vous avez atteint la limite pour cette entité. %s / %s"
+L.EntityDoesntExist = "L'entité (%s) n'existe pas ??? Veuillez contacter un administrateur."
+L.SuccessfullySpawnedEntity = "Entité apparue avec succès."
+L.NotEnoughMoney = "Vous n'avez pas assez d'argent pour acheter cette entité."
+L.NotEnoughLevel = "Vous n'avez pas le niveau requis pour acheter cette entité."
 
 L.BoughtWeapon = "Vous avez acheté l'arme (%s) pour %s."
-L.ActivatedBuyOnRespawn = "Vous avez activé l'achat à la réapparition pour l'arme (%s)."
-L.DeactivatedBuyOnRespawn = "Vous avez désactivé l'achat à la réapparition pour l'arme (%s)."
+L.AutoBuy = "Achat automatique"
+L.AutoBuyAreYouSure = "Êtes-vous sûr de vouloir activer l'achat automatique pour cette arme ?"
+L.ActivatedBuyOnRespawn = "Vous avez activé l'achat au respawn pour l'arme (%s)."
+L.DeactivatedBuyOnRespawn = "Vous avez désactivé l'achat au respawn pour toutes les armes."
 
-L.ActivatedSpawnpoint = "Vous réapparaîtrez désormais au point de spawn."
-L.DeactivatedSpawnpoint = "Vous ne réapparaîtrez plus au point de spawn."
+L.ActivatedSpawnpoint = "Vous réapparaîtrez désormais à ce point de spawn."
+L.DeactivatedSpawnpoint = "Vous ne réapparaîtrez plus à ce point de spawn."
+
+L.YouMustBeAPlayerToUseThis = "Vous devez être un joueur pour utiliser ceci."
 
 L.PickedMoney = "Vous avez ramassé %s."
 L.PickedMoneyError = "Vous ne pouvez pas ramasser d'argent pour le moment."
@@ -151,7 +179,7 @@ L.PickedMoneyError = "Vous ne pouvez pas ramasser d'argent pour le moment."
 L.PlayerPayOut = "Vous avez été payé %s."
 L.PlayerPayOutError = "Vous ne pouvez pas être payé pour le moment."
 
--- General shop translations
+-- Traductions générales de la boutique
 L.Printer = "Imprimante"
 L.Printers = "Imprimantes"
 L.Generator = "Générateur"
@@ -183,7 +211,8 @@ L.Machinegun = "Mitrailleuse"
 L.Machineguns = "Mitrailleuses"
 L.Explosive = "Explosif"
 L.Explosives = "Explosifs"
-L.Melee = "Corps à corps"
+L.Melee = "Mêlée"
 L.Spawn = "Apparition"
+L.SpawnPoint = "Point d'apparition"
 
 BaseWars.RegisterLanguage("FR", L)
