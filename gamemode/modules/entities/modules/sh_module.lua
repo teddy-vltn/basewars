@@ -15,11 +15,8 @@ function BaseWars.Entity.Modules:Add(module)
     BaseWars.Log("Added module " .. name)
 end
 
-function BaseWars.Entity.Modules:Remove(name)
-    self[name] = nil
-end
-
 function BaseWars.Entity.Modules:Get(name)
     return self[name]
 end
+
 

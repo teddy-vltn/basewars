@@ -48,4 +48,6 @@ function CreateSettingsPanel(parent)
             end
         end
     end
+
+    return settingsPanel
 end

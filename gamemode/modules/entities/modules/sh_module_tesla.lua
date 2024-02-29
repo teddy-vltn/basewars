@@ -34,6 +34,15 @@ function BW_TESLA_MODULE:OnThink(ent)
     local targets = ents.FindInSphere(teslaPos, radius)
     for _, target in pairs(targets) do
         if target:IsPlayer() and target:Alive() then  -- Assurez-vous que la cible est un joueur vivant
+
+            local owner = ent:CPPIGetOwner()
+            local targetFaction = target:GetFaction()
+            local ownerFaction = owner:GetFaction()
+
+            if targetFaction == ownerFaction then
+                continue
+            end
+
             -- Appliquer des dégâts à la cible
             local damage = DamageInfo()
             damage:SetDamage(ent:GetDamage())  -- Dégâts par seconde, à ajuster

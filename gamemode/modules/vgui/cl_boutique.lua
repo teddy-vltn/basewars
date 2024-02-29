@@ -292,28 +292,7 @@ function CreateBoutiquePanel(parent)
         end
     end
 
-    local function populateTree(parentNode, categoryTable)
-        for categoryName, categoryOrItem in pairs(categoryTable) do
-            if type(categoryOrItem) == "table" then
-                if not categoryOrItem.Price then  -- It's a category
+    BaseWars.SpawnMenu.PopulateTree(tree, BaseWars.Config.Shop, displayItemsFiltered)
 
-                    local tryTranslation = BaseWars.TryTranslate(categoryName)
-
-                    local categoryNode = parentNode:AddNode(tryTranslation)
-                    -- Put icon if it's a category
-                    categoryNode:SetIcon(categoryOrItem.Icon or "icon16/folder.png")
-                    populateTree(categoryNode, categoryOrItem)
-                    categoryNode.DoClick = function()
-                        displayItemsFiltered(categoryOrItem, "")
-                    end
-
-                    -- set expanded
-                    categoryNode:SetExpanded(true)
-                end
-            end
-        end
-    end
-
-    populateTree(tree, BaseWars.Config.Shop)
-
+    return boutiquePanel
 end

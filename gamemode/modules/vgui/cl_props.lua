@@ -46,4 +46,6 @@ function CreatePropsPanel(parent)
             displayPropsInCategory(props)
         end
     end
+
+    return propsPanel
 end

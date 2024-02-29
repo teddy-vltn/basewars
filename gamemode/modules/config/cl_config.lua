@@ -7,7 +7,7 @@ BaseWars.Config.Navigation = {
         Color = Color(255, 0, 0),
         Icon = "icon16/bricks.png",
         Panel = function(parent)
-            CreatePropsPanel(parent)
+            return CreatePropsPanel(parent)
         end
     },
     {
@@ -15,7 +15,7 @@ BaseWars.Config.Navigation = {
         Color = Color(0, 0, 255),
         Icon = "icon16/cart.png",
         Panel = function(parent)
-            CreateToolsPanel(parent)
+            return CreateToolsPanel(parent)
         end
     },
     {
@@ -23,7 +23,7 @@ BaseWars.Config.Navigation = {
         Color = Color(255, 255, 0),
         Icon = "icon16/cart.png",
         Panel = function(parent)
-            CreateBoutiquePanel(parent)
+            return CreateBoutiquePanel(parent)
         end
     },
     {
@@ -31,7 +31,7 @@ BaseWars.Config.Navigation = {
         Color = Color(255, 0, 0),
         Icon = "icon16/box.png",
         Panel = function(parent)
-            CreateFactionPanel(parent)
+            return CreateFactionPanel(parent)
         end
     },
     {
@@ -39,7 +39,7 @@ BaseWars.Config.Navigation = {
         Color = Color(0, 255, 0),
         Icon = "icon16/award_star_gold_1.png",
         Panel = function(parent)
-            CreateLeaderboardPanel(parent)
+            return CreateLeaderboardPanel(parent)
         end
     },
     {
@@ -47,7 +47,7 @@ BaseWars.Config.Navigation = {
         Color = Color(0, 0, 255),
         Icon = "icon16/wrench.png",
         Panel = function(parent)
-            CreateSettingsPanel(parent)
+            return CreateSettingsPanel(parent)
         end
     },
 }

@@ -200,8 +200,6 @@ net.Receive(netAutoBuyTag, function(len, ply)
     local uuid = data.weapon
     local state = data.bool
 
-    print(uuid, state)
-
     local status, message
     if state then
         status, message = BaseWars.SpawnMenu.ActivateWeaponAutoBuy(ply, uuid, state)

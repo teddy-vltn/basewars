@@ -311,6 +311,7 @@ function CreateFactionPanel(parent)
         end
     end
 
-
     parent:RefreshFactionData()
+
+    return factionPanel
 end

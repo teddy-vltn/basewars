@@ -46,8 +46,18 @@ function BW_TURRET_MODULE:OnThink(ent)
     local closestTarget = nil
     local closestDistance = range
 
+    local owner = ent:CPPIGetOwner()
+
     for _, target in ipairs(targets) do
-        if target:IsPlayer() and target:Alive() and !target:IsFriendlyEntity(ent) then
+        if target:IsPlayer() and target:Alive() then
+
+            local targetFaction = target:GetFaction()
+            local ownerFaction = owner:GetFaction()
+
+            if targetFaction == ownerFaction then
+                continue
+            end
+
             local dist = turretPos:Distance(target:GetPos())
             local directionToTarget = (target:GetPos() - turretPos):GetNormalized()
             local dotProduct = turretForward:Dot(directionToTarget)

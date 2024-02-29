@@ -37,14 +37,15 @@ local function CreateBaseWarsMenu()
 
     for _, navItem in pairs(BaseWars.Config.Navigation) do
         local panel = vgui.Create("DPanel", sheet)
-        panel.Paint = function(self, w, h) return end
-
-        -- margin
-        local margin = 2
-        panel:DockMargin(margin, margin, margin, margin)
+        panel.Paint = function(self, w, h) 
+            return
+        end
 
         if navItem.Panel then
-            navItem.Panel(panel) 
+            local p = navItem.Panel(panel) 
+
+            local margin = 5
+            p:DockMargin(margin, margin, margin, margin)
         end
 
         sheet:AddSheet(navItem.Name, panel, navItem.Icon)
@@ -92,13 +93,12 @@ hook.Add("SpawnMenuOpen", "OpenBaseWarsMenu", function()
 end)
 
 
-
 hook.Add("Think", "CloseBaseWarsMenu", function()
 
     -- Skip if the player is typing in chat or the console is open
     if IsValid(vgui.GetKeyboardFocus()) && !isMenuOpen then return end
     if gui.IsConsoleVisible() then return end
-
+    
     menuOpenKey = BaseWars.Config.MenuOpenKey.keycode
     menuAlwaysOpen = BaseWars.Config.MenuAlwaysFocus.value
 

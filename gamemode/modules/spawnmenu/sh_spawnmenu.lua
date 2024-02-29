@@ -95,7 +95,18 @@ function BaseWars.SpawnMenu.AddUUIDsToShop(categoryTable)
             newTable[UUID] = value
         -- If the value is a table but doesn't represent an item, treat it as a category or subcategory
         elseif type(value) == "table" and not value.ClassName then
-            newTable[key] = BaseWars.SpawnMenu.AddUUIDsToShop(value)  -- Recursively process the subcategory
+            --newTable[key] = BaseWars.SpawnMenu.AddUUIDsToShop(value.Items)  -- Recursively process the subcategory
+            newTable[key] = {
+                Name = value.Name,
+                Icon = value.Icon,
+            }
+
+            -- Recursively process the subcategories in order to add UUIDs to their items
+            local subItems = BaseWars.SpawnMenu.AddUUIDsToShop(value.Items)
+
+            for subKey, item in pairs(subItems) do
+                newTable[key][subKey] = item
+            end
         else
             -- Any other type of value is directly copied to the new table
             newTable[key] = value

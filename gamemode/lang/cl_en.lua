@@ -173,7 +173,7 @@ L.DeactivatedSpawnpoint = "You will no longer respawn at this spawnpoint."
 
 L.YouMustBeAPlayerToUseThis = "You must be a player to use this."
 
-L.PickedMoney = "You have picked %s."
+L.PickedMoney = "You have picked %s" .. L.MoneyCurrency .. "."
 L.PickedMoneyError = "You can't pick money right now."
 
 L.PlayerPayOut = "You have been paid %s."

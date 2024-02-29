@@ -46,4 +46,6 @@ function CreateToolsPanel(parent)
             end
         end
     end
+
+    return toolsPanel
 end

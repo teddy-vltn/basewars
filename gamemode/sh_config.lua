@@ -28,6 +28,51 @@ BaseWars.Config.Globals = {
     },
 }
 
+local function Category(...)
+    return BaseWars.Category(...)
+end
+
+local function Item(...)
+    return BaseWars.Item(...)
+end
+
+local function Weapon(...)
+    return BaseWars.Weapon(...)
+end
+
+BaseWars.Config.Shop = {
+    Entities = Category("Entities", "icon16/bricks.png", {
+        Printers = Category("Printers", "icon16/printer.png", {
+            Item("Emerald Printer", "bw_printer_emerald", "models/props_lab/reciever01a.mdl", 1000, 1),
+            Item("Diamond Printer", "bw_printer_diamond", "models/props_lab/reciever01a.mdl", 2000, 1),
+            Item("Ruby Printer", "bw_printer_ruby", "models/props_lab/reciever01a.mdl", 3000, 1),
+        }),
+        Turrets = Category("Turrets", "icon16/flag_red.png", {
+            Item("Turret", "bw_turret", "models/combine_turrets/floor_turret.mdl", 1000, 1),
+        }),
+        Teslas = Category("Teslas", "icon16/lightning.png", {
+            Item("Tesla", "bw_tesla", "models/props_c17/FurnitureBoiler001a.mdl", 1000, 1),
+        }),
+        SpawnPoints = Category("Spawn Points", "icon16/user.png", {
+            Item("Spawn Point", "bw_spawnpoint", "models/props_trainstation/trainstation_clock001.mdl", 1000, 1),
+        }),
+    }),
+    Weapons = Category("Weapons", "icon16/gun.png", {
+        Uncommon = Category("Uncommon", "icon16/medal_silver_3.png", {
+            Weapon("Uncommon AK-47", "bw_weapon_ak47_uncommon", "models/weapons/w_ak47_m9k.mdl", 1000),
+        }),
+        Rare = Category("Rare", "icon16/medal_gold_3.png", {
+            Weapon("Rare M4A1", "bw_weapon_m4a1_rare", "models/weapons/w_m4a1_iron.mdl", 2000),
+        }),
+        VeryRare = Category("Very Rare", "icon16/medal_gold_2.png", {
+            Weapon("Very Rare M249", "bw_weapon_m249_veryrare", "models/weapons/w_m249_machine_gun.mdl", 3000),
+        }),
+        Legendary = Category("Legendary", "icon16/medal_gold_1.png", {
+            Weapon("Legendary M249", "bw_weapon_m249_legendary", "models/weapons/w_m249_machine_gun.mdl", 4000),
+        }),
+    }),
+}
+
 BaseWars.Config.Level = {
 
     MaxLevel = 100,
@@ -120,98 +165,6 @@ BaseWars.Config.Weapons = {
     -- ... other categories if needed
 }
 
-BaseWars.Config.Entities = {
-    Printers = {
-        BaseEntity = "bw_base_moneyprinter",
-        Entities = {
-            ["bw_printer_emerald"] = {
-                PrintName = "Emerald Printer",
-                Model = "models/props_lab/reciever01a.mdl",
-                PrinterColor = Color(0, 255, 0),
-                BasePrintRate = 200,
-                -- ... autres propriétés
-            },
-            ["bw_printer_diamond"] = {
-                PrintName = "Diamond Printer",
-                Model = "models/props_lab/reciever01a.mdl",
-                PrinterColor = Color(0, 0, 255),
-                -- ... autres propriétés
-            },
-            -- ... autres imprimantes
-        },
-    },
-    Generators = {
-        BaseEntity = "bw_base_generator",
-        Entities = {
-            ["bw_generator_coal"] = {
-                PrintName = "Coal Generator",
-                Model = "models/props_lab/reciever01b.mdl",
-                -- ... autres propriétés
-            },
-        },
-    },
-    Turrets = {
-        BaseEntity = "bw_base_turret",
-        Entities = {
-            ["bw_turret"] = {
-                PrintName = "Turret",
-                Model = "models/combine_turrets/floor_turret.mdl",
-                -- ... autres propriétés
-            },
-        },
-    },
-    Teslas = {
-        BaseEntity = "bw_base_tesla",
-        Entities = {
-            ["bw_tesla"] = {
-                PrintName = "Tesla",
-                Model = "models/props_c17/FurnitureBoiler001a.mdl",
-                -- ... autres propriétés
-            },
-        },
-    },
-    SpawnPoints = {
-        BaseEntity = "bw_base_spawnpoint",
-        Entities = {
-            ["bw_spawnpoint"] = {
-                PrintName = "Spawn Point",
-                Model = "models/props_trainstation/trainstation_clock001.mdl",
-                -- ... autres propriétés
-            },
-        },
-    },
-    Dispensers = {
-        BaseEntity = "bw_base_dispenser",
-        Entities = {
-            ["bw_dispenser_health"] = {
-                PrintName = "Dispenser Health",
-                Model = "models/props_lab/reciever01a.mdl",
-                DispenseType = "Health",
-                BaseDispenseCoolDown = 1,
-                BaseDispenseRate = 10,
-                BaseDispenseCapacity = 100,
-            },
-            ["bw_dispenser_ammo"] = {
-                PrintName = "Dispenser Ammo",
-                Model = "models/props_lab/reciever01a.mdl",
-                DispenseType = "Ammo",
-                BaseDispenseCoolDown = 1,
-                BaseDispenseRate = 100,
-                BaseDispenseCapacity = 1000,
-            },
-            ["bw_dispenser_armor"] = {
-                PrintName = "Dispenser Armor",
-                Model = "models/props_lab/reciever01a.mdl",
-                DispenseType = "Armor",
-                BaseDispenseCoolDown = 1,
-                BaseDispenseRate = 30,
-                BaseDispenseCapacity = 100,
-            },
-        },
-    },
-    -- ... autres catégories
-}
-
 -- only for props replacing the default one
 BaseWars.Config.Props = {
     ["Basique"] = {
@@ -264,65 +217,9 @@ BaseWars.Config.Props = {
 }
 
 
-BaseWars.Config.Shop = {
-    ["Entities"] = {
-        Icon = "icon16/bricks.png",
-        ["Printers"] = {
-            Icon = "icon16/printer.png",
 
-            ["T1"] = { 
-                --{Name = "Basic Printer", Price = 10, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_base_moneyprinter"},
-                {Name = "Emerald Printer", Price = 100, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_emerald", Limit = 1},
-                {Name = "Diamond Printer", Price = 200, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_diamond"},
-                {Name = "Ruby Printer", Price = 400, Level = 0, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_printer_ruby"},
-            },
 
-            ["VIP"] = {
-                ["T1"] = {
 
-                }
-            }
-        },
-        ["Generators"] = {
-            Icon = "icon16/lightning.png",
-
-            {Name = "Basic Generator", Price = 50, Model = "models/props_lab/reciever01b.mdl", ClassName = "bw_base_generator"},
-            {Name = "Coal Generator", Price = 50, Model = "models/props_lab/reciever01b.mdl", ClassName = "bw_generator_coal"},
-        },
-        ["Turrets"] = {
-
-            {Name = "Tourelle Basique", Price = 50, Model = "models/combine_turrets/floor_turret.mdl", ClassName = "bw_turret"},
-            {Name = "Tesla Basique", Price = 50, Model = "models/props_c17/FurnitureBoiler001a.mdl", ClassName = "bw_tesla"},
-        },
-        ["Base"] = {
-            {Name = "Spawn Point", Price = 50, Model = "models/props_trainstation/trainstation_clock001.mdl", ClassName = "bw_spawnpoint"},
-        },
-        ["Dispenser"] = {
-            Icon = "icon16/heart.png",
-
-            {Name = "Dispenser Health", Price = 2000, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_health"},
-            {Name = "Dispenser Ammo", Price = 50, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_ammo", VIP = true},
-            {Name = "Dispenser Armor", Price = 50, Level = 3, Model = "models/props_lab/reciever01a.mdl", ClassName = "bw_dispenser_armor"},
-        },
-    },
-    ["Weapons"] = {
-        Icon = "icon16/gun.png",
-
-        ["Pistols"] = {
-            {Name = "Pistol", Price = 10, Model = "models/weapons/w_pistol.mdl", ClassName = "weapon_pistol", Weapon = true},
-        },
-        ["Rifles"] = {
-            {Name = "Rifle", Price = 50, Model = "models/weapons/w_rif_ak47.mdl", ClassName = "bw_weapon_ak47_uncommon", Weapon = true},
-
-        },
-    },
-    ["Fun"] = {
-        Icon = "icon16/heart.png",
-
-        {Name = "Bouncy Ball", Price = 10, Model = "models/maxofs2d/balloon_classic.mdl", ClassName = "gmod_balloon"},
-        
-    },
-}
 
 
 

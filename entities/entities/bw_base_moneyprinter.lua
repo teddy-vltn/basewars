@@ -99,7 +99,7 @@ if SERVER then
         local oldMoney = self:GetMoney()
 
         if PrinterModule:Use(self, ply) then
-            BaseWars.Notify.Send(ply, "You have collected", "$" .. oldMoney .. " from the printer", Color(0, 255, 0))
+            BaseWars.Notify.Send(ply, BaseWars.Lang("Printer"), BaseWars.Lang("PickedMoney", oldMoney), Color(0, 255, 0))
         end
     end
 

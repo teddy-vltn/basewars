@@ -36,6 +36,51 @@ function BaseWars.Color(code)
 	return BaseWars.Config.Colors[code]
 end
 
+
+function BaseWars.Category(name, icon, tbl)
+	return {
+		Name = name,
+		Icon = icon,
+		Items = tbl
+	}
+end
+
+function BaseWars.Item(name, className, model, price, limit, extra)
+	local a = {
+		Name = name,
+		ClassName = className,
+		Model = model,
+		Price = price,
+		Limit = limit,
+	}
+
+	if extra then
+		for k, v in pairs(extra) do
+			a[k] = v
+		end
+	end
+
+	return a
+end
+
+function BaseWars.Weapon(name, className, model, price, extra)
+	local a = {
+		Name = name,
+		ClassName = className,
+		Model = model,
+		Price = price,
+		Weapon = true
+	}
+
+	if extra then
+		for k, v in pairs(extra) do
+			a[k] = v
+		end
+	end
+
+	return a
+end
+
 function table.Equals(a, b)
 	for k, v in pairs(a) do
 		if b[k] ~= v then
@@ -156,6 +201,22 @@ end
 */
 function BaseWars.FormatMoney(n)
 	return "$" .. BaseWars.NumberFormat(n)
+end
+
+function BaseWars.AddBaseEntity(baseEntityType, baseEntityConfig)
+    BaseWars.Config.Entities[baseEntityType] = {
+        BaseEntity = baseEntityConfig.BaseEntity or "base_entity",
+		Configurables = baseEntityConfig.Configurables or {},
+        Entities = {}
+    }
+end
+
+function BaseWars.AddDerivedEntity(baseEntityType, entityKey, entityConfig)
+    if not BaseWars.Config.Entities[baseEntityType] then
+        error("Base entity type " .. tostring(baseEntityType) .. " does not exist.")
+        return
+    end
+    BaseWars.Config.Entities[baseEntityType].Entities[entityKey] = entityConfig
 end
 
 /*
@@ -318,12 +379,13 @@ if CLIENT then
 
 end
 
-
+include("sh_config_entities.lua")
 include("sh_config.lua")
 
 include("modules/sh_modules.lua")
 
 if SERVER then
+	AddCSLuaFile("sh_config_entities.lua")
 	AddCSLuaFile("sh_config.lua")
 
     AddCSLuaFile("modules/sh_modules.lua")
@@ -334,7 +396,7 @@ function GM:Initialize()
 	if SERVER then
 		BaseWars.Faction.Initialize()
 	end
-
+	
 	BaseWars.LoadEntityConfiguration()
 	BaseWars.LoadWeaponConfiguration()
 end
